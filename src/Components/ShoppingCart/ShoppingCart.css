@@ -1,0 +1,30 @@
+
+
+.delete
+{
+    font-size: 0;
+}
+
+.shoppingCartList
+{
+    position: relative;
+}
+
+.shoppingCartList:hover
+{
+    background-color: red;
+}
+
+.shoppingCartList:hover > .delete
+{
+    height: 50%;
+    font-size: 20px;
+    color: white;
+    z-index: 1;
+    position: absolute;
+    top: 50%;
+}
+
+
+
+
