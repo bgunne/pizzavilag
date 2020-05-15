@@ -10,6 +10,8 @@ const Order = ({onRouteChange, onEmptyCart, sumPrice, shoppingCart, user}) =>
 {
     const [showFail, setShowFail] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
+    const [formatFail, setFormatFail] = useState(false);
+    const [emailFail, setEmailFail] = useState(false);
     
     const loadUser = (reg) =>
     {
@@ -47,8 +49,23 @@ const Order = ({onRouteChange, onEmptyCart, sumPrice, shoppingCart, user}) =>
     {
         
         let userData = `${user.lastname} ${user.firstname}\n${user.zip} ${user.city} ${user.address}\nTel.: ${user.phone}\nE-mail: ${user.email}\nMegj.: ${user.comment}`;
-        console.log(user.lastname)
-        if(!user.lastname || !user.firstname || !user.zip || !user.city || !user.address || !user.phone || !user.email )
+        
+        const blackList=[",","@","(",")","'","\"","`",";","#","_","<",">","+","[","]","{","}"];
+        
+        blackList.forEach(char => 
+            {
+                if(user.email.includes(char,user.email.search("@")+1))
+                {
+                    setFormatFail(true);
+                }
+            }
+        )
+        if(!user.email.includes("@") || !user.email.includes(".",user.email.search("@")) || formatFail)
+        {
+            setEmailFail(true);
+        
+        } 
+        else if(!user.lastname || !user.firstname || !user.zip || !user.city || !user.address || !user.phone || !user.email )
         {
             setShowFail(true);
         }
@@ -60,7 +77,7 @@ const Order = ({onRouteChange, onEmptyCart, sumPrice, shoppingCart, user}) =>
                 pizzas+=`${pizza.name} ${pizza.size} cm      ${pizza.price} Ft\n`;
             })
             
-            fetch('http://localhost:3000/order',
+            fetch('https://shielded-coast-80926.herokuapp.com/order',
             {
                 method: 'post',
                 headers: {'Content-Type': 'application/json'},
@@ -85,6 +102,17 @@ const Order = ({onRouteChange, onEmptyCart, sumPrice, shoppingCart, user}) =>
 
     return(
         <div className="flex flex-column items-center " >
+            <Alert show={emailFail} variant="danger" >
+                <p>
+                Hibás e-mail cím formátum!
+                </p>
+                <hr />
+                <div className="d-flex justify-content-end">
+                <Button onClick={() => {setEmailFail(false); setFormatFail(false);}} variant="outline-danger">
+                    Bezárás
+                </Button>
+                </div>
+            </Alert>  
             <Alert show={showSuccess} variant="success">
                 <Alert.Heading>Rendelésed fogadtuk.</Alert.Heading>
                 <p>

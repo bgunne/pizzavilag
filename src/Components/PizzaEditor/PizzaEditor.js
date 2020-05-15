@@ -13,6 +13,15 @@ class PizzaEditor extends React.Component
 
     render()
     {
+        /*
+        FILEUPLOAD TO LOCALHOST - DOESNT WORK ON HEROKU :-(
+            <Col className="col-3">
+                <Form.File id="formcheck-api-regular">
+                    <Form.File.Label>Kép</Form.File.Label>
+                    <Form.File.Input type="file" onChange={onFileInputChangeHandler}/>
+                </Form.File>
+            </Col>
+        */
         const{pizza,onFormChange,onFileInputChangeHandler}=this.props;
         
         return(
@@ -52,11 +61,16 @@ class PizzaEditor extends React.Component
                     </Col>
                     
                     <Col className="col-3">
-                        <Form.File id="formcheck-api-regular">
-                            <Form.File.Label>Kép</Form.File.Label>
-                            <Form.File.Input type="file" onChange={onFileInputChangeHandler}/>
-                        </Form.File>
+                        <Form.Group controlId="imageurl">
+                        <Form.Label>Kép URL</Form.Label>
+                        <Form.Control 
+                            type="text" 
+                            placeholder="Kép URL"
+                            defaultValue={pizza.imageurl}
+                            onChange={onFormChange} />
+                        </Form.Group>
                     </Col>
+                    
                 </Form.Row>
             </Form>
         );

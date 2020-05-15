@@ -77,7 +77,7 @@ class App extends Component
   {
     if(!this.state.pizzas.length)
     {
-      fetch('http://localhost:3000/',
+      fetch('https://shielded-coast-80926.herokuapp.com/',
       {
         method: 'get',
       })

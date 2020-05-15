@@ -89,7 +89,6 @@ class Register extends React.Component
     onSubmit = () =>
     {
         const {email, password, password2, firstname, lastname, phone, zip, city, address, comment} = this.state;
-        console.log(password.length);
 
         const blackList=[",","@","(",")","'","\"","`",";","#","_","<",">","+","[","]","{","}"];
         let formatFail = false;
@@ -120,7 +119,7 @@ class Register extends React.Component
         }
         else
         {
-            fetch('http://localhost:3000/register',
+            fetch('https://shielded-coast-80926.herokuapp.com/register',
             {
                 method: 'post',
                 headers: {'Content-Type': 'application/json'},
@@ -163,7 +162,7 @@ class Register extends React.Component
                 </p>
                 <hr />
                 <div className="d-flex justify-content-end">
-                <Button onClick={() => this.setState({emailFail: false})} variant="outline-danger">
+                <Button onClick={() => this.setState({emailFail: false, formatFail: false})} variant="outline-danger">
                     Bezárás
                 </Button>
                 </div>

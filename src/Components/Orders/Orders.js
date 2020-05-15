@@ -17,21 +17,21 @@ class Orders extends Component
     {
         //if(!this.state.orders.length)
     
-      fetch('http://localhost:3000/orders',
-      {
-        method: 'get',
-      })
-      .then(response => response.json())
-      .then(orders =>
-      {
-        this.setState({orders})
-      })
+        fetch('https://shielded-coast-80926.herokuapp.com/orders',
+        {
+            method: 'get',
+        })
+        .then(response => response.json())
+        .then(orders =>
+        {
+            this.setState({orders})
+        })
     
     }
 
     changeStatus = (id, statusCode) =>
     {
-        fetch('http://localhost:3000/orders',
+        fetch('https://shielded-coast-80926.herokuapp.com/orders',
         {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
@@ -45,13 +45,13 @@ class Orders extends Component
         })
         .then(response =>response.json())
 
-        setTimeout(() => {this.loadOrders()}, 100)
+        setTimeout(() => {this.loadOrders()}, 1000)
         
     }
 
     deleteOrder = (id) =>
     {
-        fetch('http://localhost:3000/orders',
+        fetch('https://shielded-coast-80926.herokuapp.com/orders',
         {
             method: 'delete',
             headers: {'Content-Type': 'application/json'},

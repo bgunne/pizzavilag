@@ -32,21 +32,23 @@ class Admin extends Component
     loadPizzas = () =>
     {
         
-        fetch('http://localhost:3000/manage',
-        {
-            method: 'get',
-        })
-        .then(response => response.json())
-        .then(pizzas =>
-        {
-            this.setState({pizzas})
-        })
+            fetch('https://shielded-coast-80926.herokuapp.com/manage',
+            {
+                method: 'get',
+            })
+            .then(response => response.json())
+            .then(pizzas =>
+            {
+                this.setState({pizzas})
+            }) 
+        
+        
         
     }
 
     deletePizza = (id) =>
     {
-        fetch('http://localhost:3000/manage',
+        fetch('https://shielded-coast-80926.herokuapp.com/manage',
         {
             method: 'delete',
             headers: {'Content-Type': 'application/json'},
@@ -85,7 +87,7 @@ class Admin extends Component
     {
         
         
-        fetch('http://localhost:3000/manage',
+        fetch('https://shielded-coast-80926.herokuapp.com/manage',
         {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
@@ -102,7 +104,7 @@ class Admin extends Component
         })
         .then(response =>response.json())
         
-        setTimeout(() => {this.loadPizzas()}, 100)
+        setTimeout(() => {this.loadPizzas()}, 1000)
         this.setState({showEdit: false})
         
     }
@@ -111,7 +113,7 @@ class Admin extends Component
     {
         
 
-        fetch('http://localhost:3000/manage',
+        fetch('https://shielded-coast-80926.herokuapp.com/manage',
         {
                 method: 'post',
                 headers: {'Content-Type': 'application/json'},
@@ -143,10 +145,12 @@ class Admin extends Component
                             <p className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-dark-green mh1" 
                                 onClick={()=>
                                     {
+                                        /*FILEUPLOAD...
                                         this.onFileUploadHandler();
                                         setTimeout(() => {
                                             this.uploadPizza()
-                                        }, 100)
+                                        }, 100)*/
+                                        this.uploadPizza();
                                     }
                                     }
                                 >
@@ -187,20 +191,23 @@ class Admin extends Component
         const data = new FormData() 
         data.append('file', this.state.selectedFile)
 
-        fetch('http://localhost:3000/uploadimage', 
+        if(this.state.selectedFile)
         {
-            method: 'POST',
-            body: data,
-        })
-        .then((response) => 
-        {
-            response.json().then((body) => 
-            {             
-                console.log(body);
-                this.setState(Object.assign(this.state.pizzaEdit, {imageurl: `http://localhost:3000/images/${body.filename}`}));
+            fetch('https://shielded-coast-80926.herokuapp.com/uploadimage', 
+            {
+                method: 'POST',
+                body: data,
+            })
+            .then((response) => 
+            {
+                response.json().then((body) => 
+                {             
+                    console.log(body);
+                    this.setState(Object.assign(this.state.pizzaEdit, {imageurl: `https://shielded-coast-80926.herokuapp.com/public/images/${body.filename}`}));
+                });
+                
             });
-            
-        });
+        }
 
     }
 
@@ -242,10 +249,12 @@ class Admin extends Component
                                             <p className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-dark-green mt-auto mb-auto" 
                                                 onClick={()=>
                                                     {
+                                                        /*FILEUPLOAD...
                                                         this.onFileUploadHandler();
                                                         setTimeout(() => {
                                                             this.updatePizza()
-                                                        }, 100)
+                                                        }, 100)*/
+                                                        this.updatePizza();
                                                     }
                                                 }
                                                 >
