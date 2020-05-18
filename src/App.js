@@ -17,8 +17,8 @@ import './App.css';
 const initialState =
 {
   route: 'home',
-  isSignedIn: false,
-  isAdmin: false,
+  isSignedIn: true,
+  isAdmin: true,
   user:
   {
     id:'',
@@ -44,9 +44,9 @@ const initialState =
 
 class App extends Component
 {
-  constructor()
+  constructor(props)
   {
-    super();
+    super(props);
     this.state = initialState;
   }
 
