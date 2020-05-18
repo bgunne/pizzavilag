@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component} from 'react'; 
 
 import Navigation from './Components/Navigation/Navigation';
 import CardList from './Components/CardList/CardList';
