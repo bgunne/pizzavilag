@@ -22,7 +22,7 @@ class PizzaEditor extends React.Component
                 </Form.File>
             </Col>
         */
-        const{pizza,onFormChange,onFileInputChangeHandler}=this.props;
+        const{pizza,onFormChange,/*onFileInputChangeHandler*/}=this.props;
         
         return(
             <Form style={{}}>

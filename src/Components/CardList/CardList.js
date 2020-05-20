@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from '../Card/Card';
 
-const CardList = ({pizzas, priceMultiplier, size, addToCart}) =>  //propsban megkapjuk a robotokat
+const CardList = ({pizzas, priceMultiplier, size, addToCart}) =>
 {
     return(
         <div className="w-90" style={{overflowY: 'auto', height:'600px'}}>

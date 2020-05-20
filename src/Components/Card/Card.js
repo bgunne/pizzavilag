@@ -1,7 +1,7 @@
 import React from 'react';
 import './Card.css';
 const Card = ({pizza, priceMultiplier, size, addToCart}) =>
-{/**/
+{
     return(
         <article className="cardBox dib br2 ba dark-gray b--black-10 w-100 w-50-m w-25-l mw5 mh-auto mv2 bg-light-yellow">
             

@@ -53,22 +53,25 @@ class Signin extends React.Component
                     if(user.role === "admin")
                     {
                         
-     
                         this.props.onRouteChange("admin");
                     }
                     else
                     {
                         
-      
                         this.props.onRouteChange("signedin");
                     }
                 }
                 else
                 {
-                    this.setState({showFail: true});
+                    this.handleAlert("showFail", true);
                 }
             }
         )
+    }
+    handleAlert(type, show) {
+        if (type === "showFail") {
+            this.setState({ showFail: show });
+        }
     }
 
     
@@ -82,22 +85,21 @@ class Signin extends React.Component
                     </p>
                     <hr />
                     <div className="d-flex justify-content-end">
-                    <Button onClick={() => this.setState({showFail: false})} variant="outline-danger">
+                    <Button onClick={() => this.handleAlert("showFail", false)} variant="outline-danger">
                         Bezárás
                     </Button>
                     </div>
                 </Alert>
             <Form.Group controlId="formBasicEmail">
-              <Form.Label>E-mail cím</Form.Label>
-              <Form.Control 
+                <Form.Label>E-mail cím</Form.Label>
+                <Form.Control 
                 type="email" 
                 placeholder="pelda@pizzavilag.hu"
                 onChange={this.onEmailChange} />
             </Form.Group>
-          
             <Form.Group controlId="formBasicPassword">
-              <Form.Label>Jelszó</Form.Label>
-              <Form.Control 
+                <Form.Label>Jelszó</Form.Label>
+                <Form.Control 
                 type="password" 
                 placeholder="Jelszó"
                 onChange={this.onPasswordChange} />

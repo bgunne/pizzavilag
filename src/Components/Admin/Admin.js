@@ -3,8 +3,7 @@ import React, { Component } from 'react';
 import PizzaEditor from '../PizzaEditor/PizzaEditor';
 
 class Admin extends Component {
-    
-    initialState = {
+	initialState = {
 		pizzas: [],
 		pizzaEdit: {
 			id: '',
@@ -15,8 +14,10 @@ class Admin extends Component {
 		},
 		showEdit: false,
 		editId: '',
+		deleteId: '',
 		showUpload: false,
-		selectedFile: null
+		selectedFile: null,
+		modificationType: ''
 	};
 
 	constructor(props) {
@@ -43,9 +44,10 @@ class Admin extends Component {
 			})
 		}).then((response) => response.json());
 
+
 		setTimeout(() => {
 			this.loadPizzas();
-		}, 100);
+		}, 1000);
 	};
 
 	changePizza(pizza) {
@@ -99,6 +101,18 @@ class Admin extends Component {
 			.then(this.loadPizzas);
 	}
 
+	handleCloseAddForm() {
+		this.setState({ showUpload: false })
+	}
+
+	handleModificationType(type) {
+		this.setState({ modificationType: type });
+	}
+
+	handleDeleteId(id) {
+		this.setState({ deleteId: id });
+	}
+
 	addBar() {
 		if (this.state.showUpload === true) {
 			return (
@@ -115,19 +129,19 @@ class Admin extends Component {
 						<p
 							className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-dark-green mh1"
 							onClick={() => {
-								/*FILEUPLOAD...
+								/*TODO: FILEUPLOAD
                                         this.onFileUploadHandler();
                                         setTimeout(() => {
                                             this.uploadPizza()
                                         }, 100)*/
-								this.uploadPizza();
+								this.handleModificationType("upload");
 							}}
 						>
 							Pizza Feltöltése
 						</p>
 						<p
 							className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-dark-red mh1"
-							onClick={() => this.setState({ showUpload: false })}
+							onClick={() => this.handleCloseAddForm()}
 						>
 							Mégsem
 						</p>
@@ -176,10 +190,28 @@ class Admin extends Component {
 	};
 
 	componentDidMount() {
-		const { pizzas } = this.state;
-		if (!pizzas.length) {
-			this.loadPizzas();
+		this.loadPizzas();
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		const { modificationType, deleteId } = this.state;
+
+		if (modificationType !== prevState.modificationType) {
+
+			if (modificationType === "update") {
+				this.updatePizza();
+
+			}
+			else if (modificationType === "upload") {
+				this.uploadPizza();
+			}
+			else if (modificationType === "delete") {
+				this.deletePizza(deleteId);
+			}
+
+			this.setState({ modificationType: '' });
 		}
+
 	}
 
 	render() {
@@ -225,7 +257,8 @@ class Admin extends Component {
                                                         setTimeout(() => {
                                                             this.updatePizza()
                                                         }, 100)*/
-													this.updatePizza();
+													//this.updatePizza();
+													this.handleModificationType("update");
 												}}
 											>
 												Módosítás mentése
@@ -280,7 +313,11 @@ class Admin extends Component {
 											</p>
 											<p
 												className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-dark-red"
-												onClick={() => this.deletePizza(pizza.id)}
+												onClick={() => {
+													this.handleDeleteId(pizza.id);
+													this.handleModificationType("delete");
+												}
+												}
 											>
 												Törlés
 											</p>
