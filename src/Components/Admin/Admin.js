@@ -3,51 +3,45 @@ import React, { Component } from 'react';
 import PizzaEditor from '../PizzaEditor/PizzaEditor';
 
 class Admin extends Component {
-	initialState = {
-		pizzas: [],
-		pizzaEdit: {
-			id: '',
-			name: '',
-			topping: '',
-			price: '',
-			imageurl: ''
-		},
-		showEdit: false,
-		editId: '',
-		deleteId: '',
-		showUpload: false,
-		selectedFile: null,
-		modificationType: ''
-	};
-
 	constructor(props) {
 		super(props);
-		this.state = this.initialState;
+		this.state =
+		{
+			pizzas: [],
+			pizzaEdit: {
+				id: '',
+				name: '',
+				topping: '',
+				price: '',
+				imageurl: ''
+			},
+			showEdit: false,
+			editId: '',
+			deleteId: '',
+			showUpload: false,
+			selectedFile: null,
+			modificationType: ''
+		};
 	}
 
-	loadPizzas = () => {
-		fetch('https://shielded-coast-80926.herokuapp.com/manage', {
+	async loadPizzas() {
+		const response = await fetch('https://shielded-coast-80926.herokuapp.com/manage', {
 			method: 'get'
 		})
-			.then((response) => response.json())
-			.then((pizzas) => {
-				this.setState({ pizzas });
-			});
+		const pizzas = await response.json();
+		this.setState({ pizzas });
 	};
 
-	deletePizza = (id) => {
-		fetch('https://shielded-coast-80926.herokuapp.com/manage', {
+	async deletePizza(id) {
+		await fetch('https://shielded-coast-80926.herokuapp.com/manage', {
 			method: 'delete',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
 				id: id
 			})
-		}).then((response) => response.json());
+		});
 
-
-		setTimeout(() => {
-			this.loadPizzas();
-		}, 1000);
+		this.loadPizzas();
 	};
 
 	changePizza(pizza) {
@@ -62,8 +56,8 @@ class Admin extends Component {
 		this.setState(Object.assign(this.state.pizzaEdit, { [event.target.id]: event.target.value }));
 	};
 
-	updatePizza() {
-		fetch('https://shielded-coast-80926.herokuapp.com/manage', {
+	async updatePizza() {
+		await fetch('https://shielded-coast-80926.herokuapp.com/manage', {
 			method: 'put',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
@@ -73,16 +67,13 @@ class Admin extends Component {
 				price: this.state.pizzaEdit.price,
 				imageurl: this.state.pizzaEdit.imageurl
 			})
-		}).then((response) => response.json());
-
-		setTimeout(() => {
-			this.loadPizzas();
-		}, 1000);
+		});
 		this.setState({ showEdit: false });
+		this.loadPizzas();
 	}
 
-	uploadPizza() {
-		fetch('https://shielded-coast-80926.herokuapp.com/manage', {
+	async uploadPizza() {
+		await fetch('https://shielded-coast-80926.herokuapp.com/manage', {
 			method: 'post',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
@@ -91,14 +82,9 @@ class Admin extends Component {
 				price: this.state.pizzaEdit.price,
 				imageurl: this.state.pizzaEdit.imageurl
 			})
-		})
-			.then((response) => response.json())
-			.then(
-				setTimeout(() => {
-					this.setState(this.initialState);
-				}, 100)
-			)
-			.then(this.loadPizzas);
+		});
+		this.setState({ showUpload: false, pizzaEdit: [] });
+		this.loadPizzas();
 	}
 
 	handleCloseAddForm() {
@@ -168,24 +154,21 @@ class Admin extends Component {
 		});
 	};
 
-	onFileUploadHandler = () => {
+	async onFileUploadHandler() {
 		const data = new FormData();
 		data.append('file', this.state.selectedFile);
 
 		if (this.state.selectedFile) {
-			fetch('https://shielded-coast-80926.herokuapp.com/uploadimage', {
+			const response = await fetch('https://shielded-coast-80926.herokuapp.com/uploadimage', {
 				method: 'POST',
 				body: data
-			}).then((response) => {
-				response.json().then((body) => {
-					console.log(body);
-					this.setState(
-						Object.assign(this.state.pizzaEdit, {
-							imageurl: `https://shielded-coast-80926.herokuapp.com/public/images/${body.filename}`
-						})
-					);
-				});
 			});
+			const body = await response.json();
+			this.setState(
+				Object.assign(this.state.pizzaEdit, {
+					imageurl: `https://shielded-coast-80926.herokuapp.com/public/images/${body.filename}`
+				})
+			);
 		}
 	};
 

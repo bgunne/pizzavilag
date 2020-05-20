@@ -7,7 +7,7 @@ const Navigation = ({onRouteChange, isSignedIn, isAdmin, user}) =>
         if(isAdmin)
         {
             return(
-                <nav className="flex justify-center pa2" style={{background: "#c4954f"}}>
+                <nav className="flex justify-center pa1" style={{background: "#c4954f"}}>
                     <p className="link white-70 hover-white no-underline flex items-center pa1 cms"
                         >
                         Pizza világ CMS
@@ -34,7 +34,7 @@ const Navigation = ({onRouteChange, isSignedIn, isAdmin, user}) =>
         else
         {
             return(
-                <nav className="flex justify-center pa2" style={{background: "#c4954f"}}>
+                <nav className="flex justify-center pa1" style={{background: "#c4954f"}}>
                         <p className="link white-70 hover-white no-underline flex items-center pa1 pointer"
                             onClick = {() => onRouteChange('home')}>
                             Főoldal

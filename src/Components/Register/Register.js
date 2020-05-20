@@ -40,9 +40,6 @@ class Register extends React.Component {
                 </p>
             );
         }
-        else {
-            this.props.loadUser(this.state);
-        }
     }
 
     handlePassword = (isOrder) => {
@@ -76,9 +73,17 @@ class Register extends React.Component {
 
     onFormChange = (event) => {
         this.setState({ [event.target.id]: event.target.value });
+        
     }
 
-    onSubmit = () => {
+    componentDidUpdate(prevProps, prevState) {
+    
+        if (this.state !== prevState){
+            this.props.loadUser(this.state);
+        }
+    }
+
+    async onSubmit(){
         const { email, password, password2, firstname, lastname, phone, zip, city, address, comment } = this.state;
 
         const blackList = [",", "@", "(", ")", "'", "\"", "`", ";", "#", "_", "<", ">", "+", "[", "]", "{", "}"];
@@ -102,7 +107,7 @@ class Register extends React.Component {
             this.handleAlert("showFail", true);
         }
         else {
-            fetch('https://shielded-coast-80926.herokuapp.com/register',
+            const response = await fetch('https://shielded-coast-80926.herokuapp.com/register',
                 {
                     method: 'post',
                     headers: { 'Content-Type': 'application/json' },
@@ -121,14 +126,12 @@ class Register extends React.Component {
                                 joined: new Date()
                             }
                         )
-                })
-                .then(response => response.json())
-                .then(user => {
-                    if (user.id) {
-                        this.props.loadUser(user);
-                        this.props.onRouteChange('signedin');
-                    }
                 });
+            const user = await response.json();
+            if (user.id) {
+                this.props.loadUser(user);
+                this.props.onRouteChange('signedin');
+            }
         }
     }
 
@@ -167,7 +170,7 @@ class Register extends React.Component {
                 </p>
                     <hr />
                     <div className="d-flex justify-content-end">
-                        <Button onClick={() => this.handleAlert("passwordLengthFail",false)} variant="outline-danger">
+                        <Button onClick={() => this.handleAlert("passwordLengthFail", false)} variant="outline-danger">
                             Bezárás
                 </Button>
                     </div>
@@ -178,7 +181,7 @@ class Register extends React.Component {
                 </p>
                     <hr />
                     <div className="d-flex justify-content-end">
-                        <Button onClick={() => this.handleAlert("passwordFail",false)} variant="outline-danger">
+                        <Button onClick={() => this.handleAlert("passwordFail", false)} variant="outline-danger">
                             Bezárás
                 </Button>
                     </div>
@@ -189,7 +192,7 @@ class Register extends React.Component {
                 </p>
                     <hr />
                     <div className="d-flex justify-content-end">
-                        <Button onClick={() => this.handleAlert("showFail",false)} variant="outline-danger">
+                        <Button onClick={() => this.handleAlert("showFail", false)} variant="outline-danger">
                             Bezárás
                 </Button>
                     </div>
@@ -234,7 +237,7 @@ class Register extends React.Component {
                         onChange={this.onFormChange} />
                 </Form.Group>
                 <Form.Row>
-                    <Col className="col-3">
+                    <Col className="col-5">
                         <Form.Group controlId="zip">
                             <Form.Label>Irányítószám</Form.Label>
                             <Form.Control
@@ -244,7 +247,7 @@ class Register extends React.Component {
                         </Form.Group>
                     </Col>
 
-                    <Col className="col-9">
+                    <Col className="col-7">
                         <Form.Group controlId="city">
                             <Form.Label>Település</Form.Label>
                             <Form.Control

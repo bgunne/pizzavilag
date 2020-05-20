@@ -28,9 +28,9 @@ class Signin extends React.Component
         this.setState({signInPassword: event.target.value});
     }
 
-    onSubmit = () =>
+    async onSubmit()
     {
-        fetch(
+        const response = await fetch(
             'https://shielded-coast-80926.herokuapp.com/signin',
             {
                 method: 'post',
@@ -43,30 +43,25 @@ class Signin extends React.Component
                     }
                 )
             }
-        )
-        .then(response => response.json())
-        .then( user=>
+        );
+        const user = await response.json();
+        
+        if(user.id)
+        {
+            this.props.loadUser(user);
+            if(user.role === "admin")
             {
-                if(user.id)
-                {
-                    this.props.loadUser(user);
-                    if(user.role === "admin")
-                    {
-                        
-                        this.props.onRouteChange("admin");
-                    }
-                    else
-                    {
-                        
-                        this.props.onRouteChange("signedin");
-                    }
-                }
-                else
-                {
-                    this.handleAlert("showFail", true);
-                }
+                this.props.onRouteChange("admin");
             }
-        )
+            else
+            {
+                this.props.onRouteChange("signedin");
+            }
+        }
+        else
+        {
+            this.handleAlert("showFail", true);
+        }
     }
     handleAlert(type, show) {
         if (type === "showFail") {

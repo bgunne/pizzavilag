@@ -17,7 +17,7 @@ import './App.css';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = 
+    this.state =
     {
       route: 'home',
       isSignedIn: true,
@@ -129,6 +129,7 @@ class App extends Component {
       }
     });
 
+
     this.setState({ shoppingCart: newCart });
   }
 
@@ -168,6 +169,10 @@ class App extends Component {
     if (searchField !== prevState.searchField || (route !== prevState.route && route === "home")) {
       this.filterPizzas();
     }
+  }
+
+  updateUser(user) {
+    this.setState({ user })
   }
 
 
@@ -213,7 +218,7 @@ class App extends Component {
                     (
                       this.state.route === "order"
                         ?
-                        <Order onRouteChange={this.onRouteChange} onEmptyCart={this.onEmptyCart} sumPrice={this.state.sumPrice} shoppingCart={this.state.shoppingCart} user={this.state.user} />
+                        <Order onRouteChange={this.onRouteChange} onEmptyCart={this.onEmptyCart} sumPrice={this.state.sumPrice} shoppingCart={this.state.shoppingCart} user={this.state.user} updateUser={this.updateUser} />
                         :
                         (
                           this.state.route === "signin"

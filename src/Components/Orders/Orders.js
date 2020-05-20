@@ -9,19 +9,18 @@ class Orders extends Component {
         }
     }
 
-    loadOrders = () => {
-        fetch('https://shielded-coast-80926.herokuapp.com/orders',
+    async loadOrders(){
+        const response = await fetch('https://shielded-coast-80926.herokuapp.com/orders',
             {
                 method: 'get',
-            })
-            .then(response => response.json())
-            .then(orders => {
-                this.setState({ orders })
-            })
+            });
+        const orders = await response.json();
+        
+        this.setState({ orders });
     }
 
-    changeStatus = (id, statusCode) => {
-        fetch('https://shielded-coast-80926.herokuapp.com/orders',
+    async changeStatus(id, statusCode){
+        await fetch('https://shielded-coast-80926.herokuapp.com/orders',
             {
                 method: 'put',
                 headers: { 'Content-Type': 'application/json' },
@@ -32,14 +31,13 @@ class Orders extends Component {
                             statusCode: statusCode
                         }
                     )
-            })
-            .then(response => response.json())
-            .then(this.setState({updated: true}))
+            });
+        this.setState({updated: true});
 
     }
 
-    deleteOrder = (id) => {
-        fetch('https://shielded-coast-80926.herokuapp.com/orders',
+    async deleteOrder(id){
+        await fetch('https://shielded-coast-80926.herokuapp.com/orders',
             {
                 method: 'delete',
                 headers: { 'Content-Type': 'application/json' },
@@ -49,9 +47,8 @@ class Orders extends Component {
                             id: id
                         }
                     )
-            })
-            .then(response => response.json())
-            .then(this.setState({updated: true}))
+            });
+        this.setState({updated: true});
 
         
     }

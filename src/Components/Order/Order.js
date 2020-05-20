@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 
 import Register from '../Register/Register';
 import Alert from 'react-bootstrap/Alert';
@@ -6,17 +6,40 @@ import Button from 'react-bootstrap/Button';
 
 
 
-const Order = ({ onRouteChange, onEmptyCart, sumPrice, shoppingCart, user }) => {
-    const [showFail, setShowFail] = useState(false);
-    const [showSuccess, setShowSuccess] = useState(false);
-    const [formatFail, setFormatFail] = useState(false);
-    const [emailFail, setEmailFail] = useState(false);
+class Order extends Component{
 
-    const loadUser = (reg) => {
-        user = reg;
+    constructor(props)
+    {
+        super(props);
+        this.state=
+        {
+            showFail: false,
+            showSuccess: false,
+            formatFail: false,
+            emailFail: false,
+            user: 
+            {
+                email: '',
+                password: '',
+                password2: '',
+                firstname: '',
+                lastname: '',
+                phone: '',
+                zip: '',
+                city: '',
+                address: '',
+                comment: ''
+            }
+        }
     }
 
-    const userSignedIn = (user) => {
+    loadUser = (reg) => {
+        console.log(reg);
+        
+        this.setState({user: reg})
+    }
+
+    userSignedIn = (user) => {
         if (user.id) {
             return (
                 <div className="w-50 mh1" >
@@ -34,11 +57,14 @@ const Order = ({ onRouteChange, onEmptyCart, sumPrice, shoppingCart, user }) => 
             );
         }
         else {
-            return (<Register loadUser={loadUser} isOrder={true} />);
+            return (<Register loadUser={this.loadUser} isOrder={true} />);
         }
     }
 
-    const onSubmit = () => {
+    async onSubmit(){
+
+        const {shoppingCart} = this.props;
+        const {user} = this.state;
 
         let userData = `${user.lastname} ${user.firstname}\n${user.zip} ${user.city} ${user.address}\nTel.: ${user.phone}\nE-mail: ${user.email}\nMegj.: ${user.comment}`;
 
@@ -46,16 +72,16 @@ const Order = ({ onRouteChange, onEmptyCart, sumPrice, shoppingCart, user }) => 
 
         blackList.forEach(char => {
             if (user.email.includes(char, user.email.search("@") + 1)) {
-                setFormatFail(true);
+                this.handleAlert("formatFail", true);
             }
         }
         )
-        if (!user.email.includes("@") || !user.email.includes(".", user.email.search("@")) || formatFail) {
-            setEmailFail(true);
+        if (!user.email.includes("@") || !user.email.includes(".", user.email.search("@")) || this.state.formatFail) {
+            this.handleAlert("emailFail", true);
 
         }
         else if (!user.lastname || !user.firstname || !user.zip || !user.city || !user.address || !user.phone || !user.email) {
-            setShowFail(true);
+            this.handleAlert("showFail", true);
         }
         else {
             let pizzas = '';
@@ -63,7 +89,7 @@ const Order = ({ onRouteChange, onEmptyCart, sumPrice, shoppingCart, user }) => 
                 pizzas += `${pizza.name} ${pizza.size} cm      ${pizza.price} Ft\n`;
             })
 
-            fetch('https://shielded-coast-80926.herokuapp.com/order',
+            await fetch('https://shielded-coast-80926.herokuapp.com/order',
                 {
                     method: 'post',
                     headers: { 'Content-Type': 'application/json' },
@@ -72,86 +98,102 @@ const Order = ({ onRouteChange, onEmptyCart, sumPrice, shoppingCart, user }) => 
                             {
                                 user: userData,
                                 pizzas: pizzas,
-                                price: sumPrice
+                                price: this.props.sumPrice
                             }
                         )
-                })
-                .then(response => response.json())
-                .then(setShowSuccess(true))
-                .then(onEmptyCart())
+                });
+            
+            this.handleAlert("showSuccess", true);
+            this.props.onEmptyCart();
         }
     }
 
+    handleAlert(type, show) {
+        if (type === "showFail") {
+            this.setState({ showFail: show });
+        }
+        else if (type === "showSuccess") {
+            this.setState({ showSuccess: show });
+        }
+        else if (type === "formatFail") {
+            this.setState({ formatFail: show });
+        }
+        else if (type === "emailFail") {
+            this.setState({ emailFail: show });
+        }
+    }
 
-
-    return (
-        <div className="flex flex-column items-center " >
-            <Alert show={emailFail} variant="danger" >
-                <p>
-                    Hibás e-mail cím formátum!
-                </p>
-                <hr />
-                <div className="d-flex justify-content-end">
-                    <Button onClick={() => { setEmailFail(false); setFormatFail(false); }} variant="outline-danger">
-                        Bezárás
-                </Button>
-                </div>
-            </Alert>
-            <Alert show={showSuccess} variant="success">
-                <Alert.Heading>Rendelésed fogadtuk.</Alert.Heading>
-                <p>
-                    Köszönjük, hogy minket választottál.
-                </p>
-                <hr />
-                <p className="mb-0">
-                    Probléma esetén vedd fel a kapcsolatot az ügyfélszolgálatunkkal: ugysemvalaszolunk@pizzavilag.test
-                </p>
-            </Alert>
-            <Alert show={showFail} variant="danger" >
-                <p>
-                    Kérlek tölts ki minden kötelező mezőt a rendelés leadásához.
-                </p>
-                <hr />
-                <div className="d-flex justify-content-end">
-                    <Button onClick={() => setShowFail(false)} variant="outline-danger">
-                        Bezárás
-                </Button>
-                </div>
-            </Alert>
-            <div className="w-80 mr2">
-                <div className="flex justify-center">
-                    {userSignedIn(user)}
-                    <div className="w-50 mh1" style={{ overflowY: 'scroll', height: '600px' }}>
-                        <article className="pa1 pa2-ns" style={{ float: "left" }}>
-                            <ul className="list pl0 ml0 center mw6 ba b--light-silver br2 bg-light-yellow">
-                                {
-                                    shoppingCart.map((pizza, i) => {
-                                        return (
-                                            <li className="ph3 pv3 bb b--light-silver tc" key={i}>
-                                                <p>{pizza.name} {pizza.size} cm</p>
-                                                <p>{pizza.price} Ft</p>
-                                            </li>
-                                        );
-                                    })
-                                }
-                            </ul>
-                        </article>
+    render(){
+        return (
+            <div className="flex flex-column items-center " >
+                <Alert show={this.state.emailFail} variant="danger" >
+                    <p>
+                        Hibás e-mail cím formátum!
+                    </p>
+                    <hr />
+                    <div className="d-flex justify-content-end">
+                        <Button onClick={() => { this.handleAlert("emailFail", false); this.handleAlert("formatFail", false); }} variant="outline-danger">
+                            Bezárás
+                    </Button>
+                    </div>
+                </Alert>
+                <Alert show={this.state.showSuccess} variant="success">
+                    <Alert.Heading>Rendelésed fogadtuk.</Alert.Heading>
+                    <p>
+                        Köszönjük, hogy minket választottál.
+                    </p>
+                    <hr />
+                    <p className="mb-0">
+                        Probléma esetén vedd fel a kapcsolatot az ügyfélszolgálatunkkal: ugysemvalaszolunk@pizzavilag.test
+                    </p>
+                </Alert>
+                <Alert show={this.state.showFail} variant="danger" >
+                    <p>
+                        Kérlek tölts ki minden kötelező mezőt a rendelés leadásához.
+                    </p>
+                    <hr />
+                    <div className="d-flex justify-content-end">
+                        <Button onClick={() => this.handleAlert("showFail", false)} variant="outline-danger">
+                            Bezárás
+                    </Button>
+                    </div>
+                </Alert>
+                <div className="w-100 mr2 flex justify-center">
+                    <div className="flex justify-center">
+                        {this.userSignedIn(this.props.user)}
+                        <div className="w-50 mh1" style={{ overflowY: 'auto', height: '600px' }}>
+                            <article className="pa1 pa2-ns" style={{ float: "left" }}>
+                                <ul className="list pl0 ml0 center mw6 ba b--light-silver br2 bg-light-yellow">
+                                    {
+                                        this.props.shoppingCart.map((pizza, i) => {
+                                            return (
+                                                <li className="ph3 pv3 bb b--light-silver tc" key={i}>
+                                                    <p>{pizza.name} {pizza.size} cm</p>
+                                                    <p>{pizza.price} Ft</p>
+                                                </li>
+                                            );
+                                        })
+                                    }
+                                </ul>
+                            </article>
+                        </div>
                     </div>
                 </div>
+                <div className="w-25 mr2 flex">
+                    <p className="b red ">Végösszeg: {this.props.sumPrice} Ft</p>
+                    <p className="f6 grow no-underline br-pill ph3 pv2 dib white bg-black pointer ba bw0 ml3"
+                        style={{ background: "#c4954f" }}
+                        onClick={() => {
+                            this.onSubmit();
+                        }}>
+                        Rendelés megerősítése
+                    </p>
+                </div>
             </div>
-            <div className="w-25 mr2 flex">
-                <p className="b red ">Végösszeg: {sumPrice} Ft</p>
-                <p className="f6 grow no-underline br-pill ph3 pv2 dib white bg-black pointer ba bw0 ml3"
-                    style={{ background: "#c4954f" }}
-                    onClick={() => {
-                        onSubmit();
-                    }}>
-                    Rendelés megerősítése
-                </p>
-            </div>
-        </div>
-
-    );
+    
+        );
+    }
+    
 }
 
 export default Order;
