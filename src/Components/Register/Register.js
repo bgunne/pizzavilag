@@ -83,7 +83,7 @@ class Register extends React.Component {
         }
     }
 
-    async onSubmit(){
+    onSubmit = async () => {
         const { email, password, password2, firstname, lastname, phone, zip, city, address, comment } = this.state;
 
         const blackList = [",", "@", "(", ")", "'", "\"", "`", ";", "#", "_", "<", ">", "+", "[", "]", "{", "}"];

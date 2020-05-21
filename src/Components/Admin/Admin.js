@@ -24,7 +24,7 @@ class Admin extends Component {
 		};
 	}
 
-	async loadPizzas() {
+	loadPizzas = async () => {
 		const response = await fetch('https://shielded-coast-80926.herokuapp.com/manage', {
 			method: 'get'
 		})
@@ -32,7 +32,7 @@ class Admin extends Component {
 		this.setState({ pizzas });
 	};
 
-	async deletePizza(id) {
+	deletePizza = async (id) => {
 		await fetch('https://shielded-coast-80926.herokuapp.com/manage', {
 			method: 'delete',
 			headers: { 'Content-Type': 'application/json' },
@@ -56,7 +56,7 @@ class Admin extends Component {
 		this.setState(Object.assign(this.state.pizzaEdit, { [event.target.id]: event.target.value }));
 	};
 
-	async updatePizza() {
+	updatePizza = async () => {
 		await fetch('https://shielded-coast-80926.herokuapp.com/manage', {
 			method: 'put',
 			headers: { 'Content-Type': 'application/json' },
@@ -72,7 +72,7 @@ class Admin extends Component {
 		this.loadPizzas();
 	}
 
-	async uploadPizza() {
+	uploadPizza = async () => {
 		await fetch('https://shielded-coast-80926.herokuapp.com/manage', {
 			method: 'post',
 			headers: { 'Content-Type': 'application/json' },
@@ -117,9 +117,9 @@ class Admin extends Component {
 							onClick={() => {
 								/*TODO: FILEUPLOAD
                                         this.onFileUploadHandler();
-                                        setTimeout(() => {
+                                        
                                             this.uploadPizza()
-                                        }, 100)*/
+                                        */
 								this.handleModificationType("upload");
 							}}
 						>
@@ -154,7 +154,7 @@ class Admin extends Component {
 		});
 	};
 
-	async onFileUploadHandler() {
+	onFileUploadHandler = async () => {
 		const data = new FormData();
 		data.append('file', this.state.selectedFile);
 
@@ -237,9 +237,9 @@ class Admin extends Component {
 												onClick={() => {
 													/*FILEUPLOAD...
                                                         this.onFileUploadHandler();
-                                                        setTimeout(() => {
+                                                        
                                                             this.updatePizza()
-                                                        }, 100)*/
+                                                        */
 													//this.updatePizza();
 													this.handleModificationType("update");
 												}}

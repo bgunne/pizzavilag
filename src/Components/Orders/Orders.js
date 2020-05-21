@@ -9,7 +9,7 @@ class Orders extends Component {
         }
     }
 
-    async loadOrders(){
+    loadOrders = async () =>{
         const response = await fetch('https://shielded-coast-80926.herokuapp.com/orders',
             {
                 method: 'get',
@@ -19,7 +19,7 @@ class Orders extends Component {
         this.setState({ orders });
     }
 
-    async changeStatus(id, statusCode){
+    changeStatus = async(id, statusCode) =>{
         await fetch('https://shielded-coast-80926.herokuapp.com/orders',
             {
                 method: 'put',
@@ -36,7 +36,7 @@ class Orders extends Component {
 
     }
 
-    async deleteOrder(id){
+    deleteOrder = async (id) => {
         await fetch('https://shielded-coast-80926.herokuapp.com/orders',
             {
                 method: 'delete',

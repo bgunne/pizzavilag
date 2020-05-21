@@ -39,8 +39,8 @@ class App extends Component {
       pizzas: [],
       filteredPizzas: [],
       searchField: '',
-      prizeMultiplier: 1,
-      size: 32,
+      prizeMultiplier: Number(process.env.REACT_APP_BASE_PRIZEMULTIPLIER),
+      size: Number(process.env.REACT_APP_BASE_SIZE),
       sumPrice: 0,
       shoppingCart: [],
       orders: []
@@ -70,7 +70,7 @@ class App extends Component {
   }
 
 
-  async loadPizzas() {
+  loadPizzas = async () => {
     if (!this.state.pizzas.length) {
       const response = await fetch('https://shielded-coast-80926.herokuapp.com/',
         {
@@ -106,11 +106,10 @@ class App extends Component {
   onSizeChange = (size) => {
     this.setState({ size: size });
     switch (size) {
-      case 32: this.setState({ prizeMultiplier: 1 }); break;
-      case 45: this.setState({ prizeMultiplier: 1.9 }); break;
-      case 55: this.setState({ prizeMultiplier: 2.75 }); break;
-      default: console.log("ERROR setting size"); break;
-
+      case 32: this.setState({ prizeMultiplier: Number(process.env.REACT_APP_BASE_PRIZEMULTIPLIER) }); break;
+      case 45: this.setState({ prizeMultiplier: Number(process.env.REACT_APP_MEDIUM_PRIZEMULTIPLIER) }); break;
+      case 55: this.setState({ prizeMultiplier: Number(process.env.REACT_APP_LARGE_PRIZEMULTIPLIER) }); break;
+      default: console.error("setting size failed"); break;
     }
   }
 

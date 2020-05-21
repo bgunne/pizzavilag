@@ -34,8 +34,6 @@ class Order extends Component{
     }
 
     loadUser = (reg) => {
-        console.log(reg);
-        
         this.setState({user: reg})
     }
 
@@ -61,7 +59,7 @@ class Order extends Component{
         }
     }
 
-    async onSubmit(){
+    onSubmit = async () =>{
 
         const {shoppingCart} = this.props;
         const {user} = this.state;

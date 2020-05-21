@@ -28,7 +28,7 @@ class Signin extends React.Component
         this.setState({signInPassword: event.target.value});
     }
 
-    async onSubmit()
+    onSubmit = async() =>
     {
         const response = await fetch(
             'https://shielded-coast-80926.herokuapp.com/signin',
