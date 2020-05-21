@@ -5,12 +5,10 @@ import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 
-class Signin extends React.Component
-{
-    constructor(props)
-    {
+class Signin extends React.Component {
+    constructor(props) {
         super(props);
-        this.state=
+        this.state =
         {
             signInEmail: '',
             signInPassword: '',
@@ -18,48 +16,41 @@ class Signin extends React.Component
         }
     }
 
-    onEmailChange = (event) =>
-    {
-        this.setState({signInEmail: event.target.value});
-        
+    onEmailChange = (event) => {
+        this.setState({ signInEmail: event.target.value });
+
     }
-    onPasswordChange = (event) =>
-    {
-        this.setState({signInPassword: event.target.value});
+    onPasswordChange = (event) => {
+        this.setState({ signInPassword: event.target.value });
     }
 
-    onSubmit = async() =>
-    {
+    onSubmit = async () => {
         const response = await fetch(
             'https://shielded-coast-80926.herokuapp.com/signin',
             {
                 method: 'post',
-                headers: {'Content-Type': 'application/json'},
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify
-                (
-                    {
-                        email: this.state.signInEmail,
-                        password: this.state.signInPassword
-                    }
-                )
+                    (
+                        {
+                            email: this.state.signInEmail,
+                            password: this.state.signInPassword
+                        }
+                    )
             }
         );
         const user = await response.json();
-        
-        if(user.id)
-        {
+
+        if (user.id) {
             this.props.loadUser(user);
-            if(user.role === "admin")
-            {
+            if (user.role === "admin") {
                 this.props.onRouteChange("admin");
             }
-            else
-            {
+            else {
                 this.props.onRouteChange("signedin");
             }
         }
-        else
-        {
+        else {
             this.handleAlert("showFail", true);
         }
     }
@@ -69,40 +60,47 @@ class Signin extends React.Component
         }
     }
 
-    
-    render()
-    {
-        return(
-            <Form className="w-80 center bg-light-yellow pa2 br3 mt2">
+
+    render() {
+        return (
+            <Form className="w-80 center bg-light-yellow pa2 br3 mt2"
+                onKeyPress={(ev) => {
+                    if (ev.key === 'Enter') {
+                        this.onSubmit();
+                        ev.preventDefault();
+                    }
+                }}>
                 <Alert show={this.state.showFail} variant="danger" >
                     <p>
-                    Hibás e-mail cím vagy jelszó!
+                        Hibás e-mail cím vagy jelszó!
                     </p>
                     <hr />
                     <div className="d-flex justify-content-end">
-                    <Button onClick={() => this.handleAlert("showFail", false)} variant="outline-danger">
-                        Bezárás
+                        <Button onClick={() => this.handleAlert("showFail", false)} variant="outline-danger">
+                            Bezárás
                     </Button>
                     </div>
                 </Alert>
-            <Form.Group controlId="formBasicEmail">
-                <Form.Label>E-mail cím</Form.Label>
-                <Form.Control 
-                type="email" 
-                placeholder="pelda@pizzavilag.hu"
-                onChange={this.onEmailChange} />
-            </Form.Group>
-            <Form.Group controlId="formBasicPassword">
-                <Form.Label>Jelszó</Form.Label>
-                <Form.Control 
-                type="password" 
-                placeholder="Jelszó"
-                onChange={this.onPasswordChange} />
-            </Form.Group>
-            <p className="f6 grow no-underline br-pill ph3 pv2 dib white bg-black pointer ba bw0" 
-                style={{background: "#c4954f"}}
-                onClick={this.onSubmit}>
-                Bejelentkezés
+                <Form.Group controlId="formBasicEmail">
+                    <Form.Label>E-mail cím</Form.Label>
+                    <Form.Control
+                        type="email"
+                        placeholder="pelda@pizzavilag.hu"
+                        onChange={this.onEmailChange}
+                    />
+                </Form.Group>
+                <Form.Group controlId="formBasicPassword">
+                    <Form.Label>Jelszó</Form.Label>
+                    <Form.Control
+                        type="password"
+                        placeholder="Jelszó"
+                        onChange={this.onPasswordChange}
+                    />
+                </Form.Group>
+                <p className="f6 grow no-underline br-pill ph3 pv2 dib white bg-black pointer ba bw0"
+                    style={{ background: "#c4954f" }}
+                    onClick={this.onSubmit}>
+                    Bejelentkezés
             </p>
             </Form>
         );

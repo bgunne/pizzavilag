@@ -73,12 +73,12 @@ class Register extends React.Component {
 
     onFormChange = (event) => {
         this.setState({ [event.target.id]: event.target.value });
-        
+
     }
 
     componentDidUpdate(prevProps, prevState) {
-    
-        if (this.state !== prevState){
+
+        if (this.state !== prevState) {
             this.props.loadUser(this.state);
         }
     }
@@ -89,21 +89,21 @@ class Register extends React.Component {
         const blackList = [",", "@", "(", ")", "'", "\"", "`", ";", "#", "_", "<", ">", "+", "[", "]", "{", "}"];
         let formatFail = false;
         blackList.forEach(char => {
-            if (email.includes(char, email.search("@") + 1)) {
+            if (email.includes(char, email.search("@") + 1) && !this.props.isOrder) {
                 formatFail = true;
             }
         }
         )
-        if (!email.includes("@") || !email.includes(".", email.search("@")) || formatFail) {
+        if (!email.includes("@") || !email.includes(".", email.search("@")) || formatFail && !this.props.isOrder) {
             this.handleAlert("emailFail", true);
         }
-        else if (password.length < 8) {
+        else if (password.length < 8 && !this.props.isOrder) {
             this.handleAlert("passwordLengthFail", true);
         }
-        else if (password !== password2) {
+        else if (password !== password2 && !this.props.isOrder) {
             this.handleAlert("passwordFail", true);
         }
-        else if (!lastname || !firstname || !zip || !city || !address || !phone || !email || !password || !password2) {
+        else if ((!lastname || !firstname || !zip || !city || !address || !phone || !email || !password || !password2) && !this.props.isOrder) {
             this.handleAlert("showFail", true);
         }
         else {
@@ -152,7 +152,13 @@ class Register extends React.Component {
 
     render() {
         return (
-            <Form className="w-80 center bg-light-yellow pa2 br3 mt2">
+            <Form className="w-80 center bg-light-yellow pa2 br3 mt2"
+                onKeyPress={(ev) => {
+                    if (ev.key === 'Enter' && !this.props.isOrder) {
+                        this.onSubmit();
+                        ev.preventDefault();
+                    }
+                }}>
                 <Alert show={this.state.emailFail} variant="danger" >
                     <p>
                         Hibás e-mail cím formátum!
