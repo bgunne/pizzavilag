@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/pizzavilag/static/css/main.fa617638.chunk.css",
-    "main.js": "/pizzavilag/static/js/main.a5ca7cba.chunk.js",
-    "main.js.map": "/pizzavilag/static/js/main.a5ca7cba.chunk.js.map",
+    "main.js": "/pizzavilag/static/js/main.fad034eb.chunk.js",
+    "main.js.map": "/pizzavilag/static/js/main.fad034eb.chunk.js.map",
     "runtime-main.js": "/pizzavilag/static/js/runtime-main.fae46e9b.js",
     "runtime-main.js.map": "/pizzavilag/static/js/runtime-main.fae46e9b.js.map",
     "static/css/2.abd97b8c.chunk.css": "/pizzavilag/static/css/2.abd97b8c.chunk.css",
     "static/js/2.efdfde70.chunk.js": "/pizzavilag/static/js/2.efdfde70.chunk.js",
     "static/js/2.efdfde70.chunk.js.map": "/pizzavilag/static/js/2.efdfde70.chunk.js.map",
     "index.html": "/pizzavilag/index.html",
-    "precache-manifest.c88b4cc5b52e84dba3d71061519360c7.js": "/pizzavilag/precache-manifest.c88b4cc5b52e84dba3d71061519360c7.js",
+    "precache-manifest.85e5ca1b9ff7ec198c2157e94aff85ab.js": "/pizzavilag/precache-manifest.85e5ca1b9ff7ec198c2157e94aff85ab.js",
     "service-worker.js": "/pizzavilag/service-worker.js",
     "static/css/2.abd97b8c.chunk.css.map": "/pizzavilag/static/css/2.abd97b8c.chunk.css.map",
     "static/css/main.fa617638.chunk.css.map": "/pizzavilag/static/css/main.fa617638.chunk.css.map",
@@ -21,6 +21,6 @@
     "static/css/2.abd97b8c.chunk.css",
     "static/js/2.efdfde70.chunk.js",
     "static/css/main.fa617638.chunk.css",
-    "static/js/main.a5ca7cba.chunk.js"
+    "static/js/main.fad034eb.chunk.js"
   ]
 }
