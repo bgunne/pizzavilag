@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-
 import PizzaEditor from '../PizzaEditor/PizzaEditor';
+import Alert from 'react-bootstrap/Alert';
+import Button from 'react-bootstrap/Button';
 
 class Admin extends Component {
 	constructor(props) {
@@ -20,7 +21,8 @@ class Admin extends Component {
 			deleteId: '',
 			showUpload: false,
 			selectedFile: null,
-			modificationType: ''
+			modificationType: '',
+			showFail: false,
 		};
 	}
 
@@ -73,18 +75,25 @@ class Admin extends Component {
 	}
 
 	uploadPizza = async () => {
-		await fetch('https://shielded-coast-80926.herokuapp.com/manage', {
-			method: 'post',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				name: this.state.pizzaEdit.name,
-				topping: this.state.pizzaEdit.topping,
-				price: this.state.pizzaEdit.price,
-				imageurl: this.state.pizzaEdit.imageurl
-			})
-		});
-		this.setState({ showUpload: false, pizzaEdit: [] });
-		this.loadPizzas();
+		if(!this.state.pizzaEdit.name || !this.state.pizzaEdit.topping || !this.state.pizzaEdit.price)
+		{
+			this.handleAlert("showFail", true);
+		}
+		else
+		{
+			await fetch('https://shielded-coast-80926.herokuapp.com/manage', {
+				method: 'post',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					name: this.state.pizzaEdit.name,
+					topping: this.state.pizzaEdit.topping,
+					price: this.state.pizzaEdit.price,
+					imageurl: this.state.pizzaEdit.imageurl
+				})
+			});
+			this.setState({ showUpload: false, pizzaEdit: [] });
+			this.loadPizzas();
+		}
 	}
 
 	handleCloseAddForm() {
@@ -98,6 +107,12 @@ class Admin extends Component {
 	handleDeleteId(id) {
 		this.setState({ deleteId: id });
 	}
+
+	handleAlert(type, show) {
+        if (type === "showFail") {
+            this.setState({ showFail: show });
+        }
+    }
 
 	addBar() {
 		if (this.state.showUpload === true) {
@@ -203,6 +218,17 @@ class Admin extends Component {
 		return (
 			<div className="w-80 flex items-center center">
 				<article className="pa2 w-100">
+				<Alert show={this.state.showFail} variant="danger" >
+                    <p>
+                        Kérlek tölts ki minden kötelező mezőt.
+                    </p>
+                    <hr />
+                    <div className="d-flex justify-content-end">
+                        <Button onClick={() => this.handleAlert("showFail", false)} variant="outline-danger">
+                            Bezárás
+                    </Button>
+                    </div>
+                </Alert>
 					<div className="flex justify-between items-center pa2">
 						<h1 className="f4 bold left tl mw6 mt-auto mb-auto">Pizzák</h1>
 					</div>

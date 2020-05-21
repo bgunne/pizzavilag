@@ -1,23 +1,21 @@
 import React, { Component } from 'react';
-
 import Register from '../Register/Register';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 
 
 
-class Order extends Component{
+class Order extends Component {
 
-    constructor(props)
-    {
+    constructor(props) {
         super(props);
-        this.state=
+        this.state =
         {
             showFail: false,
             showSuccess: false,
             formatFail: false,
             emailFail: false,
-            user: 
+            user:
             {
                 email: '',
                 password: '',
@@ -34,7 +32,7 @@ class Order extends Component{
     }
 
     loadUser = (reg) => {
-        this.setState({user: reg})
+        this.setState({ user: reg })
     }
 
     userSignedIn = (user) => {
@@ -59,10 +57,16 @@ class Order extends Component{
         }
     }
 
-    onSubmit = async () =>{
+    onSubmit = async () => {
 
-        const {shoppingCart} = this.props;
-        const {user} = this.state;
+        const { shoppingCart } = this.props;
+        let user = '';
+        if (this.props.user.id) {
+            user = this.props.user;
+        }
+        else {
+            user = this.state.user;
+        }
 
         let userData = `${user.lastname} ${user.firstname}\n${user.zip} ${user.city} ${user.address}\nTel.: ${user.phone}\nE-mail: ${user.email}\nMegj.: ${user.comment}`;
 
@@ -100,7 +104,7 @@ class Order extends Component{
                             }
                         )
                 });
-            
+
             this.handleAlert("showSuccess", true);
             this.props.onEmptyCart();
         }
@@ -121,7 +125,7 @@ class Order extends Component{
         }
     }
 
-    render(){
+    render() {
         return (
             <div className="flex flex-column items-center " >
                 <Alert show={this.state.emailFail} variant="danger" >
@@ -188,10 +192,10 @@ class Order extends Component{
                     </p>
                 </div>
             </div>
-    
+
         );
     }
-    
+
 }
 
 export default Order;
