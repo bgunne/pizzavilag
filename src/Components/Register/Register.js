@@ -94,7 +94,7 @@ class Register extends React.Component {
             }
         }
         )
-        if (!email.includes("@") || !email.includes(".", email.search("@")) || formatFail && !this.props.isOrder) {
+        if ((!email.includes("@") || !email.includes(".", email.search("@")) || formatFail) && !this.props.isOrder) {
             this.handleAlert("emailFail", true);
         }
         else if (password.length < 8 && !this.props.isOrder) {
