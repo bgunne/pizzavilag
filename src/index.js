@@ -8,11 +8,11 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { createLogger } from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
-import { requestPizzas, searchPizzas } from './reducers';
+import { requestPizzas, searchPizzas, filterPizzas, manageCart } from './reducers';
 
 const logger = createLogger();
 
-const rootReducer = combineReducers({ requestPizzas, searchPizzas });
+const rootReducer = combineReducers({ requestPizzas, searchPizzas, filterPizzas, manageCart });
 
 const store = createStore(rootReducer, applyMiddleware(thunkMiddleware, logger));
 

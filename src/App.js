@@ -11,7 +11,7 @@ import Signin from './Components/Signin/Signin';
 import Register from './Components/Register/Register';
 import Orders from './Components/Orders/Orders';
 import Admin from './Components/Admin/Admin';
-import { requestPizzas, setSearchField } from './actions.js';
+import { requestPizzas, setSearchField, filterPizzas, addToCart, deleteFromCart, emptyCart } from './actions.js';
 import { connect } from 'react-redux';
 
 import './App.css';
@@ -20,7 +20,9 @@ const mapStateToProps = state => {
   return {
     pizzas: state.requestPizzas.pizzas,
     isPending: state.requestPizzas.isPending,
-    searchField: state.searchPizzas.searchField
+    searchField: state.searchPizzas.searchField,
+    filteredPizzas: state.filterPizzas.filteredPizzas,
+    shoppingCart: state.manageCart.shoppingCart
   }
 }
 
@@ -28,6 +30,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onRequestPizzas: () => requestPizzas(dispatch),
     onSearchChange: (event) => dispatch(setSearchField(event.target.value)),
+    filterPizzas: (pizzas, searchField) => filterPizzas(dispatch, pizzas, searchField),
+    addToCart: (pizza, shoppingCart) => addToCart(dispatch, pizza, shoppingCart),
+    deleteFromCart: (item, shoppingCart) => deleteFromCart(dispatch, item, shoppingCart),
+    emptyCart: () => emptyCart(dispatch)
   }
 }
 
@@ -53,13 +59,9 @@ class App extends Component {
         role: '',
         joined: ''
       },
-      pizzas: [],
-      filteredPizzas: [],
-      searchField: '',
       prizeMultiplier: Number(process.env.REACT_APP_BASE_PRIZEMULTIPLIER),
       size: Number(process.env.REACT_APP_BASE_SIZE),
       sumPrice: 0,
-      shoppingCart: [],
       orders: []
     }
   }
@@ -88,22 +90,16 @@ class App extends Component {
 
 
   loadPizzas = async () => {
-    if (!this.state.pizzas.length) {
-      /*const response = await fetch('https://shielded-coast-80926.herokuapp.com/',
-        {
-          method: 'get',
-        });
-      const pizzas = await response.json();
-      this.setState({ pizzas })*/
+    if (!this.props.pizzas.length) {
       await this.props.onRequestPizzas();
-      this.filterPizzas();
+      this.props.filterPizzas(this.props.pizzas, this.props.searchField);
     }
   }
 
 
   onRouteChange = (route) => {
     if (route === "signedin") {
-      this.setState({ isSignedIn: true, searchField: '' });
+      this.setState({ isSignedIn: true, });
       route = "home";
     }
     else if (route === "signout") {
@@ -112,13 +108,8 @@ class App extends Component {
     }
     else if (route === "admin") {
       this.setState({ isSignedIn: true, isAdmin: true });
-
     }
-    this.setState({ route: route, searchField: '' });
-  }
-
-  onSearchChange = (event) => {
-    this.setState({ searchField: event.target.value });
+    this.setState({ route: route });
   }
 
   onSizeChange = (size) => {
@@ -132,26 +123,11 @@ class App extends Component {
   }
 
   onAddToCart = (pizza) => {
-    this.setState(prevState => (
-      {
-        shoppingCart: [...prevState.shoppingCart, pizza]
-      }))
+    this.props.addToCart(pizza, this.props.shoppingCart);
   }
 
   onDeleteFromCart = (item) => {
-    const newCart = this.state.shoppingCart;
-    newCart.forEach(function (pizza, index) {
-      if (pizza.id === item.id) {
-        newCart.splice(index, 1);
-      }
-    });
-
-
-    this.setState({ shoppingCart: newCart });
-  }
-
-  onEmptyCart = () => {
-    this.setState({ shoppingCart: [] });
+    this.props.deleteFromCart(item, this.props.shoppingCart);
   }
 
   onSumPriceChange = (sumPrice) => {
@@ -176,16 +152,17 @@ class App extends Component {
   }
 
   componentDidMount() {
-    if (!this.state.pizzas.length) {
-      this.loadPizzas();
-    }
+    this.loadPizzas();
   }
 
   componentDidUpdate(prevProps, prevState) {
     const { route } = this.state;
-    const { searchField } = this.props;
-    if (searchField !== prevProps.searchField || (route !== prevState.route && route === "home")) {
-      this.filterPizzas();
+    const { searchField, pizzas } = this.props;
+    if (searchField !== prevProps.searchField) {
+      this.props.filterPizzas(pizzas, searchField);
+    }
+    else if (route !== prevState.route && route === "home") {
+      this.props.filterPizzas(pizzas, '');
     }
   }
 
@@ -195,7 +172,6 @@ class App extends Component {
 
 
   render() {
-    const { filteredPizzas } = this.state;
 
     if (this.props.isPending)
       return (
@@ -218,8 +194,8 @@ class App extends Component {
                 <SizeBox sizeChange={this.onSizeChange} />
               </div>
               <Scroll>
-                <CardList pizzas={filteredPizzas} priceMultiplier={this.state.prizeMultiplier} size={this.state.size} addToCart={this.onAddToCart} />
-                <ShoppingCart onRouteChange={this.onRouteChange} onSumPriceChange={this.onSumPriceChange} shoppingCart={this.state.shoppingCart} deleteFromCart={this.onDeleteFromCart} />
+                <CardList pizzas={this.props.filteredPizzas} priceMultiplier={this.state.prizeMultiplier} size={this.state.size} addToCart={this.onAddToCart} />
+                <ShoppingCart onRouteChange={this.onRouteChange} onSumPriceChange={this.onSumPriceChange} shoppingCart={this.props.shoppingCart} deleteFromCart={this.onDeleteFromCart} />
               </Scroll>
             </div>
             :
@@ -236,7 +212,7 @@ class App extends Component {
                     (
                       this.state.route === "order"
                         ?
-                        <Order onRouteChange={this.onRouteChange} onEmptyCart={this.onEmptyCart} sumPrice={this.state.sumPrice} shoppingCart={this.state.shoppingCart} user={this.state.user} updateUser={this.updateUser} />
+                        <Order onRouteChange={this.onRouteChange} onEmptyCart={this.props.emptyCart} sumPrice={this.state.sumPrice} shoppingCart={this.props.shoppingCart} user={this.state.user} updateUser={this.updateUser} />
                         :
                         (
                           this.state.route === "signin"

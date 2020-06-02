@@ -15,7 +15,7 @@ const ShhoppingCart = ({onRouteChange, onSumPriceChange, shoppingCart, deleteFro
         return(
             <main className="center" style={{overflowY: 'auto', height:'600px', maxWidth: "200px", margin: "auto"}}><i className="gg-shopping-cart dib"></i> Kosár tartalma:
                 {
-                    shoppingCart.map((pizza, i) =>
+                    shoppingCart.map((pizza) =>
                     {
                         sumPrice+=pizza.price;
                         pizza.id=id;
