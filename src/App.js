@@ -11,8 +11,25 @@ import Signin from './Components/Signin/Signin';
 import Register from './Components/Register/Register';
 import Orders from './Components/Orders/Orders';
 import Admin from './Components/Admin/Admin';
+import { requestPizzas, setSearchField } from './actions.js';
+import { connect } from 'react-redux';
 
 import './App.css';
+
+const mapStateToProps = state => {
+  return {
+    pizzas: state.requestPizzas.pizzas,
+    isPending: state.requestPizzas.isPending,
+    searchField: state.searchPizzas.searchField
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onRequestPizzas: () => requestPizzas(dispatch),
+    onSearchChange: (event) => dispatch(setSearchField(event.target.value)),
+  }
+}
 
 class App extends Component {
   constructor(props) {
@@ -20,8 +37,8 @@ class App extends Component {
     this.state =
     {
       route: 'home',
-      isSignedIn: true,
-      isAdmin: true,
+      isSignedIn: false,
+      isAdmin: false,
       user:
       {
         id: '',
@@ -72,12 +89,13 @@ class App extends Component {
 
   loadPizzas = async () => {
     if (!this.state.pizzas.length) {
-      const response = await fetch('https://shielded-coast-80926.herokuapp.com/',
+      /*const response = await fetch('https://shielded-coast-80926.herokuapp.com/',
         {
           method: 'get',
         });
       const pizzas = await response.json();
-      this.setState({ pizzas })
+      this.setState({ pizzas })*/
+      await this.props.onRequestPizzas();
       this.filterPizzas();
     }
   }
@@ -141,15 +159,16 @@ class App extends Component {
   }
 
   filterPizzas = () => {
-    if (this.state.pizzas.length && this.state.searchField.length) {
-      const filteredPizzas = this.state.pizzas.filter(
+    if (this.props.pizzas.length && this.props.searchField.length) {
+      const filteredPizzas = this.props.pizzas.filter(
         pizzas => {
-          return pizzas.name.toLowerCase().includes(this.state.searchField.toLowerCase());
+          return pizzas.name.toLowerCase().includes(this.props.searchField.toLowerCase());
         })
+      console.log(filteredPizzas);
       this.setState({ filteredPizzas });
     }
-    else if (this.state.pizzas.length) {
-      this.setState({ filteredPizzas: this.state.pizzas })
+    else if (this.props.pizzas.length) {
+      this.setState({ filteredPizzas: this.props.pizzas })
     }
     else {
       console.error("Nem sikerült betölteni a pizzákat.");
@@ -163,9 +182,9 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { searchField, route } = this.state;
-
-    if (searchField !== prevState.searchField || (route !== prevState.route && route === "home")) {
+    const { route } = this.state;
+    const { searchField } = this.props;
+    if (searchField !== prevProps.searchField || (route !== prevState.route && route === "home")) {
       this.filterPizzas();
     }
   }
@@ -178,13 +197,13 @@ class App extends Component {
   render() {
     const { filteredPizzas } = this.state;
 
-
-    /*return( 
-      <div className="appBody" style={{textAlign: "center"}}>
-        <h1>Kínálat betöltése...</h1>
-        <i className="gg-spinner-alt" style={{margin: "auto"}}></i>
-      </div>
-    );*/
+    if (this.props.isPending)
+      return (
+        <div className="appBody" style={{ textAlign: "center" }}>
+          <h1>Kínálat betöltése...</h1>
+          <i className="gg-spinner-alt" style={{ margin: "auto" }}></i>
+        </div>
+      );
 
 
     return (
@@ -195,7 +214,7 @@ class App extends Component {
             ?
             <div>
               <div className="flex justify-center">
-                <SearchBox searchChange={this.onSearchChange} />
+                <SearchBox searchChange={this.props.onSearchChange} />
                 <SizeBox sizeChange={this.onSizeChange} />
               </div>
               <Scroll>
@@ -225,19 +244,13 @@ class App extends Component {
                             : <Register isOrder={false} loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
                         )
                     )
-
                 )
             )
         }
-
-
-
-
-
       </div>
     );
 
   }
 }
 
-export default App;
+export default connect(mapStateToProps, mapDispatchToProps)(App);

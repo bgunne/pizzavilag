@@ -86,15 +86,9 @@ class Register extends React.Component {
     onSubmit = async () => {
         const { email, password, password2, firstname, lastname, phone, zip, city, address, comment } = this.state;
 
-        const blackList = [",", "@", "(", ")", "'", "\"", "`", ";", "#", "_", "<", ">", "+", "[", "]", "{", "}"];
-        let formatFail = false;
-        blackList.forEach(char => {
-            if (email.includes(char, email.search("@") + 1) && !this.props.isOrder) {
-                formatFail = true;
-            }
-        }
-        )
-        if ((!email.includes("@") || !email.includes(".", email.search("@")) || formatFail) && !this.props.isOrder) {
+        // eslint-disable-next-line
+        const blackList = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; //RFC 5322 Official Standard
+        if (!blackList.test(email)) {
             this.handleAlert("emailFail", true);
         }
         else if (password.length < 8 && !this.props.isOrder) {
