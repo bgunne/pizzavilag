@@ -5,23 +5,33 @@ import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 
+import { onSigninFormChange } from '../../_actions/signin.js';
+import { connect } from 'react-redux';
+
+const mapStateToProps = state => {
+    return {
+        signInEmail: state.onSigninFormChange.signInEmail,
+        signInPassword: state.onSigninFormChange.signInPassword,
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onSigninFormChange: (data, targetId) => onSigninFormChange(dispatch, data, targetId)
+    }
+}
+
 class Signin extends React.Component {
     constructor(props) {
         super(props);
         this.state =
         {
-            signInEmail: '',
-            signInPassword: '',
             showFail: false
         }
     }
 
-    onEmailChange = (event) => {
-        this.setState({ signInEmail: event.target.value });
-
-    }
-    onPasswordChange = (event) => {
-        this.setState({ signInPassword: event.target.value });
+    onSigninFormChange = (event) => {
+        this.props.onSigninFormChange(event.target.value, event.target.id);
     }
 
     onSubmit = async () => {
@@ -33,8 +43,8 @@ class Signin extends React.Component {
                 body: JSON.stringify
                     (
                         {
-                            email: this.state.signInEmail,
-                            password: this.state.signInPassword
+                            email: this.props.signInEmail,
+                            password: this.props.signInPassword
                         }
                     )
             }
@@ -81,20 +91,20 @@ class Signin extends React.Component {
                     </Button>
                     </div>
                 </Alert>
-                <Form.Group controlId="formBasicEmail">
+                <Form.Group controlId="signInEmail">
                     <Form.Label>E-mail cím</Form.Label>
                     <Form.Control
                         type="email"
                         placeholder="pelda@pizzavilag.hu"
-                        onChange={this.onEmailChange}
+                        onChange={this.onSigninFormChange}
                     />
                 </Form.Group>
-                <Form.Group controlId="formBasicPassword">
+                <Form.Group controlId="signInPassword">
                     <Form.Label>Jelszó</Form.Label>
                     <Form.Control
                         type="password"
                         placeholder="Jelszó"
-                        onChange={this.onPasswordChange}
+                        onChange={this.onSigninFormChange}
                     />
                 </Form.Group>
                 <p className="f6 grow no-underline br-pill ph3 pv2 dib white bg-black pointer ba bw0"
@@ -108,4 +118,4 @@ class Signin extends React.Component {
 }
 
 
-export default Signin;
+export default connect(mapStateToProps, mapDispatchToProps)(Signin);

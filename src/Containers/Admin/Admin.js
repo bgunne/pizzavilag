@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PizzaEditor from '../PizzaEditor/PizzaEditor';
+import PizzaEditor from '../../Components/PizzaEditor/PizzaEditor';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 

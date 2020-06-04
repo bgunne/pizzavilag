@@ -2,8 +2,21 @@ import React, { Component } from 'react';
 import Register from '../Register/Register';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
+import { loadGuest } from '../../_actions/order.js';
+import { connect } from 'react-redux';
 
+const mapStateToProps = state => {
+    return {
+        guest: state.manageGuest.guest,
+        user: state.manageUser.user
+    }
+}
 
+const mapDispatchToProps = (dispatch) => {
+    return {
+        loadGuest: (data) => loadGuest(dispatch, data)
+    }
+}
 
 class Order extends Component {
 
@@ -15,19 +28,6 @@ class Order extends Component {
             showSuccess: false,
             formatFail: false,
             emailFail: false,
-            user:
-            {
-                email: '',
-                password: '',
-                password2: '',
-                firstname: '',
-                lastname: '',
-                phone: '',
-                zip: '',
-                city: '',
-                address: '',
-                comment: ''
-            }
         }
     }
 
@@ -53,7 +53,7 @@ class Order extends Component {
             );
         }
         else {
-            return (<Register loadUser={this.loadUser} isOrder={true} />);
+            return (<Register loadUser={this.props.loadGuest} isOrder={true} />);
         }
     }
 
@@ -65,7 +65,7 @@ class Order extends Component {
             user = this.props.user;
         }
         else {
-            user = this.state.user;
+            user = this.props.guest;
         }
 
         let userData = `${user.lastname} ${user.firstname}\n${user.zip} ${user.city} ${user.address}\nTel.: ${user.phone}\nE-mail: ${user.email}\nMegj.: ${user.comment}`;
@@ -198,4 +198,4 @@ class Order extends Component {
 
 }
 
-export default Order;
+export default connect(mapStateToProps, mapDispatchToProps)(Order);

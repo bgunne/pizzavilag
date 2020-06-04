@@ -5,11 +5,6 @@ import Col from 'react-bootstrap/Col';
 
 class PizzaEditor extends React.Component
 {
- // eslint-disable-next-line
-    constructor(props) 
-    {
-        super(props);
-    }
 
     render()
     {

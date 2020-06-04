@@ -1,11 +1,31 @@
 import React from 'react';
-
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
+import { onRegisterFormChange } from '../../_actions/register.js';
+import { connect } from 'react-redux';
 
+const mapStateToProps = state => {
+    return {
+        email: state.onRegisterFormChange.email,
+        password: state.onRegisterFormChange.password,
+        password2: state.onRegisterFormChange.password2,
+        firstname: state.onRegisterFormChange.firstname,
+        lastname: state.onRegisterFormChange.lastname,
+        phone: state.onRegisterFormChange.phone,
+        zip: state.onRegisterFormChange.zip,
+        city: state.onRegisterFormChange.city,
+        address: state.onRegisterFormChange.address,
+        comment: state.onRegisterFormChange.comment
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return{
+        onRegisterFormChange: (data,targetId) => onRegisterFormChange(dispatch,data,targetId)
+    }
+}
 
 class Register extends React.Component {
 
@@ -13,16 +33,6 @@ class Register extends React.Component {
         super(props);
         this.state =
         {
-            email: '',
-            password: '',
-            password2: '',
-            firstname: '',
-            lastname: '',
-            phone: '',
-            zip: '',
-            city: '',
-            address: '',
-            comment: '',
             showFail: false,
             passwordFail: false,
             passwordLengthFail: false,
@@ -52,7 +62,7 @@ class Register extends React.Component {
                             <Form.Control
                                 type="password"
                                 placeholder="Jelszó"
-                                onChange={this.onFormChange} />
+                                onChange={this.onRegisterFormChange} />
                         </Form.Group>
                     </Col>
 
@@ -62,7 +72,7 @@ class Register extends React.Component {
                             <Form.Control
                                 type="password"
                                 placeholder="Jelszó"
-                                onChange={this.onFormChange} />
+                                onChange={this.onRegisterFormChange} />
                         </Form.Group>
                     </Col>
                 </Form.Row>
@@ -71,20 +81,18 @@ class Register extends React.Component {
     }
 
 
-    onFormChange = (event) => {
-        this.setState({ [event.target.id]: event.target.value });
-
+    onRegisterFormChange = (event) => {
+        this.props.onRegisterFormChange(event.target.value, event.target.id);
     }
 
     componentDidUpdate(prevProps, prevState) {
-
-        if (this.state !== prevState) {
-            this.props.loadUser(this.state);
+        if (this.props !== prevProps) {
+            this.props.loadUser(this.props);
         }
     }
 
     onSubmit = async () => {
-        const { email, password, password2, firstname, lastname, phone, zip, city, address, comment } = this.state;
+        const { email, password, password2, firstname, lastname, phone, zip, city, address, comment } = this.props;
 
         // eslint-disable-next-line
         const blackList = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; //RFC 5322 Official Standard
@@ -202,7 +210,7 @@ class Register extends React.Component {
                     <Form.Control
                         type="email"
                         placeholder="pelda@pizzavilag.hu"
-                        onChange={this.onFormChange} />
+                        onChange={this.onRegisterFormChange} />
                 </Form.Group>
 
                 {this.handlePassword(this.props.isOrder)}
@@ -214,7 +222,7 @@ class Register extends React.Component {
                             <Form.Control
                                 type="text"
                                 placeholder="Vezetéknév"
-                                onChange={this.onFormChange} />
+                                onChange={this.onRegisterFormChange} />
                         </Form.Group>
                     </Col>
 
@@ -224,7 +232,7 @@ class Register extends React.Component {
                             <Form.Control
                                 type="text"
                                 placeholder="Keresztnév"
-                                onChange={this.onFormChange} />
+                                onChange={this.onRegisterFormChange} />
                         </Form.Group>
                     </Col>
                 </Form.Row>
@@ -234,7 +242,7 @@ class Register extends React.Component {
                     <Form.Control
                         type="text"
                         placeholder="Telefonszám"
-                        onChange={this.onFormChange} />
+                        onChange={this.onRegisterFormChange} />
                 </Form.Group>
                 <Form.Row>
                     <Col className="col-5">
@@ -243,7 +251,7 @@ class Register extends React.Component {
                             <Form.Control
                                 type="number"
                                 placeholder="Irányítószám"
-                                onChange={this.onFormChange} />
+                                onChange={this.onRegisterFormChange} />
                         </Form.Group>
                     </Col>
 
@@ -253,7 +261,7 @@ class Register extends React.Component {
                             <Form.Control
                                 type="text"
                                 placeholder="Település"
-                                onChange={this.onFormChange} />
+                                onChange={this.onRegisterFormChange} />
                         </Form.Group>
                     </Col>
                 </Form.Row>
@@ -264,7 +272,7 @@ class Register extends React.Component {
                     <Form.Control
                         type="text"
                         placeholder="Cím"
-                        onChange={this.onFormChange} />
+                        onChange={this.onRegisterFormChange} />
                 </Form.Group>
 
                 <Form.Group controlId="comment">
@@ -272,7 +280,7 @@ class Register extends React.Component {
                     <Form.Control
                         type="text"
                         placeholder="Pl.: Kapucsengő száma - nem kötelező kitölteni!"
-                        onChange={this.onFormChange} />
+                        onChange={this.onRegisterFormChange} />
                 </Form.Group>
 
 
@@ -282,5 +290,4 @@ class Register extends React.Component {
     }
 
 }
-
-export default Register;
+export default connect(mapStateToProps, mapDispatchToProps)(Register);
