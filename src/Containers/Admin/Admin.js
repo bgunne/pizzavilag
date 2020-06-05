@@ -2,20 +2,34 @@ import React, { Component } from 'react';
 import PizzaEditor from '../../Components/PizzaEditor/PizzaEditor';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
+import { requestPizzas, deletePizza, uploadPizza, updatePizza } from '../../_actions/app.js';
+import { onPizzaEditFormChange, loadPizzaEdit, emptyPizzaEdit } from '../../_actions/admin.js';
+import { connect } from 'react-redux';
+
+const mapStateToProps = state => {
+	return {
+		pizzas: state.managePizzas.pizzas,
+		pizzaEdit: state.onPizzaEditFormChange.pizzaEdit
+	}
+}
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		requestPizzas: () => requestPizzas(dispatch),
+		deletePizza: (id) => deletePizza(dispatch, id),
+		uploadPizza: (name, topping, price, imageurl) => uploadPizza(dispatch, name, topping, price, imageurl),
+		updatePizza: (id, name, topping, price, imageurl) => updatePizza(dispatch, id, name, topping, price, imageurl),
+		onPizzaEditFormChange: (data, targetId) => onPizzaEditFormChange(dispatch, data, targetId),
+		loadPizzaEdit: (pizza) => loadPizzaEdit(dispatch, pizza),
+		emptyPizzaEdit: () => dispatch(emptyPizzaEdit())
+	}
+}
 
 class Admin extends Component {
 	constructor(props) {
 		super(props);
 		this.state =
 		{
-			pizzas: [],
-			pizzaEdit: {
-				id: '',
-				name: '',
-				topping: '',
-				price: '',
-				imageurl: ''
-			},
 			showEdit: false,
 			editId: '',
 			deleteId: '',
@@ -26,73 +40,42 @@ class Admin extends Component {
 		};
 	}
 
-	loadPizzas = async () => {
-		const response = await fetch('https://shielded-coast-80926.herokuapp.com/manage', {
-			method: 'get'
-		})
-		const pizzas = await response.json();
-		this.setState({ pizzas });
-	};
-
-	deletePizza = async (id) => {
-		await fetch('https://shielded-coast-80926.herokuapp.com/manage', {
-			method: 'delete',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				id: id
-			})
-		});
-
-		this.loadPizzas();
-	};
-
 	changePizza(pizza) {
-		this.setState({ pizzaEdit: pizza, showEdit: true, editId: pizza.id });
+		this.props.loadPizzaEdit(pizza);
+		this.setState({ showEdit: true, editId: pizza.id });
 	}
 
 	newPizza() {
-		this.setState({ showUpload: true, pizzaEdit: [] });
+		this.props.emptyPizzaEdit();
+		this.setState({ showUpload: true });
 	}
 
 	onFormChange = (event) => {
-		this.setState(Object.assign(this.state.pizzaEdit, { [event.target.id]: event.target.value }));
+		this.props.onPizzaEditFormChange(event.target.value, event.target.id);
 	};
 
 	updatePizza = async () => {
-		await fetch('https://shielded-coast-80926.herokuapp.com/manage', {
-			method: 'put',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				id: this.state.pizzaEdit.id,
-				name: this.state.pizzaEdit.name,
-				topping: this.state.pizzaEdit.topping,
-				price: this.state.pizzaEdit.price,
-				imageurl: this.state.pizzaEdit.imageurl
-			})
-		});
-		this.setState({ showEdit: false });
-		this.loadPizzas();
+		if (!this.props.pizzaEdit.name || !this.props.pizzaEdit.topping || !this.props.pizzaEdit.price) {
+			this.handleAlert("showFail", true);
+		}
+		else {
+			console.log("HELLO WORLD");
+			console.log(this.props.pizzaEdit);
+			await this.props.updatePizza(this.props.pizzaEdit.id, this.props.pizzaEdit.name, this.props.pizzaEdit.topping, this.props.pizzaEdit.price, this.props.pizzaEdit.imageurl);
+			this.props.emptyPizzaEdit();
+			this.setState({ showEdit: false });
+		}
 	}
 
 	uploadPizza = async () => {
-		if(!this.state.pizzaEdit.name || !this.state.pizzaEdit.topping || !this.state.pizzaEdit.price)
-		{
+		if (!this.props.pizzaEdit.name || !this.props.pizzaEdit.topping || !this.props.pizzaEdit.price) {
 			this.handleAlert("showFail", true);
 		}
-		else
-		{
-			await fetch('https://shielded-coast-80926.herokuapp.com/manage', {
-				method: 'post',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					name: this.state.pizzaEdit.name,
-					topping: this.state.pizzaEdit.topping,
-					price: this.state.pizzaEdit.price,
-					imageurl: this.state.pizzaEdit.imageurl
-				})
-			});
-			this.setState({ showUpload: false, pizzaEdit: [] });
-			this.loadPizzas();
+		else {
+			console.log(this.props.pizzaEdit.name);
+			await this.props.uploadPizza(this.props.pizzaEdit.name, this.props.pizzaEdit.topping, this.props.pizzaEdit.price, this.props.pizzaEdit.imageurl);
+			this.props.emptyPizzaEdit();
+			this.setState({ showUpload: false });
 		}
 	}
 
@@ -109,10 +92,10 @@ class Admin extends Component {
 	}
 
 	handleAlert(type, show) {
-        if (type === "showFail") {
-            this.setState({ showFail: show });
-        }
-    }
+		if (type === "showFail") {
+			this.setState({ showFail: show });
+		}
+	}
 
 	addBar() {
 		if (this.state.showUpload === true) {
@@ -131,10 +114,9 @@ class Admin extends Component {
 							className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-dark-green mh1"
 							onClick={() => {
 								/*TODO: FILEUPLOAD
-                                        this.onFileUploadHandler();
-                                        
-                                            this.uploadPizza()
-                                        */
+										this.onFileUploadHandler();
+											this.uploadPizza()
+										*/
 								this.handleModificationType("upload");
 							}}
 						>
@@ -180,7 +162,8 @@ class Admin extends Component {
 			});
 			const body = await response.json();
 			this.setState(
-				Object.assign(this.state.pizzaEdit, {
+
+				Object.assign(this.props.pizzaEdit, {
 					imageurl: `https://shielded-coast-80926.herokuapp.com/public/images/${body.filename}`
 				})
 			);
@@ -188,7 +171,9 @@ class Admin extends Component {
 	};
 
 	componentDidMount() {
-		this.loadPizzas();
+		if (!this.props.pizzas.length) {
+			this.props.requestPizzas();
+		}
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -204,7 +189,7 @@ class Admin extends Component {
 				this.uploadPizza();
 			}
 			else if (modificationType === "delete") {
-				this.deletePizza(deleteId);
+				this.props.deletePizza(deleteId);
 			}
 
 			this.setState({ modificationType: '' });
@@ -213,22 +198,22 @@ class Admin extends Component {
 	}
 
 	render() {
-		const { pizzas } = this.state;
+		const { pizzas } = this.props;
 
 		return (
 			<div className="w-80 flex items-center center">
 				<article className="pa2 w-100">
-				<Alert show={this.state.showFail} variant="danger" >
-                    <p>
-                        Kérlek tölts ki minden kötelező mezőt.
+					<Alert show={this.state.showFail} variant="danger" >
+						<p>
+							Kérlek tölts ki minden kötelező mezőt.
                     </p>
-                    <hr />
-                    <div className="d-flex justify-content-end">
-                        <Button onClick={() => this.handleAlert("showFail", false)} variant="outline-danger">
-                            Bezárás
+						<hr />
+						<div className="d-flex justify-content-end">
+							<Button onClick={() => this.handleAlert("showFail", false)} variant="outline-danger">
+								Bezárás
                     </Button>
-                    </div>
-                </Alert>
+						</div>
+					</Alert>
 					<div className="flex justify-between items-center pa2">
 						<h1 className="f4 bold left tl mw6 mt-auto mb-auto">Pizzák</h1>
 					</div>
@@ -262,11 +247,10 @@ class Admin extends Component {
 												className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-dark-green mt-auto mb-auto"
 												onClick={() => {
 													/*FILEUPLOAD...
-                                                        this.onFileUploadHandler();
-                                                        
-                                                            this.updatePizza()
-                                                        */
-													//this.updatePizza();
+														this.onFileUploadHandler();
+															this.updatePizza()
+														*/
+													//this.props.updatePizza();
 													this.handleModificationType("update");
 												}}
 											>
@@ -342,4 +326,4 @@ class Admin extends Component {
 	}
 }
 
-export default Admin;
+export default connect(mapStateToProps, mapDispatchToProps)(Admin);

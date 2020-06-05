@@ -1,6 +1,10 @@
 import {
 	REQUEST_PIZZAS_PENDING,
 	REQUEST_PIZZAS_SUCCESS,
+	DELETE_PIZZA_PENDING,
+	DELETE_PIZZA_SUCCESS,
+	UPLOAD_PIZZA_PENDING,
+	UPLOAD_PIZZA_SUCCESS,
 	CHANGE_SEARCHFIELD,
 	FILTER_PIZZAS,
 	ADD_SHOPPINGCART,
@@ -12,7 +16,9 @@ import {
 	UPDATE_USER,
 	SIGNIN,
 	ADMIN,
-	SIGNOUT
+	SIGNOUT,
+	UPDATE_PIZZA_PENDING,
+	UPDATE_PIZZA_SUCCESS,
 } from "../_actiontypes/app.js";
 
 export const requestPizzas = async (dispatch) => {
@@ -24,6 +30,49 @@ export const requestPizzas = async (dispatch) => {
 	const pizzas = await response.json();
 	dispatch({ type: REQUEST_PIZZAS_SUCCESS, payload: pizzas });
 };
+
+export const deletePizza = async (dispatch, id) => {
+	dispatch({ type: DELETE_PIZZA_PENDING });
+	await fetch('https://shielded-coast-80926.herokuapp.com/manage', {
+		method: 'delete',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({
+			id: id
+		})
+	});
+	dispatch({ type: DELETE_PIZZA_SUCCESS, payload: [] });
+}
+
+export const uploadPizza = async (dispatch, name, topping, price, imageurl) => {
+	dispatch({ type: UPLOAD_PIZZA_PENDING });
+	await fetch('https://shielded-coast-80926.herokuapp.com/manage', {
+		method: 'post',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({
+			name: name,
+			topping: topping,
+			price: price,
+			imageurl: imageurl
+		})
+	});
+	dispatch({ type: UPLOAD_PIZZA_SUCCESS, payload: []});
+}
+
+export const updatePizza = async (dispatch, id, name, topping, price, imageurl) => {
+	dispatch({ type: UPDATE_PIZZA_PENDING });
+	await fetch('https://shielded-coast-80926.herokuapp.com/manage', {
+		method: 'put',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({
+			id: id,
+			name: name,
+			topping: topping,
+			price: price,
+			imageurl: imageurl
+		})
+	});
+	dispatch({ type: UPDATE_PIZZA_SUCCESS, payload: []});
+}
 
 export const setSearchField = (text) => ({
 	type: CHANGE_SEARCHFIELD,
@@ -99,9 +148,9 @@ export const loadUser = (dispatch, data) => {
 	});
 };
 
-/*export const updateUser = (dispatch, user) => {
+export const updateUser = (dispatch, user) => {
 	dispatch({ type: UPDATE_USER, payload: user });
-};*/
+};
 
 export const signIn = (dispatch) => {
 	dispatch({ type: SIGNIN });

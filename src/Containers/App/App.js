@@ -18,8 +18,8 @@ import './App.css';
 
 const mapStateToProps = state => {
   return {
-    pizzas: state.requestPizzas.pizzas,
-    isPending: state.requestPizzas.isPending,
+    pizzas: state.managePizzas.pizzas,
+    isPending: state.managePizzas.isPending,
     searchField: state.searchPizzas.searchField,
     filteredPizzas: state.filterPizzas.filteredPizzas,
     shoppingCart: state.manageCart.shoppingCart,
@@ -43,7 +43,7 @@ const mapDispatchToProps = (dispatch) => {
     sumPriceChange: (sumPrice) => sumPriceChange(dispatch, sumPrice),
     sizeChange: (size) => sizeChange(dispatch, size),
     loadUser: (data) => loadUser(dispatch, data),
-    //updateUser: (user) => updateUser(dispatch, user),
+    updateUser: (user) => updateUser(dispatch, user),
     signIn: () => signIn(dispatch),
     signOut: () => signOut(dispatch),
     admin: () => admin(dispatch)
@@ -145,7 +145,7 @@ class App extends Component {
                     (
                       this.state.route === "order"
                         ?
-                        <Order onRouteChange={this.onRouteChange} onEmptyCart={this.props.emptyCart} sumPrice={this.props.sumPrice} shoppingCart={this.props.shoppingCart} user={this.props.user} /*updateUser={this.props.updateUser}*/ />
+                        <Order onRouteChange={this.onRouteChange} onEmptyCart={this.props.emptyCart} sumPrice={this.props.sumPrice} shoppingCart={this.props.shoppingCart} user={this.props.user} updateUser={this.props.updateUser} />
                         :
                         (
                           this.state.route === "signin"

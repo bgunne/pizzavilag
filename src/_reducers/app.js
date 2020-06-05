@@ -1,6 +1,12 @@
 import {
     REQUEST_PIZZAS_PENDING,
     REQUEST_PIZZAS_SUCCESS,
+    DELETE_PIZZA_PENDING,
+    DELETE_PIZZA_SUCCESS,
+    UPDATE_PIZZA_PENDING,
+    UPDATE_PIZZA_SUCCESS,
+    UPLOAD_PIZZA_PENDING,
+    UPLOAD_PIZZA_SUCCESS,
     CHANGE_SEARCHFIELD,
     FILTER_PIZZAS,
     ADD_SHOPPINGCART,
@@ -12,18 +18,24 @@ import {
     UPDATE_USER,
     SIGNIN,
     ADMIN,
-    SIGNOUT
+    SIGNOUT,
 } from '../_actiontypes/app.js';
 
 const initialStatePizzas = {
     isPending: false,
     pizzas: []
 }
-export const requestPizzas = (state = initialStatePizzas, action = {}) => {
+export const managePizzas = (state = initialStatePizzas, action = {}) => {
     switch (action.type) {
         case REQUEST_PIZZAS_PENDING:
+        case UPDATE_PIZZA_PENDING:
+        case DELETE_PIZZA_PENDING:
+        case UPLOAD_PIZZA_PENDING:
             return { ...state, isPending: true };
         case REQUEST_PIZZAS_SUCCESS:
+        case DELETE_PIZZA_SUCCESS:
+        case UPDATE_PIZZA_SUCCESS:
+        case UPLOAD_PIZZA_SUCCESS:
             return { ...state, pizzas: action.payload, isPending: false };
         default: return state;
     }

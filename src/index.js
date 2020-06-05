@@ -8,19 +8,21 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { createLogger } from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
-import { requestPizzas, searchPizzas, filterPizzas, manageCart, manageSize, manageUser } from './_reducers/app';
+import { managePizzas, searchPizzas, filterPizzas, manageCart, manageSize, manageUser } from './_reducers/app';
 import { onRegisterFormChange } from './_reducers/register';
 import { onSigninFormChange } from './_reducers/signin';
 import { manageGuest } from './_reducers/order';
+import { onPizzaEditFormChange } from './_reducers/admin';
 
 
 const logger = createLogger();
 
 const rootReducer = combineReducers({
-  requestPizzas, searchPizzas, filterPizzas, manageCart, manageSize, manageUser,
+  managePizzas, searchPizzas, filterPizzas, manageCart, manageSize, manageUser,
   onRegisterFormChange,
   onSigninFormChange,
-  manageGuest
+  manageGuest,
+  onPizzaEditFormChange
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunkMiddleware, logger));
