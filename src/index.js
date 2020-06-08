@@ -13,20 +13,19 @@ import { onRegisterFormChange } from './_reducers/register';
 import { onSigninFormChange } from './_reducers/signin';
 import { manageGuest } from './_reducers/order';
 import { onPizzaEditFormChange } from './_reducers/admin';
-
-
+import { manageEdit } from './_reducers/admin';
+import { manageOrders } from './_reducers/orders';
 const logger = createLogger();
-
 const rootReducer = combineReducers({
   managePizzas, searchPizzas, filterPizzas, manageCart, manageSize, manageUser,
   onRegisterFormChange,
   onSigninFormChange,
   manageGuest,
-  onPizzaEditFormChange
+  onPizzaEditFormChange,
+  manageEdit,
+  manageOrders
 });
-
 const store = createStore(rootReducer, applyMiddleware(thunkMiddleware, logger));
-
 ReactDOM.render(
   <Provider store={store}>
     <App />

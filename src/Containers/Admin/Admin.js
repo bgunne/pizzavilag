@@ -3,16 +3,17 @@ import PizzaEditor from '../../Components/PizzaEditor/PizzaEditor';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import { requestPizzas, deletePizza, uploadPizza, updatePizza } from '../../_actions/app.js';
-import { onPizzaEditFormChange, loadPizzaEdit, emptyPizzaEdit } from '../../_actions/admin.js';
+import { onPizzaEditFormChange, loadPizzaEdit, emptyPizzaEdit, setEditId, setDeleteId, setModificationType } from '../../_actions/admin.js';
 import { connect } from 'react-redux';
-
 const mapStateToProps = state => {
 	return {
 		pizzas: state.managePizzas.pizzas,
-		pizzaEdit: state.onPizzaEditFormChange.pizzaEdit
+		pizzaEdit: state.onPizzaEditFormChange.pizzaEdit,
+		editId: state.manageEdit.editId,
+		deleteId: state.manageEdit.deleteId,
+		modificationType: state.manageEdit.modificationType
 	}
 }
-
 const mapDispatchToProps = (dispatch) => {
 	return {
 		requestPizzas: () => requestPizzas(dispatch),
@@ -21,39 +22,35 @@ const mapDispatchToProps = (dispatch) => {
 		updatePizza: (id, name, topping, price, imageurl) => updatePizza(dispatch, id, name, topping, price, imageurl),
 		onPizzaEditFormChange: (data, targetId) => onPizzaEditFormChange(dispatch, data, targetId),
 		loadPizzaEdit: (pizza) => loadPizzaEdit(dispatch, pizza),
-		emptyPizzaEdit: () => dispatch(emptyPizzaEdit())
+		emptyPizzaEdit: () => dispatch(emptyPizzaEdit()),
+		setEditId: (id) => setEditId(dispatch, id),
+		setDeleteId: (id) => setDeleteId(dispatch, id),
+		setModificationType: (type) => setModificationType(dispatch, type)
 	}
 }
-
 class Admin extends Component {
 	constructor(props) {
 		super(props);
 		this.state =
 		{
 			showEdit: false,
-			editId: '',
-			deleteId: '',
 			showUpload: false,
 			selectedFile: null,
-			modificationType: '',
 			showFail: false,
 		};
 	}
-
 	changePizza(pizza) {
 		this.props.loadPizzaEdit(pizza);
-		this.setState({ showEdit: true, editId: pizza.id });
+		this.props.setEditId(pizza.id);
+		this.setState({ showEdit: true });
 	}
-
 	newPizza() {
 		this.props.emptyPizzaEdit();
 		this.setState({ showUpload: true });
 	}
-
 	onFormChange = (event) => {
 		this.props.onPizzaEditFormChange(event.target.value, event.target.id);
 	};
-
 	updatePizza = async () => {
 		if (!this.props.pizzaEdit.name || !this.props.pizzaEdit.topping || !this.props.pizzaEdit.price) {
 			this.handleAlert("showFail", true);
@@ -66,7 +63,6 @@ class Admin extends Component {
 			this.setState({ showEdit: false });
 		}
 	}
-
 	uploadPizza = async () => {
 		if (!this.props.pizzaEdit.name || !this.props.pizzaEdit.topping || !this.props.pizzaEdit.price) {
 			this.handleAlert("showFail", true);
@@ -78,25 +74,14 @@ class Admin extends Component {
 			this.setState({ showUpload: false });
 		}
 	}
-
 	handleCloseAddForm() {
 		this.setState({ showUpload: false })
 	}
-
-	handleModificationType(type) {
-		this.setState({ modificationType: type });
-	}
-
-	handleDeleteId(id) {
-		this.setState({ deleteId: id });
-	}
-
 	handleAlert(type, show) {
 		if (type === "showFail") {
 			this.setState({ showFail: show });
 		}
 	}
-
 	addBar() {
 		if (this.state.showUpload === true) {
 			return (
@@ -117,7 +102,7 @@ class Admin extends Component {
 										this.onFileUploadHandler();
 											this.uploadPizza()
 										*/
-								this.handleModificationType("upload");
+								this.props.setModificationType("upload");
 							}}
 						>
 							Pizza Feltöltése
@@ -143,18 +128,15 @@ class Admin extends Component {
 			);
 		}
 	}
-
 	onFileInputChangeHandler = (event) => {
 		this.setState({
 			selectedFile: event.target.files[0],
 			loaded: 0
 		});
 	};
-
 	onFileUploadHandler = async () => {
 		const data = new FormData();
 		data.append('file', this.state.selectedFile);
-
 		if (this.state.selectedFile) {
 			const response = await fetch('https://shielded-coast-80926.herokuapp.com/uploadimage', {
 				method: 'POST',
@@ -162,28 +144,22 @@ class Admin extends Component {
 			});
 			const body = await response.json();
 			this.setState(
-
 				Object.assign(this.props.pizzaEdit, {
 					imageurl: `https://shielded-coast-80926.herokuapp.com/public/images/${body.filename}`
 				})
 			);
 		}
 	};
-
 	componentDidMount() {
 		if (!this.props.pizzas.length) {
 			this.props.requestPizzas();
 		}
 	}
-
 	componentDidUpdate(prevProps, prevState) {
-		const { modificationType, deleteId } = this.state;
-
-		if (modificationType !== prevState.modificationType) {
-
+		const { modificationType, deleteId } = this.props;
+		if (modificationType !== prevProps.modificationType) {
 			if (modificationType === "update") {
 				this.updatePizza();
-
 			}
 			else if (modificationType === "upload") {
 				this.uploadPizza();
@@ -191,15 +167,11 @@ class Admin extends Component {
 			else if (modificationType === "delete") {
 				this.props.deletePizza(deleteId);
 			}
-
-			this.setState({ modificationType: '' });
+			this.props.setModificationType('');
 		}
-
 	}
-
 	render() {
 		const { pizzas } = this.props;
-
 		return (
 			<div className="w-80 flex items-center center">
 				<article className="pa2 w-100">
@@ -217,7 +189,6 @@ class Admin extends Component {
 					<div className="flex justify-between items-center pa2">
 						<h1 className="f4 bold left tl mw6 mt-auto mb-auto">Pizzák</h1>
 					</div>
-
 					<ul className="list pl0 ml0 center ba b--light-silver br ">
 						<li
 							className="ph3 pv3 bb b--light-silver flex tc items-center bg-light-yellow"
@@ -227,7 +198,7 @@ class Admin extends Component {
 							{this.addBar()}
 						</li>
 						{pizzas.map((pizza, i) => {
-							if (this.state.editId === pizza.id && this.state.showEdit) {
+							if (this.props.editId === pizza.id && this.state.showEdit) {
 								return (
 									<li
 										className="ph3 pv3 bb b--light-silver flex tc items-center bg-light-yellow"
@@ -250,8 +221,7 @@ class Admin extends Component {
 														this.onFileUploadHandler();
 															this.updatePizza()
 														*/
-													//this.props.updatePizza();
-													this.handleModificationType("update");
+													this.props.setModificationType('update');
 												}}
 											>
 												Módosítás mentése
@@ -307,8 +277,8 @@ class Admin extends Component {
 											<p
 												className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-dark-red"
 												onClick={() => {
-													this.handleDeleteId(pizza.id);
-													this.handleModificationType("delete");
+													this.props.setDeleteId(pizza.id);
+													this.props.setModificationType("delete");
 												}
 												}
 											>
@@ -325,5 +295,4 @@ class Admin extends Component {
 		);
 	}
 }
-
 export default connect(mapStateToProps, mapDispatchToProps)(Admin);

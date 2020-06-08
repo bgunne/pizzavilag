@@ -20,7 +20,6 @@ import {
     ADMIN,
     SIGNOUT,
 } from '../_actiontypes/app.js';
-
 const initialStatePizzas = {
     isPending: false,
     pizzas: []
@@ -40,7 +39,6 @@ export const managePizzas = (state = initialStatePizzas, action = {}) => {
         default: return state;
     }
 }
-
 const initialStateSearch = {
     searchField: ''
 }
@@ -50,7 +48,6 @@ export const searchPizzas = (state = initialStateSearch, action = {}) => {
         default: return state;
     }
 }
-
 const initialStateFilter = {
     filteredPizzas: []
 }
@@ -60,7 +57,6 @@ export const filterPizzas = (state = initialStateFilter, action = {}) => {
         default: return state;
     }
 }
-
 const initialStateShoppingCart = {
     shoppingCart: [],
     sumPrice: 0
@@ -76,12 +72,10 @@ export const manageCart = (state = initialStateShoppingCart, action = {}) => {
         default: return state;
     }
 }
-
 const initialStateSize = {
     priceMultiplier: Number(process.env.REACT_APP_BASE_PRICEMULTIPLIER),
     size: Number(process.env.REACT_APP_BASE_SIZE)
 }
-
 export const manageSize = (state = initialStateSize, action = {}) => {
     switch (action.type) {
         case SIZE_CHANGE:
@@ -89,7 +83,6 @@ export const manageSize = (state = initialStateSize, action = {}) => {
         default: return state;
     }
 }
-
 const initialStateUser = {
     user:
     {
@@ -108,7 +101,6 @@ const initialStateUser = {
     isAdmin: false,
     isSignedIn: false
 }
-
 export const manageUser = (state = initialStateUser, action = {}) => {
     switch (action.type) {
         case LOAD_USER:

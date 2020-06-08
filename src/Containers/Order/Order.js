@@ -4,22 +4,18 @@ import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import { loadGuest } from '../../_actions/order.js';
 import { connect } from 'react-redux';
-
 const mapStateToProps = state => {
     return {
         guest: state.manageGuest.guest,
         user: state.manageUser.user
     }
 }
-
 const mapDispatchToProps = (dispatch) => {
     return {
         loadGuest: (data) => loadGuest(dispatch, data)
     }
 }
-
 class Order extends Component {
-
     constructor(props) {
         super(props);
         this.state =
@@ -30,11 +26,9 @@ class Order extends Component {
             emailFail: false,
         }
     }
-
     loadUser = (reg) => {
         this.setState({ user: reg })
     }
-
     userSignedIn = (user) => {
         if (user.id) {
             return (
@@ -56,9 +50,7 @@ class Order extends Component {
             return (<Register loadUser={this.props.loadGuest} isOrder={true} />);
         }
     }
-
     onSubmit = async () => {
-
         const { shoppingCart } = this.props;
         let user = '';
         if (this.props.user.id) {
@@ -67,11 +59,8 @@ class Order extends Component {
         else {
             user = this.props.guest;
         }
-
         let userData = `${user.lastname} ${user.firstname}\n${user.zip} ${user.city} ${user.address}\nTel.: ${user.phone}\nE-mail: ${user.email}\nMegj.: ${user.comment}`;
-
         const blackList = [",", "@", "(", ")", "'", "\"", "`", ";", "#", "_", "<", ">", "+", "[", "]", "{", "}"];
-
         blackList.forEach(char => {
             if (user.email.includes(char, user.email.search("@") + 1)) {
                 this.handleAlert("formatFail", true);
@@ -80,7 +69,6 @@ class Order extends Component {
         )
         if (!user.email.includes("@") || !user.email.includes(".", user.email.search("@")) || this.state.formatFail) {
             this.handleAlert("emailFail", true);
-
         }
         else if (!user.lastname || !user.firstname || !user.zip || !user.city || !user.address || !user.phone || !user.email) {
             this.handleAlert("showFail", true);
@@ -90,7 +78,6 @@ class Order extends Component {
             shoppingCart.forEach(function (pizza, index) {
                 pizzas += `${pizza.name} ${pizza.size} cm      ${pizza.price} Ft\n`;
             })
-
             await fetch('https://shielded-coast-80926.herokuapp.com/order',
                 {
                     method: 'post',
@@ -104,12 +91,10 @@ class Order extends Component {
                             }
                         )
                 });
-
             this.handleAlert("showSuccess", true);
             this.props.onEmptyCart();
         }
     }
-
     handleAlert(type, show) {
         if (type === "showFail") {
             this.setState({ showFail: show });
@@ -124,7 +109,6 @@ class Order extends Component {
             this.setState({ emailFail: show });
         }
     }
-
     render() {
         return (
             <div className="flex flex-column items-center " >
@@ -192,10 +176,7 @@ class Order extends Component {
                     </p>
                 </div>
             </div>
-
         );
     }
-
 }
-
 export default connect(mapStateToProps, mapDispatchToProps)(Order);

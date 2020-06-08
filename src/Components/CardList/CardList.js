@@ -1,27 +1,22 @@
 import React from 'react';
 import Card from '../Card/Card';
-
-const CardList = ({pizzas, priceMultiplier, size, addToCart}) =>
-{
-    return(
-        <div className="w-90" style={{overflowY: 'auto', height:'600px'}}>
+const CardList = ({ pizzas, priceMultiplier, size, addToCart }) => {
+    return (
+        <div className="w-90" style={{ overflowY: 'auto', height: '600px' }}>
             {
-                pizzas.map((pizza) =>
-                {
-                return(
+                pizzas.map((pizza) => {
+                    return (
                         <Card
                             key={pizza.id}
                             pizza={pizza}
                             priceMultiplier={priceMultiplier}
                             size={size}
-                            addToCart = {addToCart}
+                            addToCart={addToCart}
                         />
                     );
                 })
             }
         </div>
-
     );
 }
-
 export default CardList;

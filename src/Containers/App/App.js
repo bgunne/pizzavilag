@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import Navigation from '../../Components/Navigation/Navigation';
 import CardList from '../../Components/CardList/CardList';
 import SearchBox from '../../Components/SearchBox/SearchBox';
@@ -13,9 +12,7 @@ import Orders from '../Orders/Orders';
 import Admin from '../Admin/Admin';
 import { requestPizzas, setSearchField, filterPizzas, addToCart, deleteFromCart, emptyCart, sumPriceChange, sizeChange, loadUser, updateUser, signIn, signOut, admin } from '../../_actions/app.js';
 import { connect } from 'react-redux';
-
 import './App.css';
-
 const mapStateToProps = state => {
   return {
     pizzas: state.managePizzas.pizzas,
@@ -31,7 +28,6 @@ const mapStateToProps = state => {
     isSignedIn: state.manageUser.isSignedIn
   }
 }
-
 const mapDispatchToProps = (dispatch) => {
   return {
     onRequestPizzas: () => requestPizzas(dispatch),
@@ -49,7 +45,6 @@ const mapDispatchToProps = (dispatch) => {
     admin: () => admin(dispatch)
   }
 }
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -58,7 +53,6 @@ class App extends Component {
       route: 'home',
     }
   }
-
   loadPizzas = async () => {
     if (!this.props.pizzas.length) {
       await this.props.onRequestPizzas();
@@ -80,19 +74,15 @@ class App extends Component {
     }
     this.setState({ route: route });
   }
-
   onAddToCart = (pizza) => {
     this.props.addToCart(pizza, this.props.shoppingCart);
   }
-
   onDeleteFromCart = (item) => {
     this.props.deleteFromCart(item, this.props.shoppingCart);
   }
-
   componentDidMount() {
     this.loadPizzas();
   }
-
   componentDidUpdate(prevProps, prevState) {
     const { route } = this.state;
     const { searchField, pizzas } = this.props;
@@ -103,9 +93,7 @@ class App extends Component {
       this.props.filterPizzas(pizzas, '');
     }
   }
-
   render() {
-
     if (this.props.isPending)
       return (
         <div className="appBody" style={{ textAlign: "center" }}>
@@ -113,8 +101,6 @@ class App extends Component {
           <i className="gg-spinner-alt" style={{ margin: "auto" }}></i>
         </div>
       );
-
-
     return (
       <div className="tc appBody">
         <Navigation onRouteChange={this.onRouteChange} isSignedIn={this.props.isSignedIn} isAdmin={this.props.isAdmin} user={this.props.user} />
@@ -160,5 +146,4 @@ class App extends Component {
     );
   }
 }
-
 export default connect(mapStateToProps, mapDispatchToProps)(App);

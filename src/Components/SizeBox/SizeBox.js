@@ -1,8 +1,6 @@
 import React from 'react';
-
 const SizeBox = ({sizeChange}) =>
 {
-    
     return(
         <div className = "flex items-center">
             <p>Átmérő (cm):</p>
@@ -24,5 +22,4 @@ const SizeBox = ({sizeChange}) =>
         </div>
     )
 }
-
 export default SizeBox;

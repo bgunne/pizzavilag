@@ -46,8 +46,6 @@ const Navigation = ({ onRouteChange, isSignedIn, isAdmin, user }) => {
                 </nav>
             );
         }
-
-
     }
     else {
         return (
@@ -60,7 +58,6 @@ const Navigation = ({ onRouteChange, isSignedIn, isAdmin, user }) => {
                     <p className="i ma0" style={{ color: "#FAD784" }}>Pizza világ</p>
                 </div>
                 <div className="flex-grow pa1 flex items-center">
-
                     <p className="f6 link dib white dim mr3 mr4-ns pa1 pointer"
                         onClick={() => onRouteChange("signin")}>
                         Bejelentkezés
@@ -69,11 +66,9 @@ const Navigation = ({ onRouteChange, isSignedIn, isAdmin, user }) => {
                         onClick={() => onRouteChange("register")}>
                         Regisztráció
 					</p>
-
                 </div>
             </nav>
         );
     }
 };
-
 export default Navigation;

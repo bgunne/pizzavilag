@@ -1,26 +1,20 @@
 import React from 'react';
-
 import Form from 'react-bootstrap/Form';
-
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
-
 import { onSigninFormChange } from '../../_actions/signin.js';
 import { connect } from 'react-redux';
-
 const mapStateToProps = state => {
     return {
         signInEmail: state.onSigninFormChange.signInEmail,
         signInPassword: state.onSigninFormChange.signInPassword,
     }
 }
-
 const mapDispatchToProps = (dispatch) => {
     return {
         onSigninFormChange: (data, targetId) => onSigninFormChange(dispatch, data, targetId)
     }
 }
-
 class Signin extends React.Component {
     constructor(props) {
         super(props);
@@ -29,11 +23,9 @@ class Signin extends React.Component {
             showFail: false
         }
     }
-
     onSigninFormChange = (event) => {
         this.props.onSigninFormChange(event.target.value, event.target.id);
     }
-
     onSubmit = async () => {
         const response = await fetch(
             'https://shielded-coast-80926.herokuapp.com/signin',
@@ -50,7 +42,6 @@ class Signin extends React.Component {
             }
         );
         const user = await response.json();
-
         if (user.id) {
             this.props.loadUser(user);
             if (user.role === "admin") {
@@ -69,8 +60,6 @@ class Signin extends React.Component {
             this.setState({ showFail: show });
         }
     }
-
-
     render() {
         return (
             <Form className="w-80 center bg-light-yellow pa2 br3 mt2"
@@ -116,6 +105,4 @@ class Signin extends React.Component {
         );
     }
 }
-
-
 export default connect(mapStateToProps, mapDispatchToProps)(Signin);

@@ -5,7 +5,6 @@ import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import { onRegisterFormChange } from '../../_actions/register.js';
 import { connect } from 'react-redux';
-
 const mapStateToProps = state => {
     return {
         email: state.onRegisterFormChange.email,
@@ -20,15 +19,12 @@ const mapStateToProps = state => {
         comment: state.onRegisterFormChange.comment
     }
 }
-
 const mapDispatchToProps = (dispatch) => {
     return{
         onRegisterFormChange: (data,targetId) => onRegisterFormChange(dispatch,data,targetId)
     }
 }
-
 class Register extends React.Component {
-
     constructor(props) {
         super(props);
         this.state =
@@ -38,7 +34,6 @@ class Register extends React.Component {
             passwordLengthFail: false,
             emailFail: false
         };
-
     }
     handleSubmitButton = (isOrder) => {
         if (!isOrder) {
@@ -51,7 +46,6 @@ class Register extends React.Component {
             );
         }
     }
-
     handlePassword = (isOrder) => {
         if (!isOrder) {
             return (
@@ -65,7 +59,6 @@ class Register extends React.Component {
                                 onChange={this.onRegisterFormChange} />
                         </Form.Group>
                     </Col>
-
                     <Col>
                         <Form.Group controlId="password2">
                             <Form.Label>Jelszó megerősítése</Form.Label>
@@ -79,21 +72,16 @@ class Register extends React.Component {
             );
         }
     }
-
-
     onRegisterFormChange = (event) => {
         this.props.onRegisterFormChange(event.target.value, event.target.id);
     }
-
     componentDidUpdate(prevProps, prevState) {
         if (this.props !== prevProps) {
             this.props.loadUser(this.props);
         }
     }
-
     onSubmit = async () => {
         const { email, password, password2, firstname, lastname, phone, zip, city, address, comment } = this.props;
-
         // eslint-disable-next-line
         const blackList = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; //RFC 5322 Official Standard
         if (!blackList.test(email)) {
@@ -136,7 +124,6 @@ class Register extends React.Component {
             }
         }
     }
-
     handleAlert(type, show) {
         if (type === "showFail") {
             this.setState({ showFail: show });
@@ -151,7 +138,6 @@ class Register extends React.Component {
             this.setState({ emailFail: show });
         }
     }
-
     render() {
         return (
             <Form className="w-80 center bg-light-yellow pa2 br3 mt2"
@@ -212,9 +198,7 @@ class Register extends React.Component {
                         placeholder="pelda@pizzavilag.hu"
                         onChange={this.onRegisterFormChange} />
                 </Form.Group>
-
                 {this.handlePassword(this.props.isOrder)}
-
                 <Form.Row>
                     <Col>
                         <Form.Group controlId="lastname">
@@ -225,7 +209,6 @@ class Register extends React.Component {
                                 onChange={this.onRegisterFormChange} />
                         </Form.Group>
                     </Col>
-
                     <Col>
                         <Form.Group controlId="firstname">
                             <Form.Label>Keresztnév</Form.Label>
@@ -236,7 +219,6 @@ class Register extends React.Component {
                         </Form.Group>
                     </Col>
                 </Form.Row>
-
                 <Form.Group controlId="phone">
                     <Form.Label>Telefonszám</Form.Label>
                     <Form.Control
@@ -254,7 +236,6 @@ class Register extends React.Component {
                                 onChange={this.onRegisterFormChange} />
                         </Form.Group>
                     </Col>
-
                     <Col className="col-7">
                         <Form.Group controlId="city">
                             <Form.Label>Település</Form.Label>
@@ -265,8 +246,6 @@ class Register extends React.Component {
                         </Form.Group>
                     </Col>
                 </Form.Row>
-
-
                 <Form.Group controlId="address">
                     <Form.Label>Cím</Form.Label>
                     <Form.Control
@@ -274,7 +253,6 @@ class Register extends React.Component {
                         placeholder="Cím"
                         onChange={this.onRegisterFormChange} />
                 </Form.Group>
-
                 <Form.Group controlId="comment">
                     <Form.Label>Megjegyzés a címhez</Form.Label>
                     <Form.Control
@@ -282,12 +260,9 @@ class Register extends React.Component {
                         placeholder="Pl.: Kapucsengő száma - nem kötelező kitölteni!"
                         onChange={this.onRegisterFormChange} />
                 </Form.Group>
-
-
                 {this.handleSubmitButton(this.props.isOrder)}
             </Form>
         );
     }
-
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Register);

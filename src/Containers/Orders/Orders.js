@@ -1,76 +1,28 @@
 import React, { Component } from 'react';
+import { requestOrders, changeOrder, deleteOrder } from '../../_actions/orders.js'
+import { connect } from 'react-redux';
 
+const mapStateToProps = state => {
+    return {
+        orders: state.manageOrders.orders,
+        isPending: state.manageOrders.isPending
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        requestOrders: () => requestOrders(dispatch),
+        changeOrder: (id, statusCode) => changeOrder(dispatch, id, statusCode),
+        deleteOrder: (id) => deleteOrder(dispatch, id)
+    }
+}
 class Orders extends Component {
-    constructor() {
-        super();
-        this.state = {
-            orders: [],
-            updated: false
-        }
-    }
-
-    loadOrders = async () =>{
-        const response = await fetch('https://shielded-coast-80926.herokuapp.com/orders',
-            {
-                method: 'get',
-            });
-        const orders = await response.json();
-        
-        this.setState({ orders });
-    }
-
-    changeStatus = async(id, statusCode) =>{
-        await fetch('https://shielded-coast-80926.herokuapp.com/orders',
-            {
-                method: 'put',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify
-                    (
-                        {
-                            id: id,
-                            statusCode: statusCode
-                        }
-                    )
-            });
-        this.setState({updated: true});
-
-    }
-
-    deleteOrder = async (id) => {
-        await fetch('https://shielded-coast-80926.herokuapp.com/orders',
-            {
-                method: 'delete',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify
-                    (
-                        {
-                            id: id
-                        }
-                    )
-            });
-        this.setState({updated: true});
-
-        
-    }
-
     componentDidMount() {
-        this.loadOrders();
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        const updated = this.state.updated;
-        
-        if (updated !== prevState.updated) {
-            if (updated) {
-                this.loadOrders();
-            }
-            this.setState({ updated: false });
-        }
-
+        this.props.requestOrders();
     }
 
     render() {
-        const { orders } = this.state;
+        const { orders } = this.props;
 
         return (
             <div className="w-80 flex items-center center">
@@ -118,17 +70,17 @@ class Orders extends Component {
                                         </div>
                                         <div className="self-end pa1 h-auto" >
                                             <p className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-gold"
-                                                onClick={() => this.changeStatus(order.id, "#FFFF66")}
+                                                onClick={() => this.props.changeOrder(order.id, "#FFFF66")}
                                             >
                                                 Rendelés visszaigazolása
                                 </p>
                                             <p className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-dark-green"
-                                                onClick={() => this.changeStatus(order.id, "#9ACD32")}
+                                                onClick={() => this.props.changeOrder(order.id, "#9ACD32")}
                                             >
                                                 Rendelés eküldve
                                 </p>
                                             <p className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-dark-red"
-                                                onClick={() => this.deleteOrder(order.id)}
+                                                onClick={() => this.props.deleteOrder(order.id)}
                                             >
                                                 Rendelés törlése
                                 </p>
@@ -149,4 +101,4 @@ class Orders extends Component {
 
 }
 
-export default Orders;
+export default connect(mapStateToProps, mapDispatchToProps)(Orders);

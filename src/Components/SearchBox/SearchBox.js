@@ -1,19 +1,15 @@
 import React from 'react';
-
-const SearchBox =({searchChange})=>
-{
-    return(
-
+const SearchBox = ({ searchChange }) => {
+    return (
         <div className='pa2'>
-            <input 
+            <input
                 className='pa3 ba bg-white w-100'
-                style={{borderColor: "#c4954f"}}
-                type='search' 
+                style={{ borderColor: "#c4954f" }}
+                type='search'
                 placeholder='Keresés név alapján'
                 onChange={searchChange}
             />
         </div>
     );
 }
-
 export default SearchBox;
