@@ -123,7 +123,7 @@ class Register extends React.Component {
             if (user.id) {
                 this.props.loadUser(user);
                 this.props.signIn();
-                this.props.history.push("/");
+                this.props.history.push("/pizzavilag/");
             }
         }
     }

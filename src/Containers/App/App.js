@@ -81,7 +81,7 @@ class App extends Component {
         <div className="tc appBody">
           <Navigation isSignedIn={this.props.isSignedIn} isAdmin={this.props.isAdmin} user={this.props.user} signOut={this.props.signOut} />
           <Switch>
-            <Route exact path="/">
+            <Route exact path="/pizzavilag/">
               <div>
                 <div className="flex justify-center">
                   <SearchBox searchChange={this.props.onSearchChange} />
@@ -93,19 +93,19 @@ class App extends Component {
                 </Scroll>
               </div>
             </Route>
-            <Route path="/admin">
+            <Route path="/pizzavilag/admin">
               <Admin />
             </Route>
-            <Route path="/orders">
+            <Route path="/pizzavilag/orders">
               <Orders />
             </Route>
-            <Route path="/order">
+            <Route path="/pizzavilag/order">
               <Order onEmptyCart={this.props.emptyCart} sumPrice={this.props.sumPrice} shoppingCart={this.props.shoppingCart} user={this.props.user} updateUser={this.props.updateUser} />
             </Route>
-            <Route path="/signin">
+            <Route path="/pizzavilag/signin">
               <Signin loadUser={this.props.loadUser} history={history}/>
             </Route>
-            <Route path="/register">
+            <Route path="/pizzavilag/register">
               <Register isOrder={false} loadUser={this.props.loadUser} history={history} />
             </Route>
           </Switch>

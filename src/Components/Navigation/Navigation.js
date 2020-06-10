@@ -11,15 +11,15 @@ const Navigation = ({ isSignedIn, isAdmin, user, signOut }) => {
                         Pizza világ CMS
 					</p>
                     <div className="flex-grow pa1 flex items-center">
-                        <NavLink to="/orders" className="f6 link dib white dim mr3 mr4-ns pa1 pointer"
+                        <NavLink to="/pizzavilag/orders" className="f6 link dib white dim mr3 mr4-ns pa1 pointer"
                         >
                             Rendelések ellenőrzése
 						</NavLink>
-                        <NavLink to="/admin" className="f6 link dib white dim mr3 mr4-ns pa1 pointer"
+                        <NavLink to="/pizzavilag/admin" className="f6 link dib white dim mr3 mr4-ns pa1 pointer"
                         >
                             Kínálat kezelése
 						</NavLink>
-                        <NavLink to="/" className="f6 dib white bg-animate hover-bg-white hover-black no-underline pv2 ph4 br-pill ba b--white-20 pointer"
+                        <NavLink to="/pizzavilag/" className="f6 dib white bg-animate hover-bg-white hover-black no-underline pv2 ph4 br-pill ba b--white-20 pointer"
                         onClick={signOut}>
                             Kijelentkezés
 						</NavLink>
@@ -30,7 +30,7 @@ const Navigation = ({ isSignedIn, isAdmin, user, signOut }) => {
         else {
             return (
                 <nav className="flex justify-center pa1" style={{ background: "#c4954f" }}>
-                    <NavLink to="/" className="link white-70 hover-white no-underline flex items-center pa1 pointer"
+                    <NavLink to="/pizzavilag/" className="link white-70 hover-white no-underline flex items-center pa1 pointer"
                     >
                         Főoldal
 					</NavLink>
@@ -39,7 +39,7 @@ const Navigation = ({ isSignedIn, isAdmin, user, signOut }) => {
                     </div>
                     <div className="flex-grow pa1 flex items-center">
                         <p className="f6 link dib white dim mr3 mr4-ns pa1">Üdvözlünk, {user.firstname}</p>
-                        <NavLink to="/" className="f6 dib white bg-animate hover-bg-white hover-black no-underline pv2 ph4 br-pill ba b--white-20 pointer"
+                        <NavLink to="/pizzavilag/" className="f6 dib white bg-animate hover-bg-white hover-black no-underline pv2 ph4 br-pill ba b--white-20 pointer"
                         onClick={signOut}>
                             Kijelentkezés
 						</NavLink>
@@ -51,7 +51,7 @@ const Navigation = ({ isSignedIn, isAdmin, user, signOut }) => {
     else {
         return (
             <nav className="flex justify-center pa2" style={{ background: "#c4954f" }}>
-                <NavLink to="/" className="link white-70 hover-white no-underline flex items-center pa1 pointer"
+                <NavLink to="/pizzavilag/" className="link white-70 hover-white no-underline flex items-center pa1 pointer"
                 >
                     Főoldal
 				</NavLink>
@@ -59,11 +59,11 @@ const Navigation = ({ isSignedIn, isAdmin, user, signOut }) => {
                     <p className="i ma0" style={{ color: "#FAD784" }}>Pizza világ</p>
                 </div>
                 <div className="flex-grow pa1 flex items-center">
-                    <NavLink to="signin" className="f6 link dib white dim mr3 mr4-ns pa1 pointer"
+                    <NavLink to="/pizzavilag/signin" className="f6 link dib white dim mr3 mr4-ns pa1 pointer"
                     >
                         Bejelentkezés
 					</NavLink>
-                    <NavLink to="register" className="f6 dib white bg-animate hover-bg-white hover-black no-underline pv2 ph4 br-pill ba b--white-20 pointer"
+                    <NavLink to="/pizzavilag/register" className="f6 dib white bg-animate hover-bg-white hover-black no-underline pv2 ph4 br-pill ba b--white-20 pointer"
                     >
                         Regisztráció
 					</NavLink>

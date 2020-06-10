@@ -49,10 +49,10 @@ class Signin extends Component {
         if (user.id) {
             this.props.loadUser(user);
             this.props.signIn();
-            this.props.history.push("/");
+            this.props.history.push("/pizzavilag/");
             if (user.role === "admin") {
                 this.props.admin();
-                this.props.history.push("/admin");
+                this.props.history.push("/pizzavilag/admin");
             }
         }
         else {
