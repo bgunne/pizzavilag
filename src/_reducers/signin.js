@@ -1,4 +1,4 @@
-import { CHANGE_SIGNIN_FORM } from "../_actiontypes/signin"
+import { CHANGE_SIGNIN_FORM} from "../_actiontypes/signin"
 const initialStateSigninForm = {
     signInEmail: '',
     signInPassword: ''

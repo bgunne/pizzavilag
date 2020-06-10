@@ -1,21 +1,25 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import { onSigninFormChange } from '../../_actions/signin.js';
+import { signIn, admin } from '../../_actions/app.js';
 import { connect } from 'react-redux';
+
 const mapStateToProps = state => {
     return {
         signInEmail: state.onSigninFormChange.signInEmail,
-        signInPassword: state.onSigninFormChange.signInPassword,
+        signInPassword: state.onSigninFormChange.signInPassword
     }
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        onSigninFormChange: (data, targetId) => onSigninFormChange(dispatch, data, targetId)
+        onSigninFormChange: (data, targetId) => onSigninFormChange(dispatch, data, targetId),
+        signIn: () => signIn(dispatch),
+        admin: () => admin(dispatch)
     }
 }
-class Signin extends React.Component {
+class Signin extends Component {
     constructor(props) {
         super(props);
         this.state =
@@ -44,11 +48,11 @@ class Signin extends React.Component {
         const user = await response.json();
         if (user.id) {
             this.props.loadUser(user);
+            this.props.signIn();
+            this.props.history.push("/");
             if (user.role === "admin") {
-                this.props.onRouteChange("admin");
-            }
-            else {
-                this.props.onRouteChange("signedin");
+                this.props.admin();
+                this.props.history.push("/admin");
             }
         }
         else {
@@ -100,7 +104,7 @@ class Signin extends React.Component {
                     style={{ background: "#c4954f" }}
                     onClick={this.onSubmit}>
                     Bejelentkezés
-            </p>
+                </p>
             </Form>
         );
     }

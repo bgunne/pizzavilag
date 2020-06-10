@@ -10,9 +10,12 @@ import Signin from '../Signin/Signin';
 import Register from '../Register/Register';
 import Orders from '../Orders/Orders';
 import Admin from '../Admin/Admin';
-import { requestPizzas, setSearchField, filterPizzas, addToCart, deleteFromCart, emptyCart, sumPriceChange, sizeChange, loadUser, updateUser, signIn, signOut, admin } from '../../_actions/app.js';
+import { requestPizzas, setSearchField, filterPizzas, addToCart, deleteFromCart, emptyCart, sumPriceChange, sizeChange, loadUser, updateUser, signOut, } from '../../_actions/app.js';
 import { connect } from 'react-redux';
 import './App.css';
+import { Router, Switch, Route } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
+const history = createBrowserHistory();
 const mapStateToProps = state => {
   return {
     pizzas: state.managePizzas.pizzas,
@@ -25,7 +28,7 @@ const mapStateToProps = state => {
     priceMultiplier: state.manageSize.priceMultiplier,
     user: state.manageUser.user,
     isAdmin: state.manageUser.isAdmin,
-    isSignedIn: state.manageUser.isSignedIn
+    isSignedIn: state.manageUser.isSignedIn,
   }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -40,39 +43,15 @@ const mapDispatchToProps = (dispatch) => {
     sizeChange: (size) => sizeChange(dispatch, size),
     loadUser: (data) => loadUser(dispatch, data),
     updateUser: (user) => updateUser(dispatch, user),
-    signIn: () => signIn(dispatch),
-    signOut: () => signOut(dispatch),
-    admin: () => admin(dispatch)
+    signOut: () => signOut(dispatch)
   }
 }
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state =
-    {
-      route: 'home',
-    }
-  }
   loadPizzas = async () => {
     if (!this.props.pizzas.length) {
       await this.props.onRequestPizzas();
       this.props.filterPizzas(this.props.pizzas, this.props.searchField);
     }
-  }
-  onRouteChange = (route) => {
-    if (route === "signedin") {
-      this.props.signIn();
-      route = "home";
-    }
-    else if (route === "signout") {
-      this.props.signOut();
-      route = "home";
-    }
-    else if (route === "admin") {
-      this.props.signIn();
-      this.props.admin();
-    }
-    this.setState({ route: route });
   }
   onAddToCart = (pizza) => {
     this.props.addToCart(pizza, this.props.shoppingCart);
@@ -84,13 +63,9 @@ class App extends Component {
     this.loadPizzas();
   }
   componentDidUpdate(prevProps, prevState) {
-    const { route } = this.state;
-    const { searchField, pizzas } = this.props;
+    const { searchField, pizzas} = this.props;
     if (searchField !== prevProps.searchField) {
       this.props.filterPizzas(pizzas, searchField);
-    }
-    else if (route !== prevState.route && route === "home") {
-      this.props.filterPizzas(pizzas, '');
     }
   }
   render() {
@@ -102,47 +77,40 @@ class App extends Component {
         </div>
       );
     return (
-      <div className="tc appBody">
-        <Navigation onRouteChange={this.onRouteChange} isSignedIn={this.props.isSignedIn} isAdmin={this.props.isAdmin} user={this.props.user} />
-        {
-          this.state.route === "home"
-            ?
-            <div>
-              <div className="flex justify-center">
-                <SearchBox searchChange={this.props.onSearchChange} />
-                <SizeBox sizeChange={this.props.sizeChange} />
+      <Router history={history}>
+        <div className="tc appBody">
+          <Navigation isSignedIn={this.props.isSignedIn} isAdmin={this.props.isAdmin} user={this.props.user} signOut={this.props.signOut} />
+          <Switch>
+            <Route exact path="/">
+              <div>
+                <div className="flex justify-center">
+                  <SearchBox searchChange={this.props.onSearchChange} />
+                  <SizeBox sizeChange={this.props.sizeChange} />
+                </div>
+                <Scroll>
+                  <CardList pizzas={this.props.filteredPizzas} priceMultiplier={this.props.priceMultiplier} size={this.props.size} addToCart={this.onAddToCart} />
+                  <ShoppingCart onSumPriceChange={this.props.sumPriceChange} shoppingCart={this.props.shoppingCart} deleteFromCart={this.onDeleteFromCart} />
+                </Scroll>
               </div>
-              <Scroll>
-                <CardList pizzas={this.props.filteredPizzas} priceMultiplier={this.props.priceMultiplier} size={this.props.size} addToCart={this.onAddToCart} />
-                <ShoppingCart onRouteChange={this.onRouteChange} onSumPriceChange={this.props.sumPriceChange} shoppingCart={this.props.shoppingCart} deleteFromCart={this.onDeleteFromCart} />
-              </Scroll>
-            </div>
-            :
-            (
-              this.state.route === "admin"
-                ?
-                <Admin />
-                :
-                (
-                  this.state.route === "orders"
-                    ?
-                    <Orders />
-                    :
-                    (
-                      this.state.route === "order"
-                        ?
-                        <Order onRouteChange={this.onRouteChange} onEmptyCart={this.props.emptyCart} sumPrice={this.props.sumPrice} shoppingCart={this.props.shoppingCart} user={this.props.user} updateUser={this.props.updateUser} />
-                        :
-                        (
-                          this.state.route === "signin"
-                            ? <Signin loadUser={this.props.loadUser} onRouteChange={this.onRouteChange} />
-                            : <Register isOrder={false} loadUser={this.props.loadUser} onRouteChange={this.onRouteChange} />
-                        )
-                    )
-                )
-            )
-        }
-      </div>
+            </Route>
+            <Route path="/admin">
+              <Admin />
+            </Route>
+            <Route path="/orders">
+              <Orders />
+            </Route>
+            <Route path="/order">
+              <Order onEmptyCart={this.props.emptyCart} sumPrice={this.props.sumPrice} shoppingCart={this.props.shoppingCart} user={this.props.user} updateUser={this.props.updateUser} />
+            </Route>
+            <Route path="/signin">
+              <Signin loadUser={this.props.loadUser} history={history}/>
+            </Route>
+            <Route path="/register">
+              <Register isOrder={false} loadUser={this.props.loadUser} history={history} />
+            </Route>
+          </Switch>
+        </div>
+      </Router>
     );
   }
 }

@@ -10,7 +10,7 @@ import { createLogger } from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 import { managePizzas, searchPizzas, filterPizzas, manageCart, manageSize, manageUser } from './_reducers/app';
 import { onRegisterFormChange } from './_reducers/register';
-import { onSigninFormChange } from './_reducers/signin';
+import { onSigninFormChange} from './_reducers/signin';
 import { manageGuest } from './_reducers/order';
 import { onPizzaEditFormChange } from './_reducers/admin';
 import { manageEdit } from './_reducers/admin';

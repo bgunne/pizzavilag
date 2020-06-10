@@ -1,5 +1,6 @@
 import React from 'react';
 import './ShoppingCart.css';
+import { NavLink } from 'react-router-dom';
 const ShhoppingCart = ({ onRouteChange, onSumPriceChange, shoppingCart, deleteFromCart }) => {
     let sumPrice = 0;
     let id = 0;
@@ -39,11 +40,11 @@ const ShhoppingCart = ({ onRouteChange, onSumPriceChange, shoppingCart, deleteFr
                     })
                 }
                 <div className="b red">Végösszeg: {sumPrice} Ft</div>
-                <p className="f6 grow no-underline br-pill ph3 pv2 dib white bg-black pointer ba bw0"
-                    style={{ background: "#c4954f" }}
-                    onClick={() => { onSumPriceChange(sumPrice); onRouteChange('order'); }}>
+                <NavLink to="/order" className="f6 grow no-underline br-pill ph3 pv2 dib white bg-black pointer ba bw0"
+                    style={{ background: "#c4954f" ,textDecoration: "none", color: "white"}}
+                    onClick={() => { onSumPriceChange(sumPrice); }}>
                     Rendelés
-                </p>
+                </NavLink>
             </main>
         );
     }

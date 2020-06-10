@@ -174,7 +174,7 @@ class Admin extends Component {
 		const { pizzas } = this.props;
 		return (
 			<div className="w-80 flex items-center center">
-				<article className="pa2 w-100">
+				<article className="pa2 w-100" style={{ height: 'pizzas.length * 150px' }}>
 					<Alert show={this.state.showFail} variant="danger" >
 						<p>
 							Kérlek tölts ki minden kötelező mezőt.
@@ -217,7 +217,8 @@ class Admin extends Component {
 											<p
 												className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-dark-green mt-auto mb-auto"
 												onClick={() => {
-													/*FILEUPLOAD...
+													/*	TODO
+														FILEUPLOAD 
 														this.onFileUploadHandler();
 															this.updatePizza()
 														*/

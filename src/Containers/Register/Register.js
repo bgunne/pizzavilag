@@ -4,6 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import { onRegisterFormChange } from '../../_actions/register.js';
+import { signIn } from '../../_actions/app.js';
 import { connect } from 'react-redux';
 const mapStateToProps = state => {
     return {
@@ -21,7 +22,8 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = (dispatch) => {
     return{
-        onRegisterFormChange: (data,targetId) => onRegisterFormChange(dispatch,data,targetId)
+        onRegisterFormChange: (data,targetId) => onRegisterFormChange(dispatch,data,targetId),
+        signIn: () => signIn(dispatch)
     }
 }
 class Register extends React.Component {
@@ -120,7 +122,8 @@ class Register extends React.Component {
             const user = await response.json();
             if (user.id) {
                 this.props.loadUser(user);
-                this.props.onRouteChange('signedin');
+                this.props.signIn();
+                this.props.history.push("/");
             }
         }
     }
