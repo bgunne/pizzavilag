@@ -12,15 +12,16 @@ const Navigation = ({ isSignedIn, isAdmin, user, signOut }) => {
 					</p>
                     <div className="flex-grow pa1 flex items-center">
                         <NavLink to="/pizzavilag/orders" className="f6 link dib white dim mr3 mr4-ns pa1 pointer"
-                        >
+                            style={{ textDecoration: "none", color: "white" }}>
                             Rendelések ellenőrzése
 						</NavLink>
                         <NavLink to="/pizzavilag/admin" className="f6 link dib white dim mr3 mr4-ns pa1 pointer"
-                        >
+                            style={{ textDecoration: "none", color: "white" }}>
                             Kínálat kezelése
 						</NavLink>
                         <NavLink to="/pizzavilag/" className="f6 dib white bg-animate hover-bg-white hover-black no-underline pv2 ph4 br-pill ba b--white-20 pointer"
-                        onClick={signOut}>
+                            onClick={signOut}
+                            style={{ textDecoration: "none"}}>
                             Kijelentkezés
 						</NavLink>
                     </div>
@@ -31,7 +32,7 @@ const Navigation = ({ isSignedIn, isAdmin, user, signOut }) => {
             return (
                 <nav className="flex justify-center pa1" style={{ background: "#c4954f" }}>
                     <NavLink to="/pizzavilag/" className="link white-70 hover-white no-underline flex items-center pa1 pointer"
-                    >
+                        style={{ textDecoration: "none", color: "white" }}>
                         Főoldal
 					</NavLink>
                     <div className="flex flex-grow items-center header pl5">
@@ -40,7 +41,8 @@ const Navigation = ({ isSignedIn, isAdmin, user, signOut }) => {
                     <div className="flex-grow pa1 flex items-center">
                         <p className="f6 link dib white dim mr3 mr4-ns pa1">Üdvözlünk, {user.firstname}</p>
                         <NavLink to="/pizzavilag/" className="f6 dib white bg-animate hover-bg-white hover-black no-underline pv2 ph4 br-pill ba b--white-20 pointer"
-                        onClick={signOut}>
+                            style={{ textDecoration: "none"}}
+                            onClick={signOut}>
                             Kijelentkezés
 						</NavLink>
                     </div>
@@ -52,7 +54,7 @@ const Navigation = ({ isSignedIn, isAdmin, user, signOut }) => {
         return (
             <nav className="flex justify-center pa2" style={{ background: "#c4954f" }}>
                 <NavLink to="/pizzavilag/" className="link white-70 hover-white no-underline flex items-center pa1 pointer"
-                >
+                    style={{ textDecoration: "none", color: "white" }}>
                     Főoldal
 				</NavLink>
                 <div className="flex flex-grow items-center header pl5">
@@ -60,11 +62,11 @@ const Navigation = ({ isSignedIn, isAdmin, user, signOut }) => {
                 </div>
                 <div className="flex-grow pa1 flex items-center">
                     <NavLink to="/pizzavilag/signin" className="f6 link dib white dim mr3 mr4-ns pa1 pointer"
-                    >
+                        style={{ textDecoration: "none", color: "white" }}>
                         Bejelentkezés
 					</NavLink>
                     <NavLink to="/pizzavilag/register" className="f6 dib white bg-animate hover-bg-white hover-black no-underline pv2 ph4 br-pill ba b--white-20 pointer"
-                    >
+                        style={{ textDecoration: "none"}}>
                         Regisztráció
 					</NavLink>
                 </div>

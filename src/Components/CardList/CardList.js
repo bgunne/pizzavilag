@@ -2,7 +2,7 @@ import React from 'react';
 import Card from '../Card/Card';
 const CardList = ({ pizzas, priceMultiplier, size, addToCart }) => {
     return (
-        <div className="w-90" style={{ overflowY: 'auto', height: '600px' }}>
+        <div className="w-90" style={{ overflowY: 'auto', height: 'auto' }}>
             {
                 pizzas.map((pizza) => {
                     return (

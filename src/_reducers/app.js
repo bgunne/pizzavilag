@@ -8,6 +8,7 @@ import {
     UPLOAD_PIZZA_PENDING,
     UPLOAD_PIZZA_SUCCESS,
     CHANGE_SEARCHFIELD,
+    EMPTY_SEARCHFIELD,
     FILTER_PIZZAS,
     ADD_SHOPPINGCART,
     DELETE_SHOPPINGCART,
@@ -45,6 +46,7 @@ const initialStateSearch = {
 export const searchPizzas = (state = initialStateSearch, action = {}) => {
     switch (action.type) {
         case CHANGE_SEARCHFIELD: return { ...state, searchField: action.payload };
+        case EMPTY_SEARCHFIELD: return {...state, searchField: ''};
         default: return state;
     }
 }

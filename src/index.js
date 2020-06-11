@@ -20,7 +20,7 @@ import { PersistGate } from 'redux-persist/es/integration/react'
 import storage from 'redux-persist/lib/storage';
 const persistConfig = {
   key: 'root',
-  storage,
+  storage
 }
 const logger = createLogger();
 const rootReducer = combineReducers({

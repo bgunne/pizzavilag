@@ -6,6 +6,7 @@ import {
 	UPLOAD_PIZZA_PENDING,
 	UPLOAD_PIZZA_SUCCESS,
 	CHANGE_SEARCHFIELD,
+	EMPTY_SEARCHFIELD,
 	FILTER_PIZZAS,
 	ADD_SHOPPINGCART,
 	DELETE_SHOPPINGCART,
@@ -72,6 +73,9 @@ export const updatePizza = async (dispatch, id, name, topping, price, imageurl) 
 export const setSearchField = (text) => ({
 	type: CHANGE_SEARCHFIELD,
 	payload: text
+});
+export const emptySearchField = () => ({
+	type: EMPTY_SEARCHFIELD
 });
 export const filterPizzas = (dispatch, pizzas, searchField) => {
 	if (pizzas.length && searchField.length) {

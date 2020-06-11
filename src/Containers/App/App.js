@@ -10,7 +10,8 @@ import Signin from '../Signin/Signin';
 import Register from '../Register/Register';
 import Orders from '../Orders/Orders';
 import Admin from '../Admin/Admin';
-import { requestPizzas, setSearchField, filterPizzas, addToCart, deleteFromCart, emptyCart, sumPriceChange, sizeChange, loadUser, updateUser, signOut, } from '../../_actions/app.js';
+import Footer from '../../Components/Footer/Footer';
+import { requestPizzas, setSearchField, emptySearchField, filterPizzas, addToCart, deleteFromCart, emptyCart, sumPriceChange, sizeChange, loadUser, updateUser, signOut, } from '../../_actions/app.js';
 import { connect } from 'react-redux';
 import './App.css';
 import { Router, Switch, Route } from 'react-router-dom';
@@ -35,6 +36,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onRequestPizzas: () => requestPizzas(dispatch),
     onSearchChange: (event) => dispatch(setSearchField(event.target.value)),
+    emptySearchField: () => dispatch(emptySearchField()),
     filterPizzas: (pizzas, searchField) => filterPizzas(dispatch, pizzas, searchField),
     addToCart: (pizza, shoppingCart) => addToCart(dispatch, pizza, shoppingCart),
     deleteFromCart: (item, shoppingCart) => deleteFromCart(dispatch, item, shoppingCart),
@@ -48,10 +50,8 @@ const mapDispatchToProps = (dispatch) => {
 }
 class App extends Component {
   loadPizzas = async () => {
-    if (!this.props.pizzas.length) {
-      await this.props.onRequestPizzas();
-      this.props.filterPizzas(this.props.pizzas, this.props.searchField);
-    }
+    await this.props.onRequestPizzas();
+    this.props.filterPizzas(this.props.pizzas, this.props.searchField);
   }
   onAddToCart = (pizza) => {
     this.props.addToCart(pizza, this.props.shoppingCart);
@@ -60,11 +60,17 @@ class App extends Component {
     this.props.deleteFromCart(item, this.props.shoppingCart);
   }
   componentDidMount() {
-    this.loadPizzas();
+    if (this.props.searchField.length) {
+      this.props.emptySearchField();
+      this.loadPizzas();
+    }
+    if (!this.props.pizzas.length) {
+      this.loadPizzas();
+    }
   }
   componentDidUpdate(prevProps, prevState) {
-    const { searchField, pizzas} = this.props;
-    if (searchField !== prevProps.searchField) {
+    const { searchField, pizzas } = this.props;
+    if (searchField !== prevProps.searchField && !this.props.isPending) {
       this.props.filterPizzas(pizzas, searchField);
     }
   }
@@ -103,12 +109,13 @@ class App extends Component {
               <Order onEmptyCart={this.props.emptyCart} sumPrice={this.props.sumPrice} shoppingCart={this.props.shoppingCart} user={this.props.user} updateUser={this.props.updateUser} />
             </Route>
             <Route path="/pizzavilag/signin">
-              <Signin loadUser={this.props.loadUser} history={history}/>
+              <Signin loadUser={this.props.loadUser} history={history} />
             </Route>
             <Route path="/pizzavilag/register">
               <Register isOrder={false} loadUser={this.props.loadUser} history={history} />
             </Route>
           </Switch>
+          <Footer />
         </div>
       </Router>
     );

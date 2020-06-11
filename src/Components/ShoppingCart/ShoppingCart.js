@@ -1,7 +1,7 @@
 import React from 'react';
 import './ShoppingCart.css';
 import { NavLink } from 'react-router-dom';
-const ShhoppingCart = ({ onRouteChange, onSumPriceChange, shoppingCart, deleteFromCart }) => {
+const ShhoppingCart = ({ onSumPriceChange, shoppingCart, deleteFromCart }) => {
     let sumPrice = 0;
     let id = 0;
     if (!shoppingCart.length) {
@@ -9,7 +9,7 @@ const ShhoppingCart = ({ onRouteChange, onSumPriceChange, shoppingCart, deleteFr
     }
     else {
         return (
-            <main className="center" style={{ overflowY: 'auto', height: '600px', maxWidth: "200px", margin: "auto" }}><i className="gg-shopping-cart dib"></i> Kosár tartalma:
+            <main className="center mt0" style={{ overflowY: 'auto', height: 'auto', maxWidth: "200px", /*margin: "auto"*/}}><i className="gg-shopping-cart dib"></i> Kosár tartalma:
                 {
                     shoppingCart.map((pizza) => {
                         sumPrice += pizza.price;

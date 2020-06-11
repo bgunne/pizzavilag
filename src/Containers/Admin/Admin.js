@@ -217,7 +217,7 @@ class Admin extends Component {
 											<p
 												className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-dark-green mt-auto mb-auto"
 												onClick={() => {
-													/*	TODO
+													/*	TODO:
 														FILEUPLOAD 
 														this.onFileUploadHandler();
 															this.updatePizza()

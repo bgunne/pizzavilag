@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 class PizzaEditor extends React.Component {
     render() {
-        /*TODO
+        /*TODO:
         FILEUPLOAD TO LOCALHOST - DOESNT WORK ON HEROKU :-(
             <Col className="col-3">
                 <Form.File id="formcheck-api-regular">
