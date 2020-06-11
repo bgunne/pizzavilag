@@ -10,11 +10,18 @@ import { createLogger } from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 import { managePizzas, searchPizzas, filterPizzas, manageCart, manageSize, manageUser } from './_reducers/app';
 import { onRegisterFormChange } from './_reducers/register';
-import { onSigninFormChange} from './_reducers/signin';
+import { onSigninFormChange } from './_reducers/signin';
 import { manageGuest } from './_reducers/order';
 import { onPizzaEditFormChange } from './_reducers/admin';
 import { manageEdit } from './_reducers/admin';
 import { manageOrders } from './_reducers/orders';
+import { persistStore, persistReducer } from 'redux-persist';
+import { PersistGate } from 'redux-persist/es/integration/react'
+import storage from 'redux-persist/lib/storage';
+const persistConfig = {
+  key: 'root',
+  storage,
+}
 const logger = createLogger();
 const rootReducer = combineReducers({
   managePizzas, searchPizzas, filterPizzas, manageCart, manageSize, manageUser,
@@ -25,10 +32,15 @@ const rootReducer = combineReducers({
   manageEdit,
   manageOrders
 });
-const store = createStore(rootReducer, applyMiddleware(thunkMiddleware, logger));
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+const store = createStore(persistedReducer, applyMiddleware(thunkMiddleware, logger));
+const persistor = persistStore(store);
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <PersistGate
+      persistor={persistor}>
+      <App />
+    </PersistGate>
   </Provider>,
   document.getElementById('root')
 );
