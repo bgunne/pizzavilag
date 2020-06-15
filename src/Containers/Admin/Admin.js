@@ -56,8 +56,6 @@ class Admin extends Component {
 			this.handleAlert("showFail", true);
 		}
 		else {
-			console.log("HELLO WORLD");
-			console.log(this.props.pizzaEdit);
 			await this.props.updatePizza(this.props.pizzaEdit.id, this.props.pizzaEdit.name, this.props.pizzaEdit.topping, this.props.pizzaEdit.price, this.props.pizzaEdit.imageurl);
 			this.props.emptyPizzaEdit();
 			this.setState({ showEdit: false });
@@ -68,7 +66,6 @@ class Admin extends Component {
 			this.handleAlert("showFail", true);
 		}
 		else {
-			console.log(this.props.pizzaEdit.name);
 			await this.props.uploadPizza(this.props.pizzaEdit.name, this.props.pizzaEdit.topping, this.props.pizzaEdit.price, this.props.pizzaEdit.imageurl);
 			this.props.emptyPizzaEdit();
 			this.setState({ showUpload: false });
@@ -97,11 +94,8 @@ class Admin extends Component {
 					>
 						<p
 							className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-dark-green mh1"
-							onClick={() => {
-								/*TODO: FILEUPLOAD
-										this.onFileUploadHandler();
-											this.uploadPizza()
-										*/
+							onClick={async () => {
+								await this.onFileUploadHandler();
 								this.props.setModificationType("upload");
 							}}
 						>
@@ -136,18 +130,19 @@ class Admin extends Component {
 	};
 	onFileUploadHandler = async () => {
 		const data = new FormData();
-		data.append('file', this.state.selectedFile);
+		data.append('image', this.state.selectedFile);
+		const myHeaders = new Headers();
+		myHeaders.append("Authorization", process.env.REACT_APP_IMGUR_API_CLIENT_ID);
 		if (this.state.selectedFile) {
-			const response = await fetch('https://shielded-coast-80926.herokuapp.com/uploadimage', {
+			const response = await fetch('https://api.imgur.com/3/image', {
 				method: 'POST',
-				body: data
+				headers: myHeaders,
+				body: data,
+				redirect: 'follow'
 			});
 			const body = await response.json();
-			this.setState(
-				Object.assign(this.props.pizzaEdit, {
-					imageurl: `https://shielded-coast-80926.herokuapp.com/public/images/${body.filename}`
-				})
-			);
+			console.log(body.data.link);
+			this.props.onPizzaEditFormChange(body.data.link, "imageurl");
 		}
 	};
 	componentDidMount() {
@@ -216,12 +211,8 @@ class Admin extends Component {
 										>
 											<p
 												className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-dark-green mt-auto mb-auto"
-												onClick={() => {
-													/*	TODO:
-														FILEUPLOAD 
-														this.onFileUploadHandler();
-															this.updatePizza()
-														*/
+												onClick={async () => {
+													await this.onFileUploadHandler();
 													this.props.setModificationType('update');
 												}}
 											>

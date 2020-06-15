@@ -62,11 +62,8 @@ class App extends Component {
   componentDidMount() {
     if (this.props.searchField.length) {
       this.props.emptySearchField();
-      this.loadPizzas();
     }
-    if (!this.props.pizzas.length) {
-      this.loadPizzas();
-    }
+    this.loadPizzas();
   }
   componentDidUpdate(prevProps, prevState) {
     const { searchField, pizzas } = this.props;
