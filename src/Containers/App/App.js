@@ -16,6 +16,7 @@ import { connect } from 'react-redux';
 import './App.css';
 import { Router, Switch, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
+import {FormattedMessage} from 'react-intl';
 const history = createBrowserHistory();
 const mapStateToProps = state => {
   return {
@@ -75,7 +76,10 @@ class App extends Component {
     if (this.props.isPending)
       return (
         <div className="appBody" style={{ textAlign: "center" }}>
-          <h1>Kínálat betöltése...</h1>
+          <h1>
+            <FormattedMessage
+              id="app.loading" />
+          </h1>
           <i className="gg-spinner-alt" style={{ margin: "auto" }}></i>
         </div>
       );

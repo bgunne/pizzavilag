@@ -1,6 +1,7 @@
 import React from 'react'
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
+import { FormattedMessage } from 'react-intl';
 class PizzaEditor extends React.Component {
     render() {
         const { pizza, onFormChange, onFileInputChangeHandler } = this.props;
@@ -9,7 +10,10 @@ class PizzaEditor extends React.Component {
                 <Form.Row>
                     <Col className="col-3">
                         <Form.Group controlId="name">
-                            <Form.Label>Név</Form.Label>
+                            <Form.Label>
+                                <FormattedMessage
+                                    id="pizzaeditor.name" />
+                            </Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Név"
@@ -19,7 +23,10 @@ class PizzaEditor extends React.Component {
                     </Col>
                     <Col className="col-3">
                         <Form.Group controlId="topping">
-                            <Form.Label>Feltétek</Form.Label>
+                            <Form.Label>
+                                <FormattedMessage
+                                    id="pizzaeditor.toppings" />
+                            </Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Feltétek"
@@ -29,7 +36,10 @@ class PizzaEditor extends React.Component {
                     </Col>
                     <Col className="col-3">
                         <Form.Group controlId="price">
-                            <Form.Label>Ár</Form.Label>
+                            <Form.Label>
+                                <FormattedMessage
+                                    id="pizzaeditor.price" />
+                            </Form.Label>
                             <Form.Control
                                 type="number"
                                 placeholder="Ár"
@@ -39,7 +49,10 @@ class PizzaEditor extends React.Component {
                     </Col>
                     <Col className="col-3">
                         <Form.File id="formcheck-api-regular">
-                            <Form.File.Label>Kép</Form.File.Label>
+                            <Form.File.Label>
+                                <FormattedMessage
+                                    id="pizzaeditor.image" />
+                            </Form.File.Label>
                             <Form.File.Input type="file" onChange={onFileInputChangeHandler} />
                         </Form.File>
                     </Col>

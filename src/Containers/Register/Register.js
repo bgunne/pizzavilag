@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { onRegisterFormChange } from '../../_actions/register.js';
 import { signIn } from '../../_actions/app.js';
 import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
 const mapStateToProps = state => {
     return {
         email: state.onRegisterFormChange.email,
@@ -21,8 +22,8 @@ const mapStateToProps = state => {
     }
 }
 const mapDispatchToProps = (dispatch) => {
-    return{
-        onRegisterFormChange: (data,targetId) => onRegisterFormChange(dispatch,data,targetId),
+    return {
+        onRegisterFormChange: (data, targetId) => onRegisterFormChange(dispatch, data, targetId),
         signIn: () => signIn(dispatch)
     }
 }
@@ -43,7 +44,8 @@ class Register extends React.Component {
                 <p className="f6 grow no-underline br-pill ph3 pv2 dib white bg-black pointer ba bw0"
                     style={{ background: "#c4954f" }}
                     onClick={this.onSubmit}>
-                    Regisztráció
+                    <FormattedMessage
+                        id="register.register" />
                 </p>
             );
         }
@@ -54,7 +56,10 @@ class Register extends React.Component {
                 <Form.Row>
                     <Col>
                         <Form.Group controlId="password">
-                            <Form.Label>Jelszó (minimum 8 karakter)</Form.Label>
+                            <Form.Label>
+                                <FormattedMessage
+                                    id="register.password" />
+                            </Form.Label>
                             <Form.Control
                                 type="password"
                                 placeholder="Jelszó"
@@ -63,7 +68,10 @@ class Register extends React.Component {
                     </Col>
                     <Col>
                         <Form.Group controlId="password2">
-                            <Form.Label>Jelszó megerősítése</Form.Label>
+                            <Form.Label>
+                                <FormattedMessage
+                                    id="register.passwordAgain" />
+                            </Form.Label>
                             <Form.Control
                                 type="password"
                                 placeholder="Jelszó"
@@ -152,50 +160,61 @@ class Register extends React.Component {
                 }}>
                 <Alert show={this.state.emailFail} variant="danger" >
                     <p>
-                        Hibás e-mail cím formátum!
-                </p>
+                        <FormattedMessage
+                            id="alert.emailFormatFail" />
+                    </p>
                     <hr />
                     <div className="d-flex justify-content-end">
                         <Button onClick={() => { this.handleAlert("emailFail", false); this.handleAlert("formatFail", false); }} variant="outline-danger">
-                            Bezárás
-                </Button>
+                            <FormattedMessage
+                                id="alert.close" />
+                        </Button>
                     </div>
                 </Alert>
                 <Alert show={this.state.passwordLengthFail} variant="danger" >
                     <p>
-                        A jelszónak legalább 8 karakterből kell állnia.
-                </p>
+                        <FormattedMessage
+                            id="alert.passwordLengthFail" />
+                    </p>
                     <hr />
                     <div className="d-flex justify-content-end">
                         <Button onClick={() => this.handleAlert("passwordLengthFail", false)} variant="outline-danger">
-                            Bezárás
-                </Button>
+                            <FormattedMessage
+                                id="alert.close" />
+                        </Button>
                     </div>
                 </Alert>
                 <Alert show={this.state.passwordFail} variant="danger" >
                     <p>
-                        A megadott jelszavak nem egyeznek.
-                </p>
+                        <FormattedMessage
+                            id="alert.passwordFail" />
+                    </p>
                     <hr />
                     <div className="d-flex justify-content-end">
                         <Button onClick={() => this.handleAlert("passwordFail", false)} variant="outline-danger">
-                            Bezárás
-                </Button>
+                            <FormattedMessage
+                                id="alert.close" />
+                        </Button>
                     </div>
                 </Alert>
                 <Alert show={this.state.showFail} variant="danger" >
                     <p>
-                        Kérlek tölts ki minden kötelező mezőt!
-                </p>
+                        <FormattedMessage
+                            id="alert.admin" />
+                    </p>
                     <hr />
                     <div className="d-flex justify-content-end">
                         <Button onClick={() => this.handleAlert("showFail", false)} variant="outline-danger">
-                            Bezárás
-                </Button>
+                            <FormattedMessage
+                                id="register.close" />
+                        </Button>
                     </div>
                 </Alert>
                 <Form.Group controlId="email">
-                    <Form.Label>E-mail cím</Form.Label>
+                    <Form.Label>
+                        <FormattedMessage
+                            id="register.email" />
+                    </Form.Label>
                     <Form.Control
                         type="email"
                         placeholder="pelda@pizzavilag.hu"
@@ -205,7 +224,10 @@ class Register extends React.Component {
                 <Form.Row>
                     <Col>
                         <Form.Group controlId="lastname">
-                            <Form.Label>Vezetéknév</Form.Label>
+                            <Form.Label>
+                                <FormattedMessage
+                                    id="register.lastName" />
+                            </Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Vezetéknév"
@@ -214,7 +236,10 @@ class Register extends React.Component {
                     </Col>
                     <Col>
                         <Form.Group controlId="firstname">
-                            <Form.Label>Keresztnév</Form.Label>
+                            <Form.Label>
+                                <FormattedMessage
+                                    id="register.firstName" />
+                            </Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Keresztnév"
@@ -223,7 +248,10 @@ class Register extends React.Component {
                     </Col>
                 </Form.Row>
                 <Form.Group controlId="phone">
-                    <Form.Label>Telefonszám</Form.Label>
+                    <Form.Label>
+                        <FormattedMessage
+                            id="register.phone" />
+                    </Form.Label>
                     <Form.Control
                         type="text"
                         placeholder="Telefonszám"
@@ -232,7 +260,10 @@ class Register extends React.Component {
                 <Form.Row>
                     <Col className="col-5">
                         <Form.Group controlId="zip">
-                            <Form.Label>Irányítószám</Form.Label>
+                            <Form.Label>
+                                <FormattedMessage
+                                    id="register.zip" />
+                            </Form.Label>
                             <Form.Control
                                 type="number"
                                 placeholder="Irányítószám"
@@ -241,7 +272,10 @@ class Register extends React.Component {
                     </Col>
                     <Col className="col-7">
                         <Form.Group controlId="city">
-                            <Form.Label>Település</Form.Label>
+                            <Form.Label>
+                                <FormattedMessage
+                                    id="register.city" />
+                            </Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Település"
@@ -250,14 +284,20 @@ class Register extends React.Component {
                     </Col>
                 </Form.Row>
                 <Form.Group controlId="address">
-                    <Form.Label>Cím</Form.Label>
+                    <Form.Label>
+                        <FormattedMessage
+                            id="register.address" />
+                    </Form.Label>
                     <Form.Control
                         type="text"
                         placeholder="Cím"
                         onChange={this.onRegisterFormChange} />
                 </Form.Group>
                 <Form.Group controlId="comment">
-                    <Form.Label>Megjegyzés a címhez</Form.Label>
+                    <Form.Label>
+                        <FormattedMessage
+                            id="register.comment" />
+                    </Form.Label>
                     <Form.Control
                         type="text"
                         placeholder="Pl.: Kapucsengő száma - nem kötelező kitölteni!"

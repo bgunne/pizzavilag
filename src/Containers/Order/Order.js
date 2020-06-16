@@ -4,6 +4,7 @@ import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import { loadGuest } from '../../_actions/order.js';
 import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
 const mapStateToProps = state => {
     return {
         guest: state.manageGuest.guest,
@@ -34,13 +35,31 @@ class Order extends Component {
             return (
                 <div className="w-50 mh1" >
                     <article className="pa1 pa2-ns" style={{ float: "right" }}>
-                        <h1 className="f4 bold center mw6">Rendelés adatai</h1>
+                        <h1 className="f4 bold center mw6">
+                            <FormattedMessage
+                                id="order.details" />
+                        </h1>
                         <ul className="list pl0 ml0 center mw6 ba b--light-silver br2 bg-light-yellow">
-                            <li className="ph3 pv3 bb b--light-silver">Név: {user.lastname} {user.firstname} </li>
-                            <li className="ph3 pv3 bb b--light-silver">Cím: {user.address}</li>
-                            <li className="ph3 pv3 bb b--light-silver">Telefonszám: {user.phone}</li>
-                            <li className="ph3 pv3 bb b--light-silver">E-mail: {user.email}</li>
-                            <li className="ph3 pv3">Megjegyzés: {user.comment}</li>
+                            <li className="ph3 pv3 bb b--light-silver">
+                                <FormattedMessage
+                                    id="order.name" />
+                                {user.lastname} {user.firstname} </li>
+                            <li className="ph3 pv3 bb b--light-silver">
+                                <FormattedMessage
+                                    id="order.address" />
+                                {user.address}</li>
+                            <li className="ph3 pv3 bb b--light-silver">
+                                <FormattedMessage
+                                    id="order.phone" />
+                                {user.phone}</li>
+                            <li className="ph3 pv3 bb b--light-silver">
+                                <FormattedMessage
+                                    id="order.email" />
+                                {user.email}</li>
+                            <li className="ph3 pv3">
+                                <FormattedMessage
+                                    id="order.comment" />
+                                {user.comment}</li>
                         </ul>
                     </article>
                 </div>
@@ -114,34 +133,43 @@ class Order extends Component {
             <div className="flex flex-column items-center " >
                 <Alert show={this.state.emailFail} variant="danger" >
                     <p>
-                        Hibás e-mail cím formátum!
+                        <FormattedMessage
+                            id="alert.emailFormatFail" />
                     </p>
                     <hr />
                     <div className="d-flex justify-content-end">
                         <Button onClick={() => { this.handleAlert("emailFail", false); this.handleAlert("formatFail", false); }} variant="outline-danger">
-                            Bezárás
-                    </Button>
+                            <FormattedMessage
+                                id="alert.close" />
+                        </Button>
                     </div>
                 </Alert>
                 <Alert show={this.state.showSuccess} variant="success">
-                    <Alert.Heading>Rendelésed fogadtuk.</Alert.Heading>
+                    <Alert.Heading>
+                        <FormattedMessage
+                            id="alert.confirm" />
+                    </Alert.Heading>
                     <p>
-                        Köszönjük, hogy minket választottál.
+                        <FormattedMessage
+                            id="alert.thankyou" />
                     </p>
                     <hr />
                     <p className="mb-0">
-                        Probléma esetén vedd fel a kapcsolatot az ügyfélszolgálatunkkal: ugysemvalaszolunk@pizzavilag.test
+                        <FormattedMessage
+                            id="alert.info" />
                     </p>
                 </Alert>
                 <Alert show={this.state.showFail} variant="danger" >
                     <p>
-                        Kérlek tölts ki minden kötelező mezőt a rendelés leadásához.
+                        <FormattedMessage
+                            id="alert.emailFormatFail" />
                     </p>
                     <hr />
                     <div className="d-flex justify-content-end">
                         <Button onClick={() => this.handleAlert("showFail", false)} variant="outline-danger">
-                            Bezárás
-                    </Button>
+                            <FormattedMessage
+                                id="alert.close" />
+                        </Button>
                     </div>
                 </Alert>
                 <div className="w-100 mr2 flex justify-center">
@@ -172,7 +200,8 @@ class Order extends Component {
                         onClick={() => {
                             this.onSubmit();
                         }}>
-                        Rendelés megerősítése
+                        <FormattedMessage
+                            id="order.checkout" />
                     </p>
                 </div>
             </div>

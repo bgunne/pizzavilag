@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { onSigninFormChange } from '../../_actions/signin.js';
 import { signIn, admin } from '../../_actions/app.js';
 import { connect } from 'react-redux';
-
+import { FormattedMessage } from 'react-intl';
 const mapStateToProps = state => {
     return {
         signInEmail: state.onSigninFormChange.signInEmail,
@@ -75,17 +75,22 @@ class Signin extends Component {
                 }}>
                 <Alert show={this.state.showFail} variant="danger" >
                     <p>
-                        Hibás e-mail cím vagy jelszó!
+                        <FormattedMessage
+                            id="alert.emailFormatFail" />
                     </p>
                     <hr />
                     <div className="d-flex justify-content-end">
                         <Button onClick={() => this.handleAlert("showFail", false)} variant="outline-danger">
-                            Bezárás
-                    </Button>
+                            <FormattedMessage
+                                id="alert.close" />
+                        </Button>
                     </div>
                 </Alert>
                 <Form.Group controlId="signInEmail">
-                    <Form.Label>E-mail cím</Form.Label>
+                    <Form.Label>
+                        <FormattedMessage
+                            id="signin.email" />
+                    </Form.Label>
                     <Form.Control
                         type="email"
                         placeholder="pelda@pizzavilag.hu"
@@ -93,7 +98,10 @@ class Signin extends Component {
                     />
                 </Form.Group>
                 <Form.Group controlId="signInPassword">
-                    <Form.Label>Jelszó</Form.Label>
+                    <Form.Label>
+                        <FormattedMessage
+                            id="signin.password" />
+                    </Form.Label>
                     <Form.Control
                         type="password"
                         placeholder="Jelszó"
@@ -103,7 +111,8 @@ class Signin extends Component {
                 <p className="f6 grow no-underline br-pill ph3 pv2 dib white bg-black pointer ba bw0"
                     style={{ background: "#c4954f" }}
                     onClick={this.onSubmit}>
-                    Bejelentkezés
+                    <FormattedMessage
+                        id="signin.signIn" />
                 </p>
             </Form>
         );

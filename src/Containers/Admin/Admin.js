@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { requestPizzas, deletePizza, uploadPizza, updatePizza } from '../../_actions/app.js';
 import { onPizzaEditFormChange, onFileInputChangeHandler, loadPizzaEdit, emptyPizzaEdit, setEditId, setDeleteId, setModificationType } from '../../_actions/admin.js';
 import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
 const mapStateToProps = state => {
 	return {
 		pizzas: state.managePizzas.pizzas,
@@ -99,13 +100,15 @@ class Admin extends Component {
 								this.props.setModificationType("upload");
 							}}
 						>
-							Pizza Feltöltése
+							<FormattedMessage
+								id="admin.upload" />
 						</p>
 						<p
 							className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-dark-red mh1"
 							onClick={() => this.handleCloseAddForm()}
 						>
-							Mégsem
+							<FormattedMessage
+								id="admin.cancel" />
 						</p>
 					</div>
 				</div>
@@ -117,17 +120,14 @@ class Admin extends Component {
 					style={{ backgroundColor: '#c4954f' }}
 					onClick={() => this.newPizza()}
 				>
-					Hozzáadás
+					<FormattedMessage
+						id="admin.add" />
 				</p>
 			);
 		}
 	}
 	onFileInputChangeHandler = (event) => {
 		this.props.onFileInputChangeHandler(event.target.files[0]);
-		/*this.setState({
-			selectedFile: event.target.files[0],
-			loaded: 0
-		});*/
 	};
 
 	onFileUploadHandler = async () => {
@@ -174,17 +174,22 @@ class Admin extends Component {
 				<article className="pa2 w-100" style={{ height: 'pizzas.length * 150px' }}>
 					<Alert show={this.state.showFail} variant="danger" >
 						<p>
-							Kérlek tölts ki minden kötelező mezőt.
-                    </p>
+							<FormattedMessage
+								id="alert.admin" />
+						</p>
 						<hr />
 						<div className="d-flex justify-content-end">
 							<Button onClick={() => this.handleAlert("showFail", false)} variant="outline-danger">
-								Bezárás
-                    </Button>
+								<FormattedMessage
+									id="alert.close" />
+							</Button>
 						</div>
 					</Alert>
 					<div className="flex justify-between items-center pa2">
-						<h1 className="f4 bold left tl mw6 mt-auto mb-auto">Pizzák</h1>
+						<h1 className="f4 bold left tl mw6 mt-auto mb-auto">
+							<FormattedMessage
+								id="admin.pizzas" />
+						</h1>
 					</div>
 					<ul className="list pl0 ml0 center ba b--light-silver br ">
 						<li
@@ -218,7 +223,8 @@ class Admin extends Component {
 													this.props.setModificationType('update');
 												}}
 											>
-												Módosítás mentése
+												<FormattedMessage
+													id="admin.save" />
 											</p>
 										</div>
 									</li>
@@ -266,7 +272,8 @@ class Admin extends Component {
 												className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-gold"
 												onClick={() => this.changePizza(pizza)}
 											>
-												Módosítás
+												<FormattedMessage
+													id="admin.save" />
 											</p>
 											<p
 												className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-dark-red"
@@ -276,7 +283,8 @@ class Admin extends Component {
 												}
 												}
 											>
-												Törlés
+												<FormattedMessage
+													id="admin.delete" />
 											</p>
 										</div>
 									</li>

@@ -16,8 +16,16 @@ import { onPizzaEditFormChange } from './_reducers/admin';
 import { manageEdit } from './_reducers/admin';
 import { manageOrders } from './_reducers/orders';
 import { persistStore, persistReducer } from 'redux-persist';
-import { PersistGate } from 'redux-persist/es/integration/react'
+import { PersistGate } from 'redux-persist/es/integration/react';
 import storage from 'redux-persist/lib/storage';
+import { IntlProvider } from 'react-intl';
+import locale_hu from "./translations/hu.json";
+import locale_en from "./translations/en.json";
+const data = {
+  'hu': locale_hu,
+  'en': locale_en
+};
+const language = "hu"//TODO: English translate + language switch, then: navigator.language.split(/[-_]/)[0];
 const persistConfig = {
   key: 'root',
   storage
@@ -36,11 +44,13 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = createStore(persistedReducer, applyMiddleware(thunkMiddleware, logger));
 const persistor = persistStore(store);
 ReactDOM.render(
-  <Provider store={store}>
-    <PersistGate
-      persistor={persistor}>
-      <App />
-    </PersistGate>
-  </Provider>,
+  <IntlProvider locale={language} messages={data[language]}>
+    <Provider store={store}>
+      <PersistGate
+        persistor={persistor}>
+        <App />
+      </PersistGate>
+    </Provider>
+  </IntlProvider>,
   document.getElementById('root')
 );
