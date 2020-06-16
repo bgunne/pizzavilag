@@ -1,6 +1,9 @@
-import { CHANGE_PIZZA_EDIT_FORM, LOAD_PIZZA_EDIT, EMPTY_PIZZA_EDIT, SET_EDIT_ID, SET_DELETE_ID, SET_MODIFICATION_TYPE } from "../_actiontypes/admin"
+import { CHANGE_PIZZA_EDIT_FORM, LOAD_PIZZA_EDIT, EMPTY_PIZZA_EDIT, SET_EDIT_ID, SET_DELETE_ID, SET_MODIFICATION_TYPE, CHANGE_FILE_INPUT } from "../_actiontypes/admin"
 export const onPizzaEditFormChange = (dispatch, data, targetId) => {
     dispatch({ type: CHANGE_PIZZA_EDIT_FORM, payload: data, id: targetId });
+}
+export const onFileInputChangeHandler = (dispatch, data) => {
+    dispatch({ type: CHANGE_FILE_INPUT, payload: data });
 }
 export const loadPizzaEdit = (dispatch, pizza) => {
     dispatch({ type: LOAD_PIZZA_EDIT, payload: pizza });

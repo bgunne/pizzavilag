@@ -3,7 +3,7 @@ import PizzaEditor from '../../Components/PizzaEditor/PizzaEditor';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import { requestPizzas, deletePizza, uploadPizza, updatePizza } from '../../_actions/app.js';
-import { onPizzaEditFormChange, loadPizzaEdit, emptyPizzaEdit, setEditId, setDeleteId, setModificationType } from '../../_actions/admin.js';
+import { onPizzaEditFormChange, onFileInputChangeHandler, loadPizzaEdit, emptyPizzaEdit, setEditId, setDeleteId, setModificationType } from '../../_actions/admin.js';
 import { connect } from 'react-redux';
 const mapStateToProps = state => {
 	return {
@@ -21,6 +21,7 @@ const mapDispatchToProps = (dispatch) => {
 		uploadPizza: (name, topping, price, imageurl) => uploadPizza(dispatch, name, topping, price, imageurl),
 		updatePizza: (id, name, topping, price, imageurl) => updatePizza(dispatch, id, name, topping, price, imageurl),
 		onPizzaEditFormChange: (data, targetId) => onPizzaEditFormChange(dispatch, data, targetId),
+		onFileInputChangeHandler: (data) => onFileInputChangeHandler(dispatch, data),
 		loadPizzaEdit: (pizza) => loadPizzaEdit(dispatch, pizza),
 		emptyPizzaEdit: () => dispatch(emptyPizzaEdit()),
 		setEditId: (id) => setEditId(dispatch, id),
@@ -35,7 +36,6 @@ class Admin extends Component {
 		{
 			showEdit: false,
 			showUpload: false,
-			selectedFile: null,
 			showFail: false,
 		};
 	}
@@ -123,17 +123,19 @@ class Admin extends Component {
 		}
 	}
 	onFileInputChangeHandler = (event) => {
-		this.setState({
+		this.props.onFileInputChangeHandler(event.target.files[0]);
+		/*this.setState({
 			selectedFile: event.target.files[0],
 			loaded: 0
-		});
+		});*/
 	};
+
 	onFileUploadHandler = async () => {
 		const data = new FormData();
-		data.append('image', this.state.selectedFile);
+		data.append('image', this.props.selectedFile);
 		const myHeaders = new Headers();
 		myHeaders.append("Authorization", process.env.REACT_APP_IMGUR_API_CLIENT_ID);
-		if (this.state.selectedFile) {
+		if (this.props.selectedFile) {
 			const response = await fetch('https://api.imgur.com/3/image', {
 				method: 'POST',
 				headers: myHeaders,
