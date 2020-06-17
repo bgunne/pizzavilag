@@ -25,6 +25,7 @@
     "admin.add": "Hozzáadás",
     "admin.save": "Módosítás mentése",
     "admin.delete": "Törlés",
+    "admin.accessDenied": "Hozzáférés megtagadva.",
     "order.details": "Rendelés adatai",
     "order.name": "Név",
     "order.address": "Cím",
