@@ -42,24 +42,24 @@ class Order extends Component {
                         <ul className="list pl0 ml0 center mw6 ba b--light-silver br2 bg-light-yellow">
                             <li className="ph3 pv3 bb b--light-silver">
                                 <FormattedMessage
-                                    id="order.name" />
-                                {user.lastname} {user.firstname} </li>
+                                    id="order.name" />: {user.lastname} {user.firstname}
+                            </li>
                             <li className="ph3 pv3 bb b--light-silver">
                                 <FormattedMessage
-                                    id="order.address" />
-                                {user.address}</li>
+                                    id="order.address" />: {user.address}
+                            </li>
                             <li className="ph3 pv3 bb b--light-silver">
                                 <FormattedMessage
-                                    id="order.phone" />
-                                {user.phone}</li>
+                                    id="order.phone" />: {user.phone}
+                            </li>
                             <li className="ph3 pv3 bb b--light-silver">
                                 <FormattedMessage
-                                    id="order.email" />
-                                {user.email}</li>
+                                    id="order.email" />: {user.email}
+                            </li>
                             <li className="ph3 pv3">
                                 <FormattedMessage
-                                    id="order.comment" />
-                                {user.comment}</li>
+                                    id="order.comment" />: {user.comment}
+                            </li>
                         </ul>
                     </article>
                 </div>

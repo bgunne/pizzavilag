@@ -6,7 +6,8 @@ import 'tachyons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
-import { createLogger } from 'redux-logger';
+// uncomment this for enable redux logging
+// import { createLogger } from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 import { managePizzas, searchPizzas, filterPizzas, manageCart, manageSize, manageUser } from './_reducers/app';
 import { onRegisterFormChange } from './_reducers/register';
@@ -30,7 +31,8 @@ const persistConfig = {
   key: 'root',
   storage
 }
-const logger = createLogger();
+// uncomment this for enable redux logging
+// const logger = createLogger();
 const rootReducer = combineReducers({
   managePizzas, searchPizzas, filterPizzas, manageCart, manageSize, manageUser,
   onRegisterFormChange,
@@ -41,7 +43,7 @@ const rootReducer = combineReducers({
   manageOrders
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
-const store = createStore(persistedReducer, applyMiddleware(thunkMiddleware, logger));
+const store = createStore(persistedReducer, applyMiddleware(thunkMiddleware/*uncomment this for enable redux logging ->*//* , logger*/));
 const persistor = persistStore(store);
 ReactDOM.render(
   <IntlProvider locale={language} messages={data[language]}>

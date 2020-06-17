@@ -63,7 +63,7 @@ class Orders extends Component {
                                         </div>
                                         <div className="ma-auto flex tc items-center center" >
                                             <p className="w-100 center mt-auto mb-auto fw6"><FormattedMessage
-                                                id="orders.confirm" /> {order.price} Ft</p>
+                                                id="orders.finalPrice" />: {order.price} Ft</p>
                                         </div>
                                         <div className="self-end pa1 h-auto" >
                                             <p className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-gold"

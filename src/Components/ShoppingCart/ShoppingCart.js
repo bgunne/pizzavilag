@@ -15,7 +15,7 @@ const ShhoppingCart = ({ onSumPriceChange, shoppingCart, deleteFromCart }) => {
         return (
             <main className="center mt0" style={{ overflowY: 'auto', height: 'auto', maxWidth: "200px" }}><i className="gg-shopping-cart dib"></i>
                 <FormattedMessage
-                    id="shoppingcart.cart" />
+                    id="shoppingcart.cart" />:
                 {
                     shoppingCart.map((pizza) => {
                         sumPrice += pizza.price;
@@ -50,8 +50,8 @@ const ShhoppingCart = ({ onSumPriceChange, shoppingCart, deleteFromCart }) => {
                 }
                 <div className="b red">
                     <FormattedMessage
-                        id="shoppingcart.finalPrice" />
-                    {sumPrice} Ft</div>
+                        id="shoppingcart.finalPrice" />: {sumPrice} Ft
+                </div>
                 <NavLink to="/pizzavilag/order" className="f6 grow no-underline br-pill ph3 pv2 dib white bg-black pointer ba bw0"
                     style={{ background: "#c4954f", textDecoration: "none", color: "white" }}
                     onClick={() => { onSumPriceChange(sumPrice); }}>
