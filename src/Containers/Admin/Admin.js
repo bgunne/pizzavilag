@@ -130,7 +130,6 @@ class Admin extends Component {
 	onFileInputChangeHandler = (event) => {
 		this.props.onFileInputChangeHandler(event.target.files[0]);
 	};
-
 	onFileUploadHandler = async () => {
 		const data = new FormData();
 		data.append('image', this.props.selectedFile);
