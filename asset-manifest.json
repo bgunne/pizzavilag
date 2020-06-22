@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/pizzavilag/static/css/main.f6fe9af6.chunk.css",
-    "main.js": "/pizzavilag/static/js/main.f3d1d319.chunk.js",
-    "main.js.map": "/pizzavilag/static/js/main.f3d1d319.chunk.js.map",
+    "main.js": "/pizzavilag/static/js/main.a77ee9ba.chunk.js",
+    "main.js.map": "/pizzavilag/static/js/main.a77ee9ba.chunk.js.map",
     "runtime-main.js": "/pizzavilag/static/js/runtime-main.fae46e9b.js",
     "runtime-main.js.map": "/pizzavilag/static/js/runtime-main.fae46e9b.js.map",
     "static/css/2.abd97b8c.chunk.css": "/pizzavilag/static/css/2.abd97b8c.chunk.css",
     "static/js/2.c9349d0f.chunk.js": "/pizzavilag/static/js/2.c9349d0f.chunk.js",
     "static/js/2.c9349d0f.chunk.js.map": "/pizzavilag/static/js/2.c9349d0f.chunk.js.map",
     "index.html": "/pizzavilag/index.html",
-    "precache-manifest.a5b7a34c756ab70b184839565f93b561.js": "/pizzavilag/precache-manifest.a5b7a34c756ab70b184839565f93b561.js",
+    "precache-manifest.1ba9b9c2b4bda7329458f682407e3175.js": "/pizzavilag/precache-manifest.1ba9b9c2b4bda7329458f682407e3175.js",
     "service-worker.js": "/pizzavilag/service-worker.js",
     "static/css/2.abd97b8c.chunk.css.map": "/pizzavilag/static/css/2.abd97b8c.chunk.css.map",
     "static/css/main.f6fe9af6.chunk.css.map": "/pizzavilag/static/css/main.f6fe9af6.chunk.css.map",
@@ -21,6 +21,6 @@
     "static/css/2.abd97b8c.chunk.css",
     "static/js/2.c9349d0f.chunk.js",
     "static/css/main.f6fe9af6.chunk.css",
-    "static/js/main.f3d1d319.chunk.js"
+    "static/js/main.a77ee9ba.chunk.js"
   ]
 }
