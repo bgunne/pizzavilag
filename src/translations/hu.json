@@ -1,5 +1,7 @@
 {
     "app.loading": "Kínálat betöltése...",
+    "app.loadingInfo": "A weboldal forráskódja megtekinthető ",
+    "app.loadingLink": "ide kattintva.",
     "card.addToCart": "Kosárba",
     "navigation.CMS": "Pizza világ CMS",
     "navigation.orders": "Rendelések ellenőrzése",

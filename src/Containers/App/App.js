@@ -16,7 +16,7 @@ import { connect } from 'react-redux';
 import './App.css';
 import { Router, Switch, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
-import {FormattedMessage} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 const history = createBrowserHistory();
 const mapStateToProps = state => {
   return {
@@ -81,12 +81,17 @@ class App extends Component {
               id="app.loading" />
           </h1>
           <i className="gg-spinner-alt" style={{ margin: "auto" }}></i>
+          <p>
+            <FormattedMessage
+              id="app.loadingInfo" />
+            <a href="https://github.com/bgunne/pizzavilag"><FormattedMessage id="app.loadingLink" /></a>
+          </p>
         </div>
       );
     return (
       <Router history={history}>
         <div className="tc appBody">
-          <Navigation isSignedIn={this.props.isSignedIn} isAdmin={this.props.isAdmin} user={this.props.user} signOut={this.props.signOut} />
+          <Navigation isSignedIn={this.props.isSignedIn} isAdmin={this.props.isAdmin} user={this.props.user} signOut={this.props.signOut} emptySearchField={this.props.emptySearchField} />
           <Switch>
             <Route exact path="/pizzavilag/">
               <div>

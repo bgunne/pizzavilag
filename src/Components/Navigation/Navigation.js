@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import "./Navigation.css";
 import { FormattedMessage } from 'react-intl';
-const Navigation = ({ isSignedIn, isAdmin, user, signOut }) => {
+const Navigation = ({ isSignedIn, isAdmin, user, signOut, emptySearchField }) => {
     if (isSignedIn) {
         if (isAdmin) {
             return (
@@ -37,7 +37,8 @@ const Navigation = ({ isSignedIn, isAdmin, user, signOut }) => {
             return (
                 <nav className="flex justify-center pa1" style={{ background: "#c4954f" }}>
                     <NavLink to="/pizzavilag/" className="link white-70 hover-white no-underline flex items-center pa1 pointer"
-                        style={{ textDecoration: "none", color: "white" }}>
+                        style={{ textDecoration: "none", color: "white" }}
+                        onClick={emptySearchField}>
                         <FormattedMessage
                             id="navigation.home" />
                     </NavLink>
@@ -46,7 +47,7 @@ const Navigation = ({ isSignedIn, isAdmin, user, signOut }) => {
                     </div>
                     <div className="flex-grow pa1 flex items-center">
                         <p className="f6 link dib white dim mr3 mr4-ns pa1"><FormattedMessage
-                        id="navigation.welcome" values={{name: user.firstname}}/></p>
+                            id="navigation.welcome" values={{ name: user.firstname }} /></p>
                         <NavLink to="/pizzavilag/" className="f6 dib white bg-animate hover-bg-white hover-black no-underline pv2 ph4 br-pill ba b--white-20 pointer"
                             style={{ textDecoration: "none" }}
                             onClick={signOut}>
@@ -62,7 +63,8 @@ const Navigation = ({ isSignedIn, isAdmin, user, signOut }) => {
         return (
             <nav className="flex justify-center pa2" style={{ background: "#c4954f" }}>
                 <NavLink to="/pizzavilag/" className="link white-70 hover-white no-underline flex items-center pa1 pointer"
-                    style={{ textDecoration: "none", color: "white" }}>
+                    style={{ textDecoration: "none", color: "white" }}
+                    onClick={emptySearchField}>
                     <FormattedMessage
                         id="navigation.home" />
                 </NavLink>
