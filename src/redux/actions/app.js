@@ -20,7 +20,7 @@ import {
 	SIGNOUT,
 	UPDATE_PIZZA_PENDING,
 	UPDATE_PIZZA_SUCCESS,
-} from "../_actiontypes/app.js";
+} from "../actiontypes/app.js";
 export const requestPizzas = async (dispatch) => {
 	dispatch({ type: REQUEST_PIZZAS_PENDING });
 	const response = await fetch("https://shielded-coast-80926.herokuapp.com/",
@@ -53,7 +53,7 @@ export const uploadPizza = async (dispatch, name, topping, price, imageurl) => {
 			imageurl: imageurl
 		})
 	});
-	dispatch({ type: UPLOAD_PIZZA_SUCCESS, payload: []});
+	dispatch({ type: UPLOAD_PIZZA_SUCCESS, payload: [] });
 }
 export const updatePizza = async (dispatch, id, name, topping, price, imageurl) => {
 	dispatch({ type: UPDATE_PIZZA_PENDING });
@@ -68,7 +68,7 @@ export const updatePizza = async (dispatch, id, name, topping, price, imageurl) 
 			imageurl: imageurl
 		})
 	});
-	dispatch({ type: UPDATE_PIZZA_SUCCESS, payload: []});
+	dispatch({ type: UPDATE_PIZZA_SUCCESS, payload: [] });
 }
 export const setSearchField = (text) => ({
 	type: CHANGE_SEARCHFIELD,

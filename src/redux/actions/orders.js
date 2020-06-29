@@ -5,7 +5,7 @@ import {
     REQUEST_ORDERS_SUCCESS,
     CHANGE_ORDER_SUCCESS,
     DELETE_ORDER_SUCCESS
-} from "../_actiontypes/orders"
+} from "../actiontypes/orders"
 export const requestOrders = async (dispatch) => {
     dispatch({ type: REQUEST_ORDERS_PENDING });
     const response = await fetch('https://shielded-coast-80926.herokuapp.com/orders',

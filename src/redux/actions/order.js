@@ -1,4 +1,4 @@
-import { GUEST_ORDER } from "../_actiontypes/order"
+import { GUEST_ORDER } from "../actiontypes/order"
 export const loadGuest = (dispatch, data) => {
     dispatch({
         type: GUEST_ORDER, payload: {

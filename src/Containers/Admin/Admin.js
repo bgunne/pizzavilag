@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PizzaEditor from '../../Components/PizzaEditor/PizzaEditor';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
-import { requestPizzas, deletePizza, uploadPizza, updatePizza } from '../../_actions/app.js';
-import { onPizzaEditFormChange, onFileInputChangeHandler, loadPizzaEdit, emptyPizzaEdit, setEditId, setDeleteId, setModificationType } from '../../_actions/admin.js';
+import { requestPizzas, deletePizza, uploadPizza, updatePizza } from '../../redux/actions/app.js';
+import { onPizzaEditFormChange, onFileInputChangeHandler, loadPizzaEdit, emptyPizzaEdit, setEditId, setDeleteId, setModificationType } from '../../redux/actions/admin.js';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 const mapStateToProps = state => {
