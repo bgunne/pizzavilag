@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { loadGuest } from '../../redux/actions/order.js';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import Api from "../../api/Api.js";
 const mapStateToProps = state => {
 	return {
 		guest: state.manageGuest.guest,
@@ -97,19 +98,7 @@ class Order extends Component {
 			shoppingCart.forEach(function (pizza, index) {
 				pizzas += `${pizza.name} ${pizza.size} cm      ${pizza.price} Ft\n`;
 			})
-			await fetch('https://shielded-coast-80926.herokuapp.com/order',
-				{
-					method: 'post',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify
-						(
-							{
-								user: userData,
-								pizzas: pizzas,
-								price: this.props.sumPrice
-							}
-						)
-				});
+			Api.order(userData, pizzas, this.props.sumPrice);
 			this.handleAlert("showSuccess", true);
 			this.props.onEmptyCart();
 		}

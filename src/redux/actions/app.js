@@ -21,53 +21,25 @@ import {
 	UPDATE_PIZZA_PENDING,
 	UPDATE_PIZZA_SUCCESS,
 } from "../actiontypes/app.js";
+import Api from "../../api/Api.js";
 export const requestPizzas = async (dispatch) => {
 	dispatch({ type: REQUEST_PIZZAS_PENDING });
-	const response = await fetch("https://shielded-coast-80926.herokuapp.com/",
-		{
-			method: "get",
-		});
-	const pizzas = await response.json();
+	const pizzas = await (await Api.getPizzas()).json();
 	dispatch({ type: REQUEST_PIZZAS_SUCCESS, payload: pizzas });
 };
 export const deletePizza = async (dispatch, id) => {
 	dispatch({ type: DELETE_PIZZA_PENDING });
-	await fetch('https://shielded-coast-80926.herokuapp.com/manage', {
-		method: 'delete',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({
-			id: id
-		})
-	});
+	await Api.deletePizza(id);
 	dispatch({ type: DELETE_PIZZA_SUCCESS, payload: [] });
 }
 export const uploadPizza = async (dispatch, name, topping, price, imageurl) => {
 	dispatch({ type: UPLOAD_PIZZA_PENDING });
-	await fetch('https://shielded-coast-80926.herokuapp.com/manage', {
-		method: 'post',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({
-			name: name,
-			topping: topping,
-			price: price,
-			imageurl: imageurl
-		})
-	});
+	await Api.uploadPizza(name, topping, price, imageurl);
 	dispatch({ type: UPLOAD_PIZZA_SUCCESS, payload: [] });
 }
 export const updatePizza = async (dispatch, id, name, topping, price, imageurl) => {
 	dispatch({ type: UPDATE_PIZZA_PENDING });
-	await fetch('https://shielded-coast-80926.herokuapp.com/manage', {
-		method: 'put',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({
-			id: id,
-			name: name,
-			topping: topping,
-			price: price,
-			imageurl: imageurl
-		})
-	});
+	await Api.updatePizza(id, name, topping, price, imageurl)
 	dispatch({ type: UPDATE_PIZZA_SUCCESS, payload: [] });
 }
 export const setSearchField = (text) => ({

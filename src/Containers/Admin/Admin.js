@@ -136,7 +136,7 @@ class Admin extends Component {
 		const myHeaders = new Headers();
 		myHeaders.append("Authorization", process.env.REACT_APP_IMGUR_API_CLIENT_ID);
 		if (this.props.selectedFile) {
-			const response = await fetch('https://api.imgur.com/3/image', {
+			const response = await fetch(process.env.REACT_APP_IMGUR_API_URL, {
 				method: 'POST',
 				headers: myHeaders,
 				body: data,

@@ -6,6 +6,7 @@ import { onSigninFormChange } from '../../redux/actions/signin.js';
 import { signIn, admin } from '../../redux/actions/app.js';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import Api from "../../api/Api.js";
 const mapStateToProps = state => {
 	return {
 		signInEmail: state.onSigninFormChange.signInEmail,
@@ -31,21 +32,7 @@ class Signin extends Component {
 		this.props.onSigninFormChange(event.target.value, event.target.id);
 	}
 	onSubmit = async () => {
-		const response = await fetch(
-			'https://shielded-coast-80926.herokuapp.com/signin',
-			{
-				method: 'post',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify
-					(
-						{
-							email: this.props.signInEmail,
-							password: this.props.signInPassword
-						}
-					)
-			}
-		);
-		const user = await response.json();
+		const user = await (await Api.signIn(this.props.signInEmail, this.props.signInPassword)).json();
 		if (user.id) {
 			this.props.loadUser(user);
 			this.props.signIn();

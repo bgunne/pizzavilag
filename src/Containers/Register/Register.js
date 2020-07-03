@@ -7,6 +7,7 @@ import { onRegisterFormChange } from '../../redux/actions/register.js';
 import { signIn } from '../../redux/actions/app.js';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import Api from "../../api/Api.js";
 const mapStateToProps = state => {
 	return {
 		email: state.onRegisterFormChange.email,
@@ -107,27 +108,7 @@ class Register extends React.Component {
 			this.handleAlert("showFail", true);
 		}
 		else {
-			const response = await fetch('https://shielded-coast-80926.herokuapp.com/register',
-				{
-					method: 'post',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify
-						(
-							{
-								email: email,
-								password: password,
-								firstname: firstname,
-								lastname: lastname,
-								phone: phone,
-								zip: zip,
-								city: city,
-								address: address,
-								comment: comment,
-								joined: new Date()
-							}
-						)
-				});
-			const user = await response.json();
+			const user = await (await Api.register(email, password, firstname, lastname, phone, zip, city, address, comment)).json();
 			if (user.id) {
 				this.props.loadUser(user);
 				this.props.signIn();

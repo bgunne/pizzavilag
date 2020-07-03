@@ -7,4 +7,5 @@
 * Fix routes, paths, roles
 * Fix api calls
 * Folder and code structuring
+* Fix .env 
 * Add language selection
