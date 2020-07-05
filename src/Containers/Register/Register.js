@@ -8,6 +8,7 @@ import { signIn } from '../../redux/actions/app.js';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Api from "../../api/Api.js";
+import { Path } from '../../utils/Path';
 const mapStateToProps = state => {
 	return {
 		email: state.onRegisterFormChange.email,
@@ -86,11 +87,6 @@ class Register extends React.Component {
 	onRegisterFormChange = (event) => {
 		this.props.onRegisterFormChange(event.target.value, event.target.id);
 	}
-	componentDidUpdate(prevProps, prevState) {
-		if (this.props !== prevProps) {
-			this.props.loadUser(this.props);
-		}
-	}
 	onSubmit = async () => {
 		const { email, password, password2, firstname, lastname, phone, zip, city, address, comment } = this.props;
 		// eslint-disable-next-line
@@ -112,7 +108,7 @@ class Register extends React.Component {
 			if (user.id) {
 				this.props.loadUser(user);
 				this.props.signIn();
-				this.props.history.push("/pizzavilag/");
+				this.props.history.push(Path.root);
 			}
 		}
 	}

@@ -7,6 +7,7 @@ import { signIn, admin } from '../../redux/actions/app.js';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Api from "../../api/Api.js";
+import { Path } from '../../utils/Path.js';
 const mapStateToProps = state => {
 	return {
 		signInEmail: state.onSigninFormChange.signInEmail,
@@ -36,10 +37,10 @@ class Signin extends Component {
 		if (user.id) {
 			this.props.loadUser(user);
 			this.props.signIn();
-			this.props.history.push("/pizzavilag/");
+			this.props.history.push(Path.root);
 			if (user.role === "admin") {
 				this.props.admin();
-				this.props.history.push("/pizzavilag/admin");
+				this.props.history.push(Path.admin);
 			}
 		}
 		else {

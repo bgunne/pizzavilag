@@ -2,6 +2,7 @@ import React from 'react';
 import './ShoppingCart.css';
 import { NavLink } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
+import { Path } from '../../utils/Path';
 const ShhoppingCart = ({ onSumPriceChange, shoppingCart, deleteFromCart }) => {
     let sumPrice = 0;
     let id = 0;
@@ -52,7 +53,7 @@ const ShhoppingCart = ({ onSumPriceChange, shoppingCart, deleteFromCart }) => {
                     <FormattedMessage
                         id="shoppingcart.finalPrice" />: {sumPrice} Ft
                 </div>
-                <NavLink to="/pizzavilag/order" className="f6 grow no-underline br-pill ph3 pv2 dib white bg-black pointer ba bw0"
+                <NavLink to={Path.order} className="f6 grow no-underline br-pill ph3 pv2 dib white bg-black pointer ba bw0"
                     style={{ background: "#c4954f", textDecoration: "none", color: "white" }}
                     onClick={() => { onSumPriceChange(sumPrice); }}>
                     <FormattedMessage
