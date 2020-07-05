@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "bac966f708fba33251af0fa7d7ef7803",
+    "revision": "1919e951c785707c38d6cd80f92eab72",
     "url": "/pizzavilag/index.html"
   },
   {
