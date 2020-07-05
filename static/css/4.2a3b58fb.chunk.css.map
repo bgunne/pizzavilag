@@ -1,0 +1,1 @@
+{"version":3,"sources":["Card.css"],"names":[],"mappings":"AAAA,SACI,YAEJ,CAEA,WACI,WACJ,CAEA,SACI,WACJ","file":"4.2a3b58fb.chunk.css","sourcesContent":[".cardBox{\r\n    height: 380px;\r\n    \r\n}\r\n\r\n.pizzaName{\r\n    height: 30px;\r\n}\r\n\r\n.topping{\r\n    height: 70px;\r\n}"]}
