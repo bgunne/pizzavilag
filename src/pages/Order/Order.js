@@ -6,6 +6,7 @@ import { loadGuest } from '../../redux/actions/order.js';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Api from "../../api/Api.js";
+import { Constants } from '../../utils/Constants';
 const mapStateToProps = state => {
 	return {
 		guest: state.manageGuest.guest,
@@ -80,8 +81,7 @@ class Order extends Component {
 			user = this.props.guest;
 		}
 		let userData = `${user.lastname} ${user.firstname}\n${user.zip} ${user.city} ${user.address}\nTel.: ${user.phone}\nE-mail: ${user.email}\nMegj.: ${user.comment}`;
-		const blackList = [",", "@", "(", ")", "'", "\"", "`", ";", "#", "_", "<", ">", "+", "[", "]", "{", "}"];
-		blackList.forEach(char => {
+		Constants.BlackList.forEach(char => {
 			if (user.email.includes(char, user.email.search("@") + 1)) {
 				this.handleAlert("formatFail", true);
 			}

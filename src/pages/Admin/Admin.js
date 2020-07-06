@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import PizzaEditor from '../../Components/PizzaEditor/PizzaEditor';
+import PizzaEditor from '../../components/PizzaEditor/PizzaEditor';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import { requestPizzas, deletePizza, uploadPizza, updatePizza } from '../../redux/actions/app.js';
 import { onPizzaEditFormChange, onFileInputChangeHandler, loadPizzaEdit, emptyPizzaEdit, setEditId, setDeleteId, setModificationType } from '../../redux/actions/admin.js';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { Env } from '../../utils/Env';
 const mapStateToProps = state => {
 	return {
 		pizzas: state.managePizzas.pizzas,
@@ -134,9 +135,9 @@ class Admin extends Component {
 		const data = new FormData();
 		data.append('image', this.props.selectedFile);
 		const myHeaders = new Headers();
-		myHeaders.append("Authorization", process.env.REACT_APP_IMGUR_API_CLIENT_ID);
+		myHeaders.append("Authorization", Env.apiClientIDImgur);
 		if (this.props.selectedFile) {
-			const response = await fetch(process.env.REACT_APP_IMGUR_API_URL, {
+			const response = await fetch(Env.apiUrlImgur, {
 				method: 'POST',
 				headers: myHeaders,
 				body: data,
@@ -152,7 +153,7 @@ class Admin extends Component {
 			this.props.requestPizzas();
 		}
 	}
-	componentDidUpdate(prevProps, prevState) {
+	async componentDidUpdate(prevProps, prevState) {
 		const { modificationType, deleteId } = this.props;
 		if (modificationType !== prevProps.modificationType) {
 			if (modificationType === "update") {
@@ -164,7 +165,8 @@ class Admin extends Component {
 			else if (modificationType === "delete") {
 				this.props.deletePizza(deleteId);
 			}
-			this.props.setModificationType('');
+			await this.props.setModificationType('');
+			this.props.requestPizzas();
 		}
 	}
 	render() {
@@ -273,7 +275,7 @@ class Admin extends Component {
 												onClick={() => this.changePizza(pizza)}
 											>
 												<FormattedMessage
-													id="admin.save" />
+													id="admin.edit" />
 											</p>
 											<p
 												className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-dark-red"

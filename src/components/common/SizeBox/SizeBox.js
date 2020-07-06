@@ -1,5 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { Constants } from '../../../utils/Constants';
 const SizeBox = ({ sizeChange }) => {
     return (
         <div className="flex items-center">
@@ -8,18 +9,18 @@ const SizeBox = ({ sizeChange }) => {
                     id="sizebox.size" /> (cm):</p>
             <p className="f6 grow no-underline br-pill ph3 pv2 dib white bg-black pointer ba bw0 mh2"
                 style={{ background: "#c4954f" }}
-                onClick={() => sizeChange(Number(process.env.REACT_APP_BASE_SIZE))}>
-                {process.env.REACT_APP_BASE_SIZE}
+                onClick={() => sizeChange(Constants.PizzaBaseSize)}>
+                {Constants.PizzaBaseSize}
             </p>
             <p className="f6 grow no-underline br-pill ph3 pv2 dib white bg-black pointer ba bw0 mh2"
                 style={{ background: "#c4954f" }}
-                onClick={() => sizeChange(Number(process.env.REACT_APP_MEDIUM_SIZE))}>
-                {process.env.REACT_APP_MEDIUM_SIZE}
+                onClick={() => sizeChange(Constants.PizzaMediumSize)}>
+                {Constants.PizzaMediumSize}
             </p>
             <p className="f6 grow no-underline br-pill ph3 pv2 dib white bg-black pointer ba bw0 mh2"
                 style={{ background: "#c4954f" }}
-                onClick={() => sizeChange(Number(process.env.REACT_APP_LARGE_SIZE))}>
-                {process.env.REACT_APP_LARGE_SIZE}
+                onClick={() => sizeChange(Constants.PizzaLargeSize)}>
+                {Constants.PizzaLargeSize}
             </p>
         </div>
     )

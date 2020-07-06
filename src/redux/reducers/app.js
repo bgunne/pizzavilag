@@ -21,6 +21,7 @@ import {
 	ADMIN,
 	SIGNOUT,
 } from '../actiontypes/app.js';
+import { Constants } from '../../utils/Constants.js';
 const initialStatePizzas = {
 	isPending: false,
 	pizzas: []
@@ -75,8 +76,8 @@ export const manageCart = (state = initialStateShoppingCart, action = {}) => {
 	}
 }
 const initialStateSize = {
-	priceMultiplier: Number(process.env.REACT_APP_BASE_PRICEMULTIPLIER),
-	size: Number(process.env.REACT_APP_BASE_SIZE)
+	priceMultiplier: Constants.PizzaBasePriceMultiplier,
+	size: Constants.PizzaBaseSize
 }
 export const manageSize = (state = initialStateSize, action = {}) => {
 	switch (action.type) {

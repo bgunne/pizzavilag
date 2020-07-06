@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './Containers/App/App';
+import App from './App';
 import 'tachyons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Provider } from 'react-redux';

@@ -22,6 +22,7 @@ import {
 	UPDATE_PIZZA_SUCCESS,
 } from "../actiontypes/app.js";
 import Api from "../../api/Api.js";
+import { Constants } from "../../utils/Constants.js";
 export const requestPizzas = async (dispatch) => {
 	dispatch({ type: REQUEST_PIZZAS_PENDING });
 	const pizzas = await (await Api.getPizzas()).json();
@@ -85,12 +86,12 @@ export const sumPriceChange = (dispatch, sumPrice) => {
 };
 export const sizeChange = (dispatch, size) => {
 	switch (size) {
-		case Number(process.env.REACT_APP_BASE_SIZE):
-			dispatch({ type: SIZE_CHANGE, payload: { size: Number(process.env.REACT_APP_BASE_SIZE), priceMultiplier: Number(process.env.REACT_APP_BASE_PRICEMULTIPLIER) } }); break;
-		case Number(process.env.REACT_APP_MEDIUM_SIZE):
-			dispatch({ type: SIZE_CHANGE, payload: { size: Number(process.env.REACT_APP_MEDIUM_SIZE), priceMultiplier: Number(process.env.REACT_APP_MEDIUM_PRICEMULTIPLIER) } }); break;
-		case Number(process.env.REACT_APP_LARGE_SIZE):
-			dispatch({ type: SIZE_CHANGE, payload: { size: Number(process.env.REACT_APP_LARGE_SIZE), priceMultiplier: Number(process.env.REACT_APP_LARGE_PRICEMULTIPLIER) } }); break;
+		case Constants.PizzaBaseSize:
+			dispatch({ type: SIZE_CHANGE, payload: { size: Constants.PizzaBaseSize, priceMultiplier: Constants.PizzaBasePriceMultiplier } }); break;
+		case Constants.PizzaMediumSize:
+			dispatch({ type: SIZE_CHANGE, payload: { size: Constants.PizzaMediumSize, priceMultiplier: Constants.PizzaMediumPriceMultiplier } }); break;
+		case Constants.PizzaLargeSize:
+			dispatch({ type: SIZE_CHANGE, payload: { size: Constants.PizzaLargeSize, priceMultiplier: Constants.PizzaLargePriceMultiplier } }); break;
 		default: console.error("Érvénytelen méret.");
 	}
 };

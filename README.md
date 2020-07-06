@@ -4,7 +4,5 @@
 # You can browse the backend's code [HERE](https://github.com/bgunne/pizzavilag-api)
 ### TODO:
 * Fix redux / state management
-* Folder and code structuring
-* Fix .env 
 * Add language selection
 * Handle API errors

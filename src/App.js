@@ -1,35 +1,26 @@
 import React, { Component, Suspense } from 'react';
-import Navigation from '../../Components/Navigation/Navigation';
-/*import CardList from '../../Components/CardList/CardList';*/
-import SearchBox from '../../Components/SearchBox/SearchBox';
-import SizeBox from '../../Components/SizeBox/SizeBox';
-import Scroll from '../../Components/Scroll/Scroll';
-/*import ShoppingCart from '../../Components/ShoppingCart/ShoppingCart';
-import Order from '../Order/Order';
-import Signin from '../Signin/Signin';
-import Register from '../Register/Register';
-import Orders from '../Orders/Orders';
-import Admin from '../Admin/Admin';*/
-import Footer from '../../Components/Footer/Footer';
-import { requestPizzas, setSearchField, emptySearchField, filterPizzas, addToCart, deleteFromCart, emptyCart, sumPriceChange, sizeChange, loadUser, updateUser, signOut, } from '../../redux/actions/app.js';
+import Navigation from './components/Navigation/Navigation';
+import SearchBox from './components/common/SearchBox/SearchBox';
+import SizeBox from './components/common/SizeBox/SizeBox';
+import Scroll from './components/common/Scroll/Scroll';
+import Footer from './components/Footer/Footer';
+import { requestPizzas, setSearchField, emptySearchField, filterPizzas, addToCart, deleteFromCart, emptyCart, sumPriceChange, sizeChange, loadUser, updateUser, signOut, } from './redux/actions/app.js';
 import { connect } from 'react-redux';
 import './App.css';
 import { Router, Switch, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import { FormattedMessage } from 'react-intl';
-import { Path } from '../../utils/Path';
-/*import GuestRoute from '../../Components/Route/GuestRoute';
-import PrivateRoute from '../../Components/Route/PrivateRoute';*/
+import { Path } from './utils/Path';
 
-const CardList = React.lazy(() => import('../../Components/CardList/CardList'));
-const ShoppingCart = React.lazy(() => import('../../Components/ShoppingCart/ShoppingCart'));
-const Order = React.lazy(() => import('../Order/Order'));
-const Signin = React.lazy(() => import('../Signin/Signin'));
-const Register = React.lazy(() => import('../Register/Register'));
-const Orders = React.lazy(() => import('../Orders/Orders'));
-const Admin = React.lazy(() => import('../Admin/Admin'));
-const GuestRoute = React.lazy(() => import('../../Components/Route/GuestRoute'));
-const PrivateRoute = React.lazy(() => import('../../Components/Route/PrivateRoute'));
+const CardList = React.lazy(() => import('./components/common/CardList/CardList'));
+const ShoppingCart = React.lazy(() => import('./components/ShoppingCart/ShoppingCart'));
+const Order = React.lazy(() => import('./pages/Order/Order'));
+const Signin = React.lazy(() => import('./pages/Signin/Signin'));
+const Register = React.lazy(() => import('./pages/Register/Register'));
+const Orders = React.lazy(() => import('./pages/Orders/Orders'));
+const Admin = React.lazy(() => import('./pages/Admin/Admin'));
+const GuestRoute = React.lazy(() => import('./components/Route/GuestRoute'));
+const PrivateRoute = React.lazy(() => import('./components/Route/PrivateRoute'));
 
 const history = createBrowserHistory();
 const mapStateToProps = state => {
