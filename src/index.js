@@ -9,7 +9,7 @@ import { createStore, applyMiddleware, combineReducers } from 'redux';
 // uncomment this for enable redux logging
 // import { createLogger } from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
-import { managePizzas, searchPizzas, filterPizzas, manageCart, manageSize, manageUser } from './redux/reducers/app';
+import { managePizzaList, searchPizzaList, filterPizzaList, manageCart, manageSize, manageUser } from './redux/reducers/app';
 import { onRegisterFormChange } from './redux/reducers/register';
 import { onSigninFormChange } from './redux/reducers/signin';
 import { manageGuest } from './redux/reducers/order';
@@ -34,7 +34,7 @@ const persistConfig = {
 // uncomment this for enable redux logging
 // const logger = createLogger();
 const rootReducer = combineReducers({
-	managePizzas, searchPizzas, filterPizzas, manageCart, manageSize, manageUser,
+	managePizzaList, searchPizzaList, filterPizzaList, manageCart, manageSize, manageUser,
 	onRegisterFormChange,
 	onSigninFormChange,
 	manageGuest,

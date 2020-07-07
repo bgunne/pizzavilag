@@ -31,7 +31,7 @@ class Orders extends Component {
 						{
 							orders.map((order, i) => {
 								let user = order.user.split("\n");
-								let pizzas = order.pizzas.split("\n");
+								let pizzaList = order.pizzaList.split("\n");
 								return (
 									<li className="ph3 pv3 bb b--black tc items-center" style={{ boxSizing: "content-box", backgroundColor: `${order.status}` }} key={order.id}>
 										<div className="ma-auto">
@@ -55,7 +55,7 @@ class Orders extends Component {
 										</div>
 										<div className="ma-auto h-auto bb b--light-yellow">
 											{
-												pizzas.map((pizza, i) => {
+												pizzaList.map((pizza, i) => {
 													return (
 														<p className="w-100 center mt-auto mb-auto pt2" key={i}>{pizza}</p>
 													)

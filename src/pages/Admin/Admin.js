@@ -2,24 +2,25 @@ import React, { Component } from 'react';
 import PizzaEditor from '../../components/PizzaEditor/PizzaEditor';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
-import { requestPizzas, deletePizza, uploadPizza, updatePizza } from '../../redux/actions/app.js';
+import { requestPizzaList, deletePizza, uploadPizza, updatePizza } from '../../redux/actions/app.js';
 import { onPizzaEditFormChange, onFileInputChangeHandler, loadPizzaEdit, emptyPizzaEdit, setEditId, setDeleteId, setModificationType } from '../../redux/actions/admin.js';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Env } from '../../utils/Env';
 const mapStateToProps = state => {
 	return {
-		pizzas: state.managePizzas.pizzas,
+		pizzaList: state.managePizzaList.pizzaList,
 		user: state.manageUser.user,
 		pizzaEdit: state.onPizzaEditFormChange.pizzaEdit,
 		editId: state.manageEdit.editId,
 		deleteId: state.manageEdit.deleteId,
-		modificationType: state.manageEdit.modificationType
+		modificationType: state.manageEdit.modificationType,
+		selectedFile: state.manageEdit.selectedFile
 	}
 }
 const mapDispatchToProps = (dispatch) => {
 	return {
-		requestPizzas: () => requestPizzas(dispatch),
+		requestPizzaList: () => requestPizzaList(dispatch),
 		deletePizza: (id) => deletePizza(dispatch, id),
 		uploadPizza: (name, topping, price, imageurl) => uploadPizza(dispatch, name, topping, price, imageurl),
 		updatePizza: (id, name, topping, price, imageurl) => updatePizza(dispatch, id, name, topping, price, imageurl),
@@ -128,8 +129,8 @@ class Admin extends Component {
 			);
 		}
 	}
-	onFileInputChangeHandler = (event) => {
-		this.props.onFileInputChangeHandler(event.target.files[0]);
+	onFileInputChangeHandler = async (event) => {
+		await this.props.onFileInputChangeHandler(event.target.files[0]);
 	};
 	onFileUploadHandler = async () => {
 		const data = new FormData();
@@ -144,13 +145,12 @@ class Admin extends Component {
 				redirect: 'follow'
 			});
 			const body = await response.json();
-			console.log(body.data.link);
 			this.props.onPizzaEditFormChange(body.data.link, "imageurl");
 		}
 	};
 	componentDidMount() {
-		if (!this.props.pizzas.length) {
-			this.props.requestPizzas();
+		if (!this.props.pizzaList.length) {
+			this.props.requestPizzaList();
 		}
 	}
 	async componentDidUpdate(prevProps, prevState) {
@@ -166,14 +166,14 @@ class Admin extends Component {
 				this.props.deletePizza(deleteId);
 			}
 			await this.props.setModificationType('');
-			this.props.requestPizzas();
+			this.props.requestPizzaList();
 		}
 	}
 	render() {
-		const { pizzas } = this.props;
+		const { pizzaList } = this.props;
 		return (
 			<div className="w-80 flex items-center center">
-				<article className="pa2 w-100" style={{ height: 'pizzas.length * 150px' }}>
+				<article className="pa2 w-100" style={{ height: 'pizzaList.length * 150px' }}>
 					<Alert show={this.state.showFail} variant="danger" >
 						<p>
 							<FormattedMessage
@@ -190,7 +190,7 @@ class Admin extends Component {
 					<div className="flex justify-between items-center pa2">
 						<h1 className="f4 bold left tl mw6 mt-auto mb-auto">
 							<FormattedMessage
-								id="admin.pizzas" />
+								id="admin.pizzaList" />
 						</h1>
 					</div>
 					<ul className="list pl0 ml0 center ba b--light-silver br ">
@@ -201,7 +201,7 @@ class Admin extends Component {
 						>
 							{this.addBar()}
 						</li>
-						{pizzas.map((pizza, i) => {
+						{pizzaList.map((pizza, i) => {
 							if (this.props.editId === pizza.id && this.state.showEdit) {
 								return (
 									<li

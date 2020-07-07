@@ -23,10 +23,10 @@ import {
 } from "../actiontypes/app.js";
 import Api from "../../api/Api.js";
 import { Constants } from "../../utils/Constants.js";
-export const requestPizzas = async (dispatch) => {
+export const requestPizzaList = async (dispatch) => {
 	dispatch({ type: REQUEST_PIZZAS_PENDING });
-	const pizzas = await (await Api.getPizzas()).json();
-	dispatch({ type: REQUEST_PIZZAS_SUCCESS, payload: pizzas });
+	const pizzaList = await (await Api.getPizzaList()).json();
+	dispatch({ type: REQUEST_PIZZAS_SUCCESS, payload: pizzaList });
 };
 export const deletePizza = async (dispatch, id) => {
 	dispatch({ type: DELETE_PIZZA_PENDING });
@@ -50,16 +50,16 @@ export const setSearchField = (text) => ({
 export const emptySearchField = () => ({
 	type: EMPTY_SEARCHFIELD
 });
-export const filterPizzas = (dispatch, pizzas, searchField) => {
-	if (pizzas.length && searchField.length) {
-		const filteredPizzas = pizzas.filter(
-			pizzas => {
-				return pizzas.name.toLowerCase().includes(searchField.toLowerCase());
+export const filterPizzaList = (dispatch, pizzaList, searchField) => {
+	if (pizzaList.length && searchField.length) {
+		const filteredPizzaList = pizzaList.filter(
+			pizzaList => {
+				return pizzaList.name.toLowerCase().includes(searchField.toLowerCase());
 			});
-		dispatch({ type: FILTER_PIZZAS, payload: filteredPizzas });
+		dispatch({ type: FILTER_PIZZAS, payload: filteredPizzaList });
 	}
-	else if (pizzas.length) {
-		dispatch({ type: FILTER_PIZZAS, payload: pizzas });
+	else if (pizzaList.length) {
+		dispatch({ type: FILTER_PIZZAS, payload: pizzaList });
 	}
 	else {
 		console.error("Nem sikerült betölteni a pizzákat.");

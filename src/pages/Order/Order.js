@@ -94,11 +94,11 @@ class Order extends Component {
 			this.handleAlert("showFail", true);
 		}
 		else {
-			let pizzas = '';
+			let pizzaList = '';
 			shoppingCart.forEach(function (pizza, index) {
-				pizzas += `${pizza.name} ${pizza.size} cm      ${pizza.price} Ft\n`;
+				pizzaList += `${pizza.name} ${pizza.size} cm      ${pizza.price} Ft\n`;
 			})
-			Api.order(userData, pizzas, this.props.sumPrice);
+			Api.order(userData, pizzaList, this.props.sumPrice);
 			this.handleAlert("showSuccess", true);
 			this.props.onEmptyCart();
 		}

@@ -7,8 +7,10 @@ import {
 	UPDATE_PIZZA_SUCCESS,
 	UPLOAD_PIZZA_PENDING,
 	UPLOAD_PIZZA_SUCCESS,
+	//
 	CHANGE_SEARCHFIELD,
 	EMPTY_SEARCHFIELD,
+	//
 	FILTER_PIZZAS,
 	ADD_SHOPPINGCART,
 	DELETE_SHOPPINGCART,
@@ -22,11 +24,11 @@ import {
 	SIGNOUT,
 } from '../actiontypes/app.js';
 import { Constants } from '../../utils/Constants.js';
-const initialStatePizzas = {
+const initialStatePizzaList = {
 	isPending: false,
-	pizzas: []
+	pizzaList: []
 }
-export const managePizzas = (state = initialStatePizzas, action = {}) => {
+export const managePizzaList = (state = initialStatePizzaList, action = {}) => {
 	switch (action.type) {
 		case REQUEST_PIZZAS_PENDING:
 		case UPDATE_PIZZA_PENDING:
@@ -37,14 +39,14 @@ export const managePizzas = (state = initialStatePizzas, action = {}) => {
 		case DELETE_PIZZA_SUCCESS:
 		case UPDATE_PIZZA_SUCCESS:
 		case UPLOAD_PIZZA_SUCCESS:
-			return { ...state, pizzas: action.payload, isPending: false };
+			return { ...state, pizzaList: action.payload, isPending: false };
 		default: return state;
 	}
 }
 const initialStateSearch = {
 	searchField: ''
 }
-export const searchPizzas = (state = initialStateSearch, action = {}) => {
+export const searchPizzaList = (state = initialStateSearch, action = {}) => {
 	switch (action.type) {
 		case CHANGE_SEARCHFIELD: return { ...state, searchField: action.payload };
 		case EMPTY_SEARCHFIELD: return { ...state, searchField: '' };
@@ -52,11 +54,11 @@ export const searchPizzas = (state = initialStateSearch, action = {}) => {
 	}
 }
 const initialStateFilter = {
-	filteredPizzas: []
+	filteredPizzaList: []
 }
-export const filterPizzas = (state = initialStateFilter, action = {}) => {
+export const filterPizzaList = (state = initialStateFilter, action = {}) => {
 	switch (action.type) {
-		case FILTER_PIZZAS: return { ...state, filteredPizzas: action.payload };
+		case FILTER_PIZZAS: return { ...state, filteredPizzaList: action.payload };
 		default: return state;
 	}
 }

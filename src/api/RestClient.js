@@ -5,7 +5,6 @@ import { Env } from "../utils/Env";
 
 export class RestClient {
 	static async get(url, body) {
-		console.log(Env.apiUrl);
 		try {
 			const result = await fetch(`${Env.apiUrl}${url}`);
 			if (!result) {
@@ -38,7 +37,6 @@ export class RestClient {
 	}
 
 	static async post(url, body) {
-		console.log(Env.apiUrl);
 		try {
 			const result = await fetch(`${Env.apiUrl}${url}`, {
 				method: 'post',

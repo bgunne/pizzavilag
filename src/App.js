@@ -4,7 +4,7 @@ import SearchBox from './components/common/SearchBox/SearchBox';
 import SizeBox from './components/common/SizeBox/SizeBox';
 import Scroll from './components/common/Scroll/Scroll';
 import Footer from './components/Footer/Footer';
-import { requestPizzas, setSearchField, emptySearchField, filterPizzas, addToCart, deleteFromCart, emptyCart, sumPriceChange, sizeChange, loadUser, updateUser, signOut, } from './redux/actions/app.js';
+import { requestPizzaList, /*setSearchField, emptySearchField,*/ filterPizzaList, addToCart, deleteFromCart, emptyCart, sumPriceChange, sizeChange, loadUser, updateUser, signOut, } from './redux/actions/app.js';
 import { connect } from 'react-redux';
 import './App.css';
 import { Router, Switch, Route } from 'react-router-dom';
@@ -25,10 +25,10 @@ const PrivateRoute = React.lazy(() => import('./components/Route/PrivateRoute'))
 const history = createBrowserHistory();
 const mapStateToProps = state => {
 	return {
-		pizzas: state.managePizzas.pizzas,
-		isPending: state.managePizzas.isPending,
-		searchField: state.searchPizzas.searchField,
-		filteredPizzas: state.filterPizzas.filteredPizzas,
+		pizzaList: state.managePizzaList.pizzaList,
+		isPending: state.managePizzaList.isPending,
+		//searchField: state.searchPizzaList.searchField,
+		filteredPizzaList: state.filterPizzaList.filteredPizzaList,
 		shoppingCart: state.manageCart.shoppingCart,
 		sumPrice: state.manageCart.sumPrice,
 		size: state.manageSize.size,
@@ -40,10 +40,10 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = (dispatch) => {
 	return {
-		onRequestPizzas: () => requestPizzas(dispatch),
-		onSearchChange: (event) => dispatch(setSearchField(event.target.value)),
-		emptySearchField: () => dispatch(emptySearchField()),
-		filterPizzas: (pizzas, searchField) => filterPizzas(dispatch, pizzas, searchField),
+		onRequestPizzaList: () => requestPizzaList(dispatch),
+		/*onSearchChange: (event) => dispatch(setSearchField(event.target.value)),
+		emptySearchField: () => dispatch(emptySearchField()),*/
+		filterPizzaList: (pizzaList, searchField) => filterPizzaList(dispatch, pizzaList, searchField),
 		addToCart: (pizza, shoppingCart) => addToCart(dispatch, pizza, shoppingCart),
 		deleteFromCart: (item, shoppingCart) => deleteFromCart(dispatch, item, shoppingCart),
 		emptyCart: () => emptyCart(dispatch),
@@ -55,9 +55,15 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 class App extends Component {
-	loadPizzas = async () => {
-		await this.props.onRequestPizzas();
-		this.props.filterPizzas(this.props.pizzas, this.props.searchField);
+	constructor(props) {
+		super(props);
+		this.state = {
+			searchField: '',
+		}
+	}
+	loadPizzaList = async () => {
+		await this.props.onRequestPizzaList();
+		this.props.filterPizzaList(this.props.pizzaList, this.state.searchField);
 	}
 	onAddToCart = (pizza) => {
 		this.props.addToCart(pizza, this.props.shoppingCart);
@@ -65,23 +71,30 @@ class App extends Component {
 	onDeleteFromCart = (item) => {
 		this.props.deleteFromCart(item, this.props.shoppingCart);
 	}
-	componentDidMount() {
-		if (this.props.searchField.length) {
-			this.props.emptySearchField();
+	onSearchChange = (event) => {
+		this.setState({ searchField: event.target.value });
+	}
+	emptySearchField() {
+		if (this.state.searchField.length && history.location.pathname !== Path.root) {
+			this.setState({ searchField: '' });
 		}
-		this.loadPizzas();
+	}
+	componentDidMount() {
+		this.emptySearchField();
+		this.loadPizzaList();
 	}
 	componentDidUpdate(prevProps, prevState) {
-		const { searchField, pizzas } = this.props;
-		if (searchField !== prevProps.searchField && !this.props.isPending) {
-			this.props.filterPizzas(pizzas, searchField);
+		const { pizzaList } = this.props;
+		const { searchField } = this.state;
+		if (searchField !== prevState.searchField && !this.props.isPending) {
+			this.props.filterPizzaList(pizzaList, searchField);
 		}
 	}
 	render() {
 		return (
 			<Router history={history}>
 				<div className="tc appBody">
-					<Navigation isSignedIn={this.props.isSignedIn} isAdmin={this.props.isAdmin} user={this.props.user} signOut={this.props.signOut} emptySearchField={this.props.emptySearchField} />
+					<Navigation isSignedIn={this.props.isSignedIn} isAdmin={this.props.isAdmin} user={this.props.user} signOut={this.props.signOut} emptySearchField={() => this.emptySearchField()} />
 					<Suspense fallback={
 						<div className="appBody" style={{ textAlign: "center" }}>
 							<h1>
@@ -101,11 +114,11 @@ class App extends Component {
 								render={(props) =>
 									<>
 										<div className="flex justify-center">
-											<SearchBox {...props} searchChange={this.props.onSearchChange} />
+											<SearchBox {...props} searchChange={this.onSearchChange} />
 											<SizeBox {...props} sizeChange={this.props.sizeChange} />
 										</div>
 										<Scroll>
-											<CardList {...props} pizzas={this.props.filteredPizzas} priceMultiplier={this.props.priceMultiplier} size={this.props.size} addToCart={this.onAddToCart} />
+											<CardList {...props} pizzaList={this.props.filteredPizzaList} priceMultiplier={this.props.priceMultiplier} size={this.props.size} addToCart={this.onAddToCart} />
 											<ShoppingCart {...props} onSumPriceChange={this.props.sumPriceChange} shoppingCart={this.props.shoppingCart} deleteFromCart={this.onDeleteFromCart} />
 										</Scroll>
 									</>

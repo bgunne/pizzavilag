@@ -1,7 +1,7 @@
 import { RestClient } from "./RestClient";
 export default class Api {
 
-	static async getPizzas() {
+	static async getPizzaList() {
 		return RestClient.get('/');
 	}
 
@@ -47,12 +47,12 @@ export default class Api {
 		}));
 	}
 
-	static async order(user, pizzas, price) {
+	static async order(user, pizzaList, price) {
 		RestClient.post('/order', JSON.stringify
 			(
 				{
 					user: user,
-					pizzas: pizzas,
+					pizzaList: pizzaList,
 					price: price
 				}));
 	}
