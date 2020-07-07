@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/pizzavilag/precache-manifest.29adaab452dd96ac61f3b995a41aaa2c.js"
+  "/pizzavilag/precache-manifest.b57374de1258d6ca7ece2a161935a715.js"
 );
 
 self.addEventListener('message', (event) => {
