@@ -5,9 +5,6 @@ import {
 	DELETE_PIZZA_SUCCESS,
 	UPLOAD_PIZZA_PENDING,
 	UPLOAD_PIZZA_SUCCESS,
-	CHANGE_SEARCHFIELD,
-	EMPTY_SEARCHFIELD,
-	FILTER_PIZZAS,
 	ADD_SHOPPINGCART,
 	DELETE_SHOPPINGCART,
 	EMPTY_SHOPPINGCART,
@@ -43,28 +40,6 @@ export const updatePizza = async (dispatch, id, name, topping, price, imageurl) 
 	await Api.updatePizza(id, name, topping, price, imageurl)
 	dispatch({ type: UPDATE_PIZZA_SUCCESS, payload: [] });
 }
-export const setSearchField = (text) => ({
-	type: CHANGE_SEARCHFIELD,
-	payload: text
-});
-export const emptySearchField = () => ({
-	type: EMPTY_SEARCHFIELD
-});
-export const filterPizzaList = (dispatch, pizzaList, searchField) => {
-	if (pizzaList.length && searchField.length) {
-		const filteredPizzaList = pizzaList.filter(
-			pizzaList => {
-				return pizzaList.name.toLowerCase().includes(searchField.toLowerCase());
-			});
-		dispatch({ type: FILTER_PIZZAS, payload: filteredPizzaList });
-	}
-	else if (pizzaList.length) {
-		dispatch({ type: FILTER_PIZZAS, payload: pizzaList });
-	}
-	else {
-		console.error("Nem sikerült betölteni a pizzákat.");
-	}
-};
 export const addToCart = (dispatch, pizza, shoppingCart) => {
 	const newCart = [...shoppingCart, pizza];
 	dispatch({ type: ADD_SHOPPINGCART, payload: newCart });

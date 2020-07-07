@@ -7,11 +7,6 @@ import {
 	UPDATE_PIZZA_SUCCESS,
 	UPLOAD_PIZZA_PENDING,
 	UPLOAD_PIZZA_SUCCESS,
-	//
-	CHANGE_SEARCHFIELD,
-	EMPTY_SEARCHFIELD,
-	//
-	FILTER_PIZZAS,
 	ADD_SHOPPINGCART,
 	DELETE_SHOPPINGCART,
 	EMPTY_SHOPPINGCART,
@@ -40,25 +35,6 @@ export const managePizzaList = (state = initialStatePizzaList, action = {}) => {
 		case UPDATE_PIZZA_SUCCESS:
 		case UPLOAD_PIZZA_SUCCESS:
 			return { ...state, pizzaList: action.payload, isPending: false };
-		default: return state;
-	}
-}
-const initialStateSearch = {
-	searchField: ''
-}
-export const searchPizzaList = (state = initialStateSearch, action = {}) => {
-	switch (action.type) {
-		case CHANGE_SEARCHFIELD: return { ...state, searchField: action.payload };
-		case EMPTY_SEARCHFIELD: return { ...state, searchField: '' };
-		default: return state;
-	}
-}
-const initialStateFilter = {
-	filteredPizzaList: []
-}
-export const filterPizzaList = (state = initialStateFilter, action = {}) => {
-	switch (action.type) {
-		case FILTER_PIZZAS: return { ...state, filteredPizzaList: action.payload };
 		default: return state;
 	}
 }

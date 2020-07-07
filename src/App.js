@@ -4,7 +4,7 @@ import SearchBox from './components/common/SearchBox/SearchBox';
 import SizeBox from './components/common/SizeBox/SizeBox';
 import Scroll from './components/common/Scroll/Scroll';
 import Footer from './components/Footer/Footer';
-import { requestPizzaList, /*setSearchField, emptySearchField,*/ filterPizzaList, addToCart, deleteFromCart, emptyCart, sumPriceChange, sizeChange, loadUser, updateUser, signOut, } from './redux/actions/app.js';
+import { requestPizzaList, addToCart, deleteFromCart, emptyCart, sumPriceChange, sizeChange, loadUser, updateUser, signOut, } from './redux/actions/app.js';
 import { connect } from 'react-redux';
 import './App.css';
 import { Router, Switch, Route } from 'react-router-dom';
@@ -27,8 +27,6 @@ const mapStateToProps = state => {
 	return {
 		pizzaList: state.managePizzaList.pizzaList,
 		isPending: state.managePizzaList.isPending,
-		//searchField: state.searchPizzaList.searchField,
-		filteredPizzaList: state.filterPizzaList.filteredPizzaList,
 		shoppingCart: state.manageCart.shoppingCart,
 		sumPrice: state.manageCart.sumPrice,
 		size: state.manageSize.size,
@@ -41,9 +39,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		onRequestPizzaList: () => requestPizzaList(dispatch),
-		/*onSearchChange: (event) => dispatch(setSearchField(event.target.value)),
-		emptySearchField: () => dispatch(emptySearchField()),*/
-		filterPizzaList: (pizzaList, searchField) => filterPizzaList(dispatch, pizzaList, searchField),
 		addToCart: (pizza, shoppingCart) => addToCart(dispatch, pizza, shoppingCart),
 		deleteFromCart: (item, shoppingCart) => deleteFromCart(dispatch, item, shoppingCart),
 		emptyCart: () => emptyCart(dispatch),
@@ -59,11 +54,30 @@ class App extends Component {
 		super(props);
 		this.state = {
 			searchField: '',
+			filteredPizzaList: []
 		}
 	}
 	loadPizzaList = async () => {
 		await this.props.onRequestPizzaList();
-		this.props.filterPizzaList(this.props.pizzaList, this.state.searchField);
+		this.filterPizzaList();
+	}
+	filterPizzaList = () => {
+		const { pizzaList } = this.props;
+		const { searchField } = this.state;
+		if (pizzaList.length && searchField.length) {
+			const filteredPizzaList = pizzaList.filter(
+				pizzaList => {
+					return pizzaList.name.toLowerCase().includes(searchField.toLowerCase());
+				});
+			this.setState({ filteredPizzaList: filteredPizzaList });
+			console.log("HELLo");
+		}
+		else if (pizzaList.length) {
+			this.setState({ filteredPizzaList: pizzaList })
+		}
+		else {
+			console.error("Nem sikerült betölteni a pizzákat.");
+		}
 	}
 	onAddToCart = (pizza) => {
 		this.props.addToCart(pizza, this.props.shoppingCart);
@@ -82,12 +96,12 @@ class App extends Component {
 	componentDidMount() {
 		this.emptySearchField();
 		this.loadPizzaList();
+		console.log(this.state.filteredPizzaList);
 	}
 	componentDidUpdate(prevProps, prevState) {
-		const { pizzaList } = this.props;
 		const { searchField } = this.state;
 		if (searchField !== prevState.searchField && !this.props.isPending) {
-			this.props.filterPizzaList(pizzaList, searchField);
+			this.filterPizzaList();
 		}
 	}
 	render() {
@@ -118,7 +132,7 @@ class App extends Component {
 											<SizeBox {...props} sizeChange={this.props.sizeChange} />
 										</div>
 										<Scroll>
-											<CardList {...props} pizzaList={this.props.filteredPizzaList} priceMultiplier={this.props.priceMultiplier} size={this.props.size} addToCart={this.onAddToCart} />
+											<CardList {...props} pizzaList={this.state.filteredPizzaList} priceMultiplier={this.props.priceMultiplier} size={this.props.size} addToCart={this.onAddToCart} />
 											<ShoppingCart {...props} onSumPriceChange={this.props.sumPriceChange} shoppingCart={this.props.shoppingCart} deleteFromCart={this.onDeleteFromCart} />
 										</Scroll>
 									</>
