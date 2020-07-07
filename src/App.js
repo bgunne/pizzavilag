@@ -70,7 +70,6 @@ class App extends Component {
 					return pizzaList.name.toLowerCase().includes(searchField.toLowerCase());
 				});
 			this.setState({ filteredPizzaList: filteredPizzaList });
-			console.log("HELLo");
 		}
 		else if (pizzaList.length) {
 			this.setState({ filteredPizzaList: pizzaList })
@@ -96,12 +95,15 @@ class App extends Component {
 	componentDidMount() {
 		this.emptySearchField();
 		this.loadPizzaList();
-		console.log(this.state.filteredPizzaList);
 	}
 	componentDidUpdate(prevProps, prevState) {
 		const { searchField } = this.state;
+		const { user } = this.props
 		if (searchField !== prevState.searchField && !this.props.isPending) {
 			this.filterPizzaList();
+		}
+		if(user !== prevState.user){
+			this.emptySearchField();
 		}
 	}
 	render() {
