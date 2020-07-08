@@ -2,20 +2,13 @@ import React, { Component } from 'react';
 import Register from '../Register/Register';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
-import { loadGuest } from '../../redux/actions/order.js';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Api from "../../api/Api.js";
 import { Constants } from '../../utils/Constants';
 const mapStateToProps = state => {
 	return {
-		guest: state.manageGuest.guest,
 		user: state.manageUser.user
-	}
-}
-const mapDispatchToProps = (dispatch) => {
-	return {
-		loadGuest: (data) => loadGuest(dispatch, data)
 	}
 }
 class Order extends Component {
@@ -27,6 +20,17 @@ class Order extends Component {
 			showSuccess: false,
 			formatFail: false,
 			emailFail: false,
+			user:
+			{
+				email: '',
+				firstname: '',
+				lastname: '',
+				phone: '',
+				zip: '',
+				city: '',
+				address: '',
+				comment: ''
+			}
 		}
 	}
 	loadUser = (reg) => {
@@ -68,7 +72,7 @@ class Order extends Component {
 			);
 		}
 		else {
-			return (<Register loadUser={this.props.loadGuest} isOrder={true} />);
+			return (<Register loadUser={this.loadUser} isOrder={true} />);
 		}
 	}
 	onSubmit = async () => {
@@ -78,7 +82,7 @@ class Order extends Component {
 			user = this.props.user;
 		}
 		else {
-			user = this.props.guest;
+			user = this.state.user;
 		}
 		let userData = `${user.lastname} ${user.firstname}\n${user.zip} ${user.city} ${user.address}\nTel.: ${user.phone}\nE-mail: ${user.email}\nMegj.: ${user.comment}`;
 		Constants.BlackList.forEach(char => {
@@ -197,4 +201,4 @@ class Order extends Component {
 		);
 	}
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Order);
+export default connect(mapStateToProps)(Order);

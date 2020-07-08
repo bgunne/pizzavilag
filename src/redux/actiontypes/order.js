@@ -1,1 +1,0 @@
-export const GUEST_ORDER = 'GUEST_ORDER';

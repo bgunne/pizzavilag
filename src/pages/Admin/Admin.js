@@ -3,7 +3,6 @@ import PizzaEditor from '../../components/PizzaEditor/PizzaEditor';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import { requestPizzaList, deletePizza, uploadPizza, updatePizza } from '../../redux/actions/app.js';
-import { onPizzaEditFormChange, onFileInputChangeHandler, loadPizzaEdit, emptyPizzaEdit, setEditId, setDeleteId, setModificationType } from '../../redux/actions/admin.js';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Env } from '../../utils/Env';
@@ -11,11 +10,6 @@ const mapStateToProps = state => {
 	return {
 		pizzaList: state.managePizzaList.pizzaList,
 		user: state.manageUser.user,
-		pizzaEdit: state.onPizzaEditFormChange.pizzaEdit,
-		editId: state.manageEdit.editId,
-		deleteId: state.manageEdit.deleteId,
-		modificationType: state.manageEdit.modificationType,
-		selectedFile: state.manageEdit.selectedFile
 	}
 }
 const mapDispatchToProps = (dispatch) => {
@@ -23,14 +17,7 @@ const mapDispatchToProps = (dispatch) => {
 		requestPizzaList: () => requestPizzaList(dispatch),
 		deletePizza: (id) => deletePizza(dispatch, id),
 		uploadPizza: (name, topping, price, imageurl) => uploadPizza(dispatch, name, topping, price, imageurl),
-		updatePizza: (id, name, topping, price, imageurl) => updatePizza(dispatch, id, name, topping, price, imageurl),
-		onPizzaEditFormChange: (data, targetId) => onPizzaEditFormChange(dispatch, data, targetId),
-		onFileInputChangeHandler: (data) => onFileInputChangeHandler(dispatch, data),
-		loadPizzaEdit: (pizza) => loadPizzaEdit(dispatch, pizza),
-		emptyPizzaEdit: () => dispatch(emptyPizzaEdit()),
-		setEditId: (id) => setEditId(dispatch, id),
-		setDeleteId: (id) => setDeleteId(dispatch, id),
-		setModificationType: (type) => setModificationType(dispatch, type)
+		updatePizza: (id, name, topping, price, imageurl) => updatePizza(dispatch, id, name, topping, price, imageurl)
 	}
 }
 class Admin extends Component {
@@ -41,38 +28,52 @@ class Admin extends Component {
 			showEdit: false,
 			showUpload: false,
 			showFail: false,
+			pizzaEdit: {
+				id: '',
+				name: '',
+				topping: '',
+				price: '',
+				imageurl: '',
+				editId: '',
+				deleteId: '',
+				modificationType: '',
+				selectedFile: ''
+			}
 		};
 	}
 	changePizza(pizza) {
-		this.props.loadPizzaEdit(pizza);
-		this.props.setEditId(pizza.id);
-		this.setState({ showEdit: true });
+		this.setState({ showEdit: true, pizzaEdit: pizza, editId: pizza.id });
 	}
 	newPizza() {
-		this.props.emptyPizzaEdit();
-		this.setState({ showUpload: true });
+		this.setState({ pizzaEdit: [], showUpload: true });
 	}
 	onFormChange = (event) => {
-		this.props.onPizzaEditFormChange(event.target.value, event.target.id);
+		this.setState(Object.assign(this.state.pizzaEdit, { [event.target.id]: event.target.value }));
 	};
+	setModificationType = (type) => {
+		this.setState({modificationType: type});
+	}
+	setDeleteId = (id) => {
+		this.setState({deleteId: id});
+	}
 	updatePizza = async () => {
-		if (!this.props.pizzaEdit.name || !this.props.pizzaEdit.topping || !this.props.pizzaEdit.price) {
+		if (!this.state.pizzaEdit.name || !this.state.pizzaEdit.topping || !this.state.pizzaEdit.price) {
 			this.handleAlert("showFail", true);
 		}
 		else {
-			await this.props.updatePizza(this.props.pizzaEdit.id, this.props.pizzaEdit.name, this.props.pizzaEdit.topping, this.props.pizzaEdit.price, this.props.pizzaEdit.imageurl);
-			this.props.emptyPizzaEdit();
-			this.setState({ showEdit: false });
+			await this.props.updatePizza(this.state.pizzaEdit.id, this.state.pizzaEdit.name, this.state.pizzaEdit.topping, this.state.pizzaEdit.price, this.state.pizzaEdit.imageurl);
+			
+			await this.setState({ pizzaEdit: [], showEdit: false });
 		}
 	}
 	uploadPizza = async () => {
-		if (!this.props.pizzaEdit.name || !this.props.pizzaEdit.topping || !this.props.pizzaEdit.price) {
+		if (!this.state.pizzaEdit.name || !this.state.pizzaEdit.topping || !this.state.pizzaEdit.price) {
 			this.handleAlert("showFail", true);
 		}
 		else {
-			await this.props.uploadPizza(this.props.pizzaEdit.name, this.props.pizzaEdit.topping, this.props.pizzaEdit.price, this.props.pizzaEdit.imageurl);
-			this.props.emptyPizzaEdit();
-			this.setState({ showUpload: false });
+			await this.props.uploadPizza(this.state.pizzaEdit.name, this.state.pizzaEdit.topping, this.state.pizzaEdit.price, this.state.pizzaEdit.imageurl);
+			
+			await this.setState({ pizzaEdit: [],showUpload: false });
 		}
 	}
 	handleCloseAddForm() {
@@ -100,7 +101,7 @@ class Admin extends Component {
 							className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-dark-green mh1"
 							onClick={async () => {
 								await this.onFileUploadHandler();
-								this.props.setModificationType("upload");
+								this.setModificationType("upload");
 							}}
 						>
 							<FormattedMessage
@@ -130,14 +131,14 @@ class Admin extends Component {
 		}
 	}
 	onFileInputChangeHandler = async (event) => {
-		await this.props.onFileInputChangeHandler(event.target.files[0]);
+		this.setState({selectedFile: event.target.files[0]})
 	};
 	onFileUploadHandler = async () => {
 		const data = new FormData();
-		data.append('image', this.props.selectedFile);
+		data.append('image', this.state.selectedFile);
 		const myHeaders = new Headers();
 		myHeaders.append("Authorization", Env.apiClientIDImgur);
-		if (this.props.selectedFile) {
+		if (this.state.selectedFile) {
 			const response = await fetch(Env.apiUrlImgur, {
 				method: 'POST',
 				headers: myHeaders,
@@ -145,7 +146,9 @@ class Admin extends Component {
 				redirect: 'follow'
 			});
 			const body = await response.json();
-			this.props.onPizzaEditFormChange(body.data.link, "imageurl");
+			this.setState(Object.assign(this.state.pizzaEdit, { imageurl: body.data.link }));
+
+
 		}
 	};
 	componentDidMount() {
@@ -154,8 +157,8 @@ class Admin extends Component {
 		}
 	}
 	async componentDidUpdate(prevProps, prevState) {
-		const { modificationType, deleteId } = this.props;
-		if (modificationType !== prevProps.modificationType) {
+		const { modificationType, deleteId } = this.state;
+		if (modificationType !== prevState.modificationType) {
 			if (modificationType === "update") {
 				this.updatePizza();
 			}
@@ -165,7 +168,7 @@ class Admin extends Component {
 			else if (modificationType === "delete") {
 				this.props.deletePizza(deleteId);
 			}
-			await this.props.setModificationType('');
+			await this.setState({modificationType: ''});
 			this.props.requestPizzaList();
 		}
 	}
@@ -202,7 +205,7 @@ class Admin extends Component {
 							{this.addBar()}
 						</li>
 						{pizzaList.map((pizza, i) => {
-							if (this.props.editId === pizza.id && this.state.showEdit) {
+							if (this.state.editId === pizza.id && this.state.showEdit) {
 								return (
 									<li
 										className="ph3 pv3 bb b--light-silver flex tc items-center bg-light-yellow"
@@ -222,7 +225,7 @@ class Admin extends Component {
 												className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-dark-green mt-auto mb-auto"
 												onClick={async () => {
 													await this.onFileUploadHandler();
-													this.props.setModificationType('update');
+													this.setModificationType('update');
 												}}
 											>
 												<FormattedMessage
@@ -280,8 +283,8 @@ class Admin extends Component {
 											<p
 												className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-dark-red"
 												onClick={() => {
-													this.props.setDeleteId(pizza.id);
-													this.props.setModificationType("delete");
+													this.setDeleteId(pizza.id);
+													this.setModificationType("delete");
 												}
 												}
 											>

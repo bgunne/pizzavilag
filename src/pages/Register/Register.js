@@ -3,29 +3,14 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
-import { onRegisterFormChange } from '../../redux/actions/register.js';
 import { signIn } from '../../redux/actions/app.js';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Api from "../../api/Api.js";
 import { Path } from '../../utils/Path';
-const mapStateToProps = state => {
-	return {
-		email: state.onRegisterFormChange.email,
-		password: state.onRegisterFormChange.password,
-		password2: state.onRegisterFormChange.password2,
-		firstname: state.onRegisterFormChange.firstname,
-		lastname: state.onRegisterFormChange.lastname,
-		phone: state.onRegisterFormChange.phone,
-		zip: state.onRegisterFormChange.zip,
-		city: state.onRegisterFormChange.city,
-		address: state.onRegisterFormChange.address,
-		comment: state.onRegisterFormChange.comment
-	}
-}
+
 const mapDispatchToProps = (dispatch) => {
 	return {
-		onRegisterFormChange: (data, targetId) => onRegisterFormChange(dispatch, data, targetId),
 		signIn: () => signIn(dispatch)
 	}
 }
@@ -37,7 +22,17 @@ class Register extends React.Component {
 			showFail: false,
 			passwordFail: false,
 			passwordLengthFail: false,
-			emailFail: false
+			emailFail: false,
+			email: '',
+			password: '',
+			password2: '',
+			firstname: '',
+			lastname: '',
+			phone: '',
+			zip: '',
+			city: '',
+			address: '',
+			comment: ''
 		};
 	}
 	handleSubmitButton = (isOrder) => {
@@ -85,10 +80,10 @@ class Register extends React.Component {
 		}
 	}
 	onRegisterFormChange = (event) => {
-		this.props.onRegisterFormChange(event.target.value, event.target.id);
+		this.setState({ [event.target.id]: event.target.value });
 	}
 	onSubmit = async () => {
-		const { email, password, password2, firstname, lastname, phone, zip, city, address, comment } = this.props;
+		const { email, password, password2, firstname, lastname, phone, zip, city, address, comment } = this.state;
 		// eslint-disable-next-line
 		const blackList = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; //RFC 5322 Official Standard
 		if (!blackList.test(email)) {
@@ -124,6 +119,11 @@ class Register extends React.Component {
 		}
 		else if (type === "emailFail") {
 			this.setState({ emailFail: show });
+		}
+	}
+	componentDidUpdate(prevProps, prevState) {
+		if (this.state !== prevState) {
+			this.props.loadUser(this.state);
 		}
 	}
 	render() {
@@ -285,4 +285,4 @@ class Register extends React.Component {
 		);
 	}
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Register);
+export default connect(null,mapDispatchToProps)(Register);

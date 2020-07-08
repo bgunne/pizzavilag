@@ -52,7 +52,7 @@ export default class Api {
 			(
 				{
 					user: user,
-					pizzaList: pizzaList,
+					pizzas: pizzaList,
 					price: price
 				}));
 	}

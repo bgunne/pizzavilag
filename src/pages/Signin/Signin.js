@@ -2,21 +2,13 @@ import React, { Component } from 'react';
 import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
-import { onSigninFormChange } from '../../redux/actions/signin.js';
 import { signIn, admin } from '../../redux/actions/app.js';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Api from "../../api/Api.js";
 import { Path } from '../../utils/Path.js';
-const mapStateToProps = state => {
-	return {
-		signInEmail: state.onSigninFormChange.signInEmail,
-		signInPassword: state.onSigninFormChange.signInPassword
-	}
-}
 const mapDispatchToProps = (dispatch) => {
 	return {
-		onSigninFormChange: (data, targetId) => onSigninFormChange(dispatch, data, targetId),
 		signIn: () => signIn(dispatch),
 		admin: () => admin(dispatch)
 	}
@@ -26,14 +18,16 @@ class Signin extends Component {
 		super(props);
 		this.state =
 		{
-			showFail: false
+			showFail: false,
+			signInEmail: '',
+			signInPassword: ''
 		}
 	}
 	onSigninFormChange = (event) => {
-		this.props.onSigninFormChange(event.target.value, event.target.id);
+		this.setState({ [event.target.id]: event.target.value });
 	}
 	onSubmit = async () => {
-		const user = await (await Api.signIn(this.props.signInEmail, this.props.signInPassword)).json();
+		const user = await (await Api.signIn(this.state.signInEmail, this.state.signInPassword)).json();
 		if (user.id) {
 			this.props.loadUser(user);
 			this.props.signIn();
@@ -106,4 +100,4 @@ class Signin extends Component {
 		);
 	}
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Signin);
+export default connect(null, mapDispatchToProps)(Signin);

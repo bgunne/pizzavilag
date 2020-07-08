@@ -1,27 +1,43 @@
 import React, { Component } from 'react';
-import { requestOrders, changeOrder, deleteOrder } from '../../redux/actions/orders.js'
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import Api from '../../api/Api.js';
 const mapStateToProps = state => {
 	return {
-		orders: state.manageOrders.orders,
-		user: state.manageUser.user,
-		isPending: state.manageOrders.isPending
-	}
-}
-const mapDispatchToProps = (dispatch) => {
-	return {
-		requestOrders: () => requestOrders(dispatch),
-		changeOrder: (id, statusCode) => changeOrder(dispatch, id, statusCode),
-		deleteOrder: (id) => deleteOrder(dispatch, id)
+		user: state.manageUser.user
 	}
 }
 class Orders extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			orders: [],
+			updated: false
+		}
+	}
+	async requestOrders() {
+		const orders = await (await Api.getOrders()).json();
+		this.setState({ orders });
+	}
+	async changeOrder(id, statusCode) {
+		await Api.changeOrder(id, statusCode);
+		this.setState({updated: true});
+	}
+	async deleteOrder(id) {
+		await Api.deleteOrder(id);
+		this.setState({updated: true});
+	}
 	componentDidMount() {
-		this.props.requestOrders();
+		this.requestOrders();
+	}
+	async componentDidUpdate(prevProps, prevState) {
+		if (this.state.updated !== prevState.updated && this.state.updated===true) {
+			this.setState({updated: false});
+			this.requestOrders();
+		}
 	}
 	render() {
-		const { orders } = this.props;
+		const { orders } = this.state;
 		return (
 			<div className="w-80 flex items-center center">
 				<article className="pa2 w-100">
@@ -31,7 +47,7 @@ class Orders extends Component {
 						{
 							orders.map((order, i) => {
 								let user = order.user.split("\n");
-								let pizzaList = order.pizzaList.split("\n");
+								let pizzaList = order.pizzas.split("\n");
 								return (
 									<li className="ph3 pv3 bb b--black tc items-center" style={{ boxSizing: "content-box", backgroundColor: `${order.status}` }} key={order.id}>
 										<div className="ma-auto">
@@ -68,19 +84,19 @@ class Orders extends Component {
 										</div>
 										<div className="self-end pa1 h-auto" >
 											<p className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-gold"
-												onClick={() => this.props.changeOrder(order.id, "#FFFF66")}
+												onClick={() => this.changeOrder(order.id, "#FFFF66")}
 											>
 												<FormattedMessage
 													id="orders.confirm" />
 											</p>
 											<p className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-dark-green"
-												onClick={() => this.props.changeOrder(order.id, "#9ACD32")}
+												onClick={() => this.changeOrder(order.id, "#9ACD32")}
 											>
 												<FormattedMessage
 													id="orders.sent" />
 											</p>
 											<p className="f6 grow no-underline br-pill ph3 pv2 dib white pointer ba bw0 bg-dark-red"
-												onClick={() => this.props.deleteOrder(order.id)}
+												onClick={() => this.deleteOrder(order.id)}
 											>
 												<FormattedMessage
 													id="orders.delete" />
@@ -96,4 +112,4 @@ class Orders extends Component {
 		)
 	}
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Orders);
+export default connect(mapStateToProps)(Orders);

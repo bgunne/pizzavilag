@@ -1,1 +1,0 @@
-export const CHANGE_SIGNIN_FORM = 'CHANGE_SIGNIN_FORM';

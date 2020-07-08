@@ -10,12 +10,6 @@ import { createStore, applyMiddleware, combineReducers } from 'redux';
 // import { createLogger } from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 import { managePizzaList, manageCart, manageSize, manageUser } from './redux/reducers/app';
-import { onRegisterFormChange } from './redux/reducers/register';
-import { onSigninFormChange } from './redux/reducers/signin';
-import { manageGuest } from './redux/reducers/order';
-import { onPizzaEditFormChange } from './redux/reducers/admin';
-import { manageEdit } from './redux/reducers/admin';
-import { manageOrders } from './redux/reducers/orders';
 import { persistStore, persistReducer } from 'redux-persist';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import storage from 'redux-persist/lib/storage';
@@ -34,13 +28,7 @@ const persistConfig = {
 // uncomment this for enable redux logging
 // const logger = createLogger();
 const rootReducer = combineReducers({
-	managePizzaList, manageCart, manageSize, manageUser,
-	onRegisterFormChange,
-	onSigninFormChange,
-	manageGuest,
-	onPizzaEditFormChange,
-	manageEdit,
-	manageOrders
+	managePizzaList, manageCart, manageSize, manageUser
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = createStore(persistedReducer, applyMiddleware(thunkMiddleware/*uncomment this for enable redux logging ->*//* , logger*/));
