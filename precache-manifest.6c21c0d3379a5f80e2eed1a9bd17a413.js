@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "4e458d92d85254c3aaaaed6273541954",
+    "revision": "545999b1d93bfe05b9de50f5acc52f55",
     "url": "/pizzavilag/index.html"
   },
   {
@@ -28,8 +28,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/pizzavilag/static/js/0.9b63d8d3.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "c6db0289c7f2dd3cad21",
-    "url": "/pizzavilag/static/js/10.f70ba8c0.chunk.js"
+    "revision": "0a091db60174ed93695f",
+    "url": "/pizzavilag/static/js/10.55df0743.chunk.js"
   },
   {
     "revision": "4e94c1e42bd4b03b86e6",
@@ -76,8 +76,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/pizzavilag/static/js/main.27450541.chunk.js"
   },
   {
-    "revision": "d651a314d03c9b939dee",
-    "url": "/pizzavilag/static/js/runtime-main.8378db42.js"
+    "revision": "bf4b8276f26020dd6184",
+    "url": "/pizzavilag/static/js/runtime-main.3d4213b6.js"
   },
   {
     "revision": "f34d0ef124b36667c76b6d4fccd0e189",
