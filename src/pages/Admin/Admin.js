@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import PizzaEditor from '../../components/PizzaEditor/PizzaEditor';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
-import { requestPizzaList, deletePizza, uploadPizza, updatePizza } from '../../redux/actions/app.js';
+import { PizzaActions } from '../../redux/actions/app.js';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Env } from '../../utils/Env';
+import Api from '../../api/Api';
+//import { FixedSizeList as List } from 'react-window'; TODO
 const mapStateToProps = state => {
 	return {
 		pizzaList: state.managePizzaList.pizzaList,
@@ -14,10 +16,7 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = (dispatch) => {
 	return {
-		requestPizzaList: () => requestPizzaList(dispatch),
-		deletePizza: (id) => deletePizza(dispatch, id),
-		uploadPizza: (name, topping, price, imageurl) => uploadPizza(dispatch, name, topping, price, imageurl),
-		updatePizza: (id, name, topping, price, imageurl) => updatePizza(dispatch, id, name, topping, price, imageurl)
+		dispatch
 	}
 }
 class Admin extends Component {
@@ -51,18 +50,18 @@ class Admin extends Component {
 		this.setState(Object.assign(this.state.pizzaEdit, { [event.target.id]: event.target.value }));
 	};
 	setModificationType = (type) => {
-		this.setState({modificationType: type});
+		this.setState({ modificationType: type });
 	}
 	setDeleteId = (id) => {
-		this.setState({deleteId: id});
+		this.setState({ deleteId: id });
 	}
 	updatePizza = async () => {
 		if (!this.state.pizzaEdit.name || !this.state.pizzaEdit.topping || !this.state.pizzaEdit.price) {
 			this.handleAlert("showFail", true);
 		}
 		else {
-			await this.props.updatePizza(this.state.pizzaEdit.id, this.state.pizzaEdit.name, this.state.pizzaEdit.topping, this.state.pizzaEdit.price, this.state.pizzaEdit.imageurl);
-			
+			this.props.dispatch(PizzaActions.updatePizza());
+			await Api.updatePizza(this.state.pizzaEdit.id, this.state.pizzaEdit.name, this.state.pizzaEdit.topping, this.state.pizzaEdit.price, this.state.pizzaEdit.imageurl);
 			await this.setState({ pizzaEdit: [], showEdit: false });
 		}
 	}
@@ -71,9 +70,9 @@ class Admin extends Component {
 			this.handleAlert("showFail", true);
 		}
 		else {
-			await this.props.uploadPizza(this.state.pizzaEdit.name, this.state.pizzaEdit.topping, this.state.pizzaEdit.price, this.state.pizzaEdit.imageurl);
-			
-			await this.setState({ pizzaEdit: [],showUpload: false });
+			this.props.dispatch(PizzaActions.uploadPizza());
+			await Api.uploadPizza(this.state.pizzaEdit.name, this.state.pizzaEdit.topping, this.state.pizzaEdit.price, this.state.pizzaEdit.imageurl);
+			await this.setState({ pizzaEdit: [], showUpload: false });
 		}
 	}
 	handleCloseAddForm() {
@@ -131,7 +130,7 @@ class Admin extends Component {
 		}
 	}
 	onFileInputChangeHandler = async (event) => {
-		this.setState({selectedFile: event.target.files[0]})
+		this.setState({ selectedFile: event.target.files[0] })
 	};
 	onFileUploadHandler = async () => {
 		const data = new FormData();
@@ -153,11 +152,12 @@ class Admin extends Component {
 	};
 	componentDidMount() {
 		if (!this.props.pizzaList.length) {
-			this.props.requestPizzaList();
+			this.props.loadPizzaList();
 		}
 	}
 	async componentDidUpdate(prevProps, prevState) {
 		const { modificationType, deleteId } = this.state;
+		const { pizzaList } = this.props;
 		if (modificationType !== prevState.modificationType) {
 			if (modificationType === "update") {
 				this.updatePizza();
@@ -166,16 +166,35 @@ class Admin extends Component {
 				this.uploadPizza();
 			}
 			else if (modificationType === "delete") {
-				this.props.deletePizza(deleteId);
+
+				await Api.deletePizza(deleteId);
+				this.props.dispatch(PizzaActions.deletePizza());
 			}
-			await this.setState({modificationType: ''});
-			this.props.requestPizzaList();
+			if (modificationType.length) {
+				await this.setState({ modificationType: '' });
+			}
+			if (pizzaList !== prevProps.pizzaList) {
+				this.props.loadPizzaList();
+			}
 		}
 	}
 	render() {
 		const { pizzaList } = this.props;
+		/* TODO: react-window list
+		const Row = ({ index, style }) => (
+			<div style={style}>
+				{pizzaList[index].name}
+			</div>
+		);*/
 		return (
 			<div className="w-80 flex items-center center">
+				{/* TODO: react-window list
+				<List height={pizzaList.length*150}
+					width={500}
+					itemSize={120}
+					itemCount={pizzaList.length}>
+					{Row}
+		</List>*/}
 				<article className="pa2 w-100" style={{ height: 'pizzaList.length * 150px' }}>
 					<Alert show={this.state.showFail} variant="danger" >
 						<p>

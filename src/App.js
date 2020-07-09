@@ -4,13 +4,14 @@ import SearchBox from './components/common/SearchBox/SearchBox';
 import SizeBox from './components/common/SizeBox/SizeBox';
 import Scroll from './components/common/Scroll/Scroll';
 import Footer from './components/Footer/Footer';
-import { requestPizzaList, addToCart, deleteFromCart, emptyCart, sumPriceChange, sizeChange, loadUser, updateUser, signOut, } from './redux/actions/app.js';
+import { addToCart, deleteFromCart, emptyCart, sumPriceChange, sizeChange, loadUser, updateUser, signOut, PizzaActions, } from './redux/actions/app.js';
 import { connect } from 'react-redux';
 import './App.css';
 import { Router, Switch, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
-import { FormattedMessage } from 'react-intl';
 import { Path } from './utils/Path';
+import { Loading } from './components/common/Loading/Loading';
+import Api from './api/Api';
 
 const CardList = React.lazy(() => import('./components/common/CardList/CardList'));
 const ShoppingCart = React.lazy(() => import('./components/ShoppingCart/ShoppingCart'));
@@ -38,7 +39,6 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = (dispatch) => {
 	return {
-		onRequestPizzaList: () => requestPizzaList(dispatch),
 		addToCart: (pizza, shoppingCart) => addToCart(dispatch, pizza, shoppingCart),
 		deleteFromCart: (item, shoppingCart) => deleteFromCart(dispatch, item, shoppingCart),
 		emptyCart: () => emptyCart(dispatch),
@@ -46,7 +46,8 @@ const mapDispatchToProps = (dispatch) => {
 		sizeChange: (size) => sizeChange(dispatch, size),
 		loadUser: (data) => loadUser(dispatch, data),
 		updateUser: (user) => updateUser(dispatch, user),
-		signOut: () => signOut(dispatch)
+		signOut: () => signOut(dispatch),
+		dispatch
 	}
 }
 class App extends Component {
@@ -58,7 +59,13 @@ class App extends Component {
 		}
 	}
 	loadPizzaList = async () => {
-		await this.props.onRequestPizzaList();
+		try {
+			const pizzaList = await (await Api.getPizzaList()).json();
+			this.props.dispatch(PizzaActions.updatePizzaList(pizzaList));
+		}
+		catch (error) {
+			console.error('error', error);
+		}
 		this.filterPizzaList();
 	}
 	filterPizzaList = () => {
@@ -102,7 +109,7 @@ class App extends Component {
 		if (searchField !== prevState.searchField && !this.props.isPending) {
 			this.filterPizzaList();
 		}
-		if(user !== prevState.user){
+		if (user !== prevState.user) {
 			this.emptySearchField();
 		}
 	}
@@ -111,20 +118,7 @@ class App extends Component {
 			<Router history={history}>
 				<div className="tc appBody">
 					<Navigation isSignedIn={this.props.isSignedIn} isAdmin={this.props.isAdmin} user={this.props.user} signOut={this.props.signOut} emptySearchField={() => this.emptySearchField()} />
-					<Suspense fallback={
-						<div className="appBody" style={{ textAlign: "center" }}>
-							<h1>
-								<FormattedMessage
-									id="app.loading" />
-							</h1>
-							<i className="gg-spinner-alt" style={{ margin: "auto" }}></i>
-							<p>
-								<FormattedMessage
-									id="app.loadingInfo" />
-								<a href="https://github.com/bgunne/pizzavilag"><FormattedMessage id="app.loadingLink" /></a>
-							</p>
-						</div>
-					}>
+					<Suspense fallback={<Loading />}>
 						<Switch>
 							<Route exact path={Path.root}
 								render={(props) =>
@@ -139,7 +133,7 @@ class App extends Component {
 										</Scroll>
 									</>
 								} />
-							<PrivateRoute path={Path.admin} render={(props) => <Admin {...props} />} />
+							<PrivateRoute path={Path.admin} render={(props) => <Admin {...props} loadPizzaList={this.loadPizzaList} />} />
 							<PrivateRoute path={Path.orders} render={(props) => <Orders {...props} />} />
 							<Route path={Path.order} render={(props) => <Order {...props} onEmptyCart={this.props.emptyCart} sumPrice={this.props.sumPrice} shoppingCart={this.props.shoppingCart} user={this.props.user} updateUser={this.props.updateUser} />} />
 							<GuestRoute path={Path.signIn} render={(props) => <Signin {...props} loadUser={this.props.loadUser} history={history} />} />

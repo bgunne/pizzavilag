@@ -1,10 +1,4 @@
 import {
-	REQUEST_PIZZAS_PENDING,
-	REQUEST_PIZZAS_SUCCESS,
-	DELETE_PIZZA_PENDING,
-	DELETE_PIZZA_SUCCESS,
-	UPLOAD_PIZZA_PENDING,
-	UPLOAD_PIZZA_SUCCESS,
 	ADD_SHOPPINGCART,
 	DELETE_SHOPPINGCART,
 	EMPTY_SHOPPINGCART,
@@ -15,30 +9,38 @@ import {
 	SIGNIN,
 	ADMIN,
 	SIGNOUT,
-	UPDATE_PIZZA_PENDING,
-	UPDATE_PIZZA_SUCCESS,
+
+	UPDATE_PIZZALIST,
+	DELETE_PIZZA,
+	UPLOAD_PIZZA,
+	UPDATE_PIZZA
 } from "../actiontypes/app.js";
-import Api from "../../api/Api.js";
 import { Constants } from "../../utils/Constants.js";
-export const requestPizzaList = async (dispatch) => {
-	dispatch({ type: REQUEST_PIZZAS_PENDING });
-	const pizzaList = await (await Api.getPizzaList()).json();
-	dispatch({ type: REQUEST_PIZZAS_SUCCESS, payload: pizzaList });
-};
-export const deletePizza = async (dispatch, id) => {
-	dispatch({ type: DELETE_PIZZA_PENDING });
-	await Api.deletePizza(id);
-	dispatch({ type: DELETE_PIZZA_SUCCESS, payload: [] });
-}
-export const uploadPizza = async (dispatch, name, topping, price, imageurl) => {
-	dispatch({ type: UPLOAD_PIZZA_PENDING });
-	await Api.uploadPizza(name, topping, price, imageurl);
-	dispatch({ type: UPLOAD_PIZZA_SUCCESS, payload: [] });
-}
-export const updatePizza = async (dispatch, id, name, topping, price, imageurl) => {
-	dispatch({ type: UPDATE_PIZZA_PENDING });
-	await Api.updatePizza(id, name, topping, price, imageurl)
-	dispatch({ type: UPDATE_PIZZA_SUCCESS, payload: [] });
+export class PizzaActions {
+	static updatePizzaList = (pizzaList) => {
+		return {
+			type: UPDATE_PIZZALIST,
+			payload: pizzaList
+		}
+	}
+	static deletePizza = () => {
+		return {
+			type: DELETE_PIZZA,
+			payload: []
+		}
+	}
+	static uploadPizza = () => {
+		return {
+			type: UPLOAD_PIZZA,
+			payload: []
+		}
+	}
+	static updatePizza = () =>{
+		return {
+			type: UPDATE_PIZZA,
+			payload: []
+		}
+	}
 }
 export const addToCart = (dispatch, pizza, shoppingCart) => {
 	const newCart = [...shoppingCart, pizza];

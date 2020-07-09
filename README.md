@@ -5,4 +5,6 @@
 ### TODO:
 * Fix redux / state management
 * Add language selection
+* Change CMS lists to react-window FixedSizeList
 * Handle API errors
+* Admin: Separate addbar to AddBar.js (as component)

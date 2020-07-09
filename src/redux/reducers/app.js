@@ -1,12 +1,4 @@
 import {
-	REQUEST_PIZZAS_PENDING,
-	REQUEST_PIZZAS_SUCCESS,
-	DELETE_PIZZA_PENDING,
-	DELETE_PIZZA_SUCCESS,
-	UPDATE_PIZZA_PENDING,
-	UPDATE_PIZZA_SUCCESS,
-	UPLOAD_PIZZA_PENDING,
-	UPLOAD_PIZZA_SUCCESS,
 	ADD_SHOPPINGCART,
 	DELETE_SHOPPINGCART,
 	EMPTY_SHOPPINGCART,
@@ -17,6 +9,11 @@ import {
 	SIGNIN,
 	ADMIN,
 	SIGNOUT,
+
+	UPDATE_PIZZALIST,
+	DELETE_PIZZA,
+	UPLOAD_PIZZA,
+	UPDATE_PIZZA
 } from '../actiontypes/app.js';
 import { Constants } from '../../utils/Constants.js';
 const initialStatePizzaList = {
@@ -25,15 +22,11 @@ const initialStatePizzaList = {
 }
 export const managePizzaList = (state = initialStatePizzaList, action = {}) => {
 	switch (action.type) {
-		case REQUEST_PIZZAS_PENDING:
-		case UPDATE_PIZZA_PENDING:
-		case DELETE_PIZZA_PENDING:
-		case UPLOAD_PIZZA_PENDING:
-			return { ...state, isPending: true };
-		case REQUEST_PIZZAS_SUCCESS:
-		case DELETE_PIZZA_SUCCESS:
-		case UPDATE_PIZZA_SUCCESS:
-		case UPLOAD_PIZZA_SUCCESS:
+		case UPDATE_PIZZALIST:
+		case DELETE_PIZZA:
+		case UPLOAD_PIZZA:
+		case UPDATE_PIZZA:
+			console.log("dispatch", action.type);
 			return { ...state, pizzaList: action.payload, isPending: false };
 		default: return state;
 	}
