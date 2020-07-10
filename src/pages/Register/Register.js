@@ -1,14 +1,20 @@
-import React from 'react';
+import React, {Component} from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
+import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Api from "../../api/Api.js";
 import { Path } from '../../utils/Path';
 import { UserActions } from '../../redux/actions/app.js';
 
-class Register extends React.Component {
+const mapDispatchToProps = (dispatch) => {
+	return {
+		dispatch
+	}
+}
+class Register extends Component {
 	constructor(props) {
 		super(props);
 		this.state =
@@ -279,4 +285,4 @@ class Register extends React.Component {
 		);
 	}
 }
-export default Register;
+export default connect(null,mapDispatchToProps)(Register);

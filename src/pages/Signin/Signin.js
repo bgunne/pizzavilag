@@ -2,11 +2,16 @@ import React, { Component } from 'react';
 import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
+import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Api from "../../api/Api.js";
 import { Path } from '../../utils/Path.js';
 import { UserActions } from '../../redux/actions/app.js';
-
+const mapDispatchToProps = (dispatch) => {
+	return {
+		dispatch
+	}
+}
 class Signin extends Component {
 	constructor(props) {
 		super(props);
@@ -94,4 +99,4 @@ class Signin extends Component {
 		);
 	}
 }
-export default Signin;
+export default connect(null, mapDispatchToProps)(Signin);
