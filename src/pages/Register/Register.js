@@ -3,17 +3,11 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
-import { signIn } from '../../redux/actions/app.js';
-import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Api from "../../api/Api.js";
 import { Path } from '../../utils/Path';
+import { UserActions } from '../../redux/actions/app.js';
 
-const mapDispatchToProps = (dispatch) => {
-	return {
-		signIn: () => signIn(dispatch)
-	}
-}
 class Register extends React.Component {
 	constructor(props) {
 		super(props);
@@ -102,7 +96,7 @@ class Register extends React.Component {
 			const user = await (await Api.register(email, password, firstname, lastname, phone, zip, city, address, comment)).json();
 			if (user.id) {
 				this.props.loadUser(user);
-				this.props.signIn();
+				this.props.dispatch(UserActions.signIn());
 				this.props.history.push(Path.root);
 			}
 		}
@@ -285,4 +279,4 @@ class Register extends React.Component {
 		);
 	}
 }
-export default connect(null,mapDispatchToProps)(Register);
+export default Register;

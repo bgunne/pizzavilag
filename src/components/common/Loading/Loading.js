@@ -1,13 +1,19 @@
 import React from 'react';
+import Loader from 'react-loader-spinner'
 import { FormattedMessage } from 'react-intl';
-export const Loading = () =>{
-	return(
+export const Loading = () => {
+	return (
 		<div className="appBody" style={{ textAlign: "center" }}>
-			<h1>
+			<h2>
 				<FormattedMessage
 					id="app.loading" />
-			</h1>
-			<i className="gg-spinner-alt" style={{ margin: "auto" }}></i>
+			</h2>
+			<Loader
+				type="ThreeDots"
+				color="#c4954f"
+				height={100}
+				width={100}
+			/>
 			<p>
 				<FormattedMessage
 					id="app.loadingInfo" />

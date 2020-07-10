@@ -4,7 +4,7 @@ import SearchBox from './components/common/SearchBox/SearchBox';
 import SizeBox from './components/common/SizeBox/SizeBox';
 import Scroll from './components/common/Scroll/Scroll';
 import Footer from './components/Footer/Footer';
-import { addToCart, deleteFromCart, emptyCart, sumPriceChange, sizeChange, loadUser, updateUser, signOut, PizzaActions, } from './redux/actions/app.js';
+import { PizzaActions, OrderActions, UserActions } from './redux/actions/app.js';
 import { connect } from 'react-redux';
 import './App.css';
 import { Router, Switch, Route } from 'react-router-dom';
@@ -35,19 +35,6 @@ const mapStateToProps = state => {
 		user: state.manageUser.user,
 		isAdmin: state.manageUser.isAdmin,
 		isSignedIn: state.manageUser.isSignedIn,
-	}
-}
-const mapDispatchToProps = (dispatch) => {
-	return {
-		addToCart: (pizza, shoppingCart) => addToCart(dispatch, pizza, shoppingCart),
-		deleteFromCart: (item, shoppingCart) => deleteFromCart(dispatch, item, shoppingCart),
-		emptyCart: () => emptyCart(dispatch),
-		sumPriceChange: (sumPrice) => sumPriceChange(dispatch, sumPrice),
-		sizeChange: (size) => sizeChange(dispatch, size),
-		loadUser: (data) => loadUser(dispatch, data),
-		updateUser: (user) => updateUser(dispatch, user),
-		signOut: () => signOut(dispatch),
-		dispatch
 	}
 }
 class App extends Component {
@@ -86,13 +73,28 @@ class App extends Component {
 		}
 	}
 	onAddToCart = (pizza) => {
-		this.props.addToCart(pizza, this.props.shoppingCart);
+		this.props.dispatch(OrderActions.addToCart(pizza, this.props.shoppingCart));
 	}
 	onDeleteFromCart = (item) => {
-		this.props.deleteFromCart(item, this.props.shoppingCart);
+		this.props.dispatch(OrderActions.deleteFromCart(item, this.props.shoppingCart));
 	}
 	onSearchChange = (event) => {
 		this.setState({ searchField: event.target.value });
+	}
+	onSumPriceChange = (sumPrice) => {
+		this.props.dispatch(OrderActions.sumPriceChange(sumPrice));
+	}
+	onSizeChange = (size) => {
+		this.props.dispatch(OrderActions.sizeChange(size));
+	}
+	onLoadUser = (data) => {
+		this.props.dispatch(UserActions.loadUser(data));
+	}
+	onUpdateUser = (user) => {
+		this.props.dispatch(UserActions.updateUser(user));
+	}
+	onSignOut = () => {
+		this.props.dispatch(UserActions.signOut());
 	}
 	emptySearchField() {
 		if (this.state.searchField.length && history.location.pathname !== Path.root) {
@@ -105,7 +107,10 @@ class App extends Component {
 	}
 	componentDidUpdate(prevProps, prevState) {
 		const { searchField } = this.state;
-		const { user } = this.props
+		const { user, pizzaList } = this.props;
+		if (pizzaList !== prevProps.pizzaList && !pizzaList.length) {
+			this.loadPizzaList();
+		}
 		if (searchField !== prevState.searchField && !this.props.isPending) {
 			this.filterPizzaList();
 		}
@@ -117,7 +122,7 @@ class App extends Component {
 		return (
 			<Router history={history}>
 				<div className="tc appBody">
-					<Navigation isSignedIn={this.props.isSignedIn} isAdmin={this.props.isAdmin} user={this.props.user} signOut={this.props.signOut} emptySearchField={() => this.emptySearchField()} />
+					<Navigation isSignedIn={this.props.isSignedIn} isAdmin={this.props.isAdmin} user={this.props.user} signOut={this.onSignOut} emptySearchField={() => this.emptySearchField()} />
 					<Suspense fallback={<Loading />}>
 						<Switch>
 							<Route exact path={Path.root}
@@ -125,19 +130,19 @@ class App extends Component {
 									<>
 										<div className="flex justify-center">
 											<SearchBox {...props} searchChange={this.onSearchChange} />
-											<SizeBox {...props} sizeChange={this.props.sizeChange} />
+											<SizeBox {...props} sizeChange={this.onSizeChange} />
 										</div>
 										<Scroll>
 											<CardList {...props} pizzaList={this.state.filteredPizzaList} priceMultiplier={this.props.priceMultiplier} size={this.props.size} addToCart={this.onAddToCart} />
-											<ShoppingCart {...props} onSumPriceChange={this.props.sumPriceChange} shoppingCart={this.props.shoppingCart} deleteFromCart={this.onDeleteFromCart} />
+											<ShoppingCart {...props} onSumPriceChange={this.onSumPriceChange} shoppingCart={this.props.shoppingCart} deleteFromCart={this.onDeleteFromCart} />
 										</Scroll>
 									</>
 								} />
 							<PrivateRoute path={Path.admin} render={(props) => <Admin {...props} loadPizzaList={this.loadPizzaList} />} />
 							<PrivateRoute path={Path.orders} render={(props) => <Orders {...props} />} />
-							<Route path={Path.order} render={(props) => <Order {...props} onEmptyCart={this.props.emptyCart} sumPrice={this.props.sumPrice} shoppingCart={this.props.shoppingCart} user={this.props.user} updateUser={this.props.updateUser} />} />
-							<GuestRoute path={Path.signIn} render={(props) => <Signin {...props} loadUser={this.props.loadUser} history={history} />} />
-							<GuestRoute path={Path.register} render={(props) => <Register {...props} isOrder={false} loadUser={this.props.loadUser} history={history} />} />
+							<Route path={Path.order} render={(props) => <Order {...props} sumPrice={this.props.sumPrice} shoppingCart={this.props.shoppingCart} />} />
+							<GuestRoute path={Path.signIn} render={(props) => <Signin {...props} loadUser={this.onLoadUser} history={history} />} />
+							<GuestRoute path={Path.register} render={(props) => <Register {...props} isOrder={false} loadUser={this.onLoadUser} history={history} />} />
 						</Switch>
 					</Suspense>
 					<Footer />
@@ -146,4 +151,4 @@ class App extends Component {
 		);
 	}
 }
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps)(App);

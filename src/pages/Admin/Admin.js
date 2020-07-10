@@ -14,11 +14,6 @@ const mapStateToProps = state => {
 		user: state.manageUser.user,
 	}
 }
-const mapDispatchToProps = (dispatch) => {
-	return {
-		dispatch
-	}
-}
 class Admin extends Component {
 	constructor(props) {
 		super(props);
@@ -321,4 +316,4 @@ class Admin extends Component {
 		);
 	}
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Admin);
+export default connect(mapStateToProps)(Admin);

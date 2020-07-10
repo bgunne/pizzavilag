@@ -2,17 +2,11 @@ import React, { Component } from 'react';
 import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
-import { signIn, admin } from '../../redux/actions/app.js';
-import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Api from "../../api/Api.js";
 import { Path } from '../../utils/Path.js';
-const mapDispatchToProps = (dispatch) => {
-	return {
-		signIn: () => signIn(dispatch),
-		admin: () => admin(dispatch)
-	}
-}
+import { UserActions } from '../../redux/actions/app.js';
+
 class Signin extends Component {
 	constructor(props) {
 		super(props);
@@ -30,10 +24,10 @@ class Signin extends Component {
 		const user = await (await Api.signIn(this.state.signInEmail, this.state.signInPassword)).json();
 		if (user.id) {
 			this.props.loadUser(user);
-			this.props.signIn();
+			this.props.dispatch(UserActions.signIn());
 			this.props.history.push(Path.root);
 			if (user.role === "admin") {
-				this.props.admin();
+				this.props.dispatch(UserActions.admin());
 				this.props.history.push(Path.admin);
 			}
 		}
@@ -100,4 +94,4 @@ class Signin extends Component {
 		);
 	}
 }
-export default connect(null, mapDispatchToProps)(Signin);
+export default Signin;

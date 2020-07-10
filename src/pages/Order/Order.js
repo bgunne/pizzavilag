@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Api from "../../api/Api.js";
 import { Constants } from '../../utils/Constants';
+import { OrderActions } from '../../redux/actions/app';
 const mapStateToProps = state => {
 	return {
 		user: state.manageUser.user
@@ -104,7 +105,7 @@ class Order extends Component {
 			})
 			Api.order(userData, pizzaList, this.props.sumPrice);
 			this.handleAlert("showSuccess", true);
-			this.props.onEmptyCart();
+			this.props.dispatch(OrderActions.emptyCart());
 		}
 	}
 	handleAlert(type, show) {

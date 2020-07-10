@@ -9,7 +9,6 @@ import {
 	SIGNIN,
 	ADMIN,
 	SIGNOUT,
-
 	UPDATE_PIZZALIST,
 	DELETE_PIZZA,
 	UPLOAD_PIZZA,
@@ -26,8 +25,9 @@ export const managePizzaList = (state = initialStatePizzaList, action = {}) => {
 		case DELETE_PIZZA:
 		case UPLOAD_PIZZA:
 		case UPDATE_PIZZA:
-			console.log("dispatch", action.type);
 			return { ...state, pizzaList: action.payload, isPending: false };
+		case SIGNOUT:
+			state = initialStatePizzaList; return state;
 		default: return state;
 	}
 }
@@ -43,6 +43,8 @@ export const manageCart = (state = initialStateShoppingCart, action = {}) => {
 			return { ...state, shoppingCart: action.payload };
 		case SUMPRICE_CHANGE:
 			return { ...state, sumPrice: action.payload };
+		case SIGNOUT:
+			state = initialStateShoppingCart; return state;
 		default: return state;
 	}
 }
@@ -54,6 +56,8 @@ export const manageSize = (state = initialStateSize, action = {}) => {
 	switch (action.type) {
 		case SIZE_CHANGE:
 			return { ...state, size: action.payload.size, priceMultiplier: action.payload.priceMultiplier };
+		case SIGNOUT:
+			state = initialStateSize; return state;
 		default: return state;
 	}
 }
@@ -85,7 +89,7 @@ export const manageUser = (state = initialStateUser, action = {}) => {
 		case ADMIN:
 			return { ...state, isAdmin: true };
 		case SIGNOUT:
-			return { ...state, isSignedIn: false, isAdmin: false, user: [] };
+			state = initialStateUser; return state;
 		default: return state;
 	}
 }

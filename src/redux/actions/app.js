@@ -9,7 +9,6 @@ import {
 	SIGNIN,
 	ADMIN,
 	SIGNOUT,
-
 	UPDATE_PIZZALIST,
 	DELETE_PIZZA,
 	UPLOAD_PIZZA,
@@ -35,69 +34,90 @@ export class PizzaActions {
 			payload: []
 		}
 	}
-	static updatePizza = () =>{
+	static updatePizza = () => {
 		return {
 			type: UPDATE_PIZZA,
 			payload: []
 		}
 	}
 }
-export const addToCart = (dispatch, pizza, shoppingCart) => {
-	const newCart = [...shoppingCart, pizza];
-	dispatch({ type: ADD_SHOPPINGCART, payload: newCart });
-};
-export const deleteFromCart = (dispatch, item, shoppingCart) => {
-	const newCart = [...shoppingCart];
-	newCart.forEach(function (pizza, index) {
-		if (pizza.id === item.id) {
-			newCart.splice(index, 1);
+export class OrderActions {
+	static addToCart = (pizza, shoppingCart) => {
+		const newCart = [...shoppingCart, pizza];
+		return {
+			type: ADD_SHOPPINGCART,
+			payload: newCart
 		}
-	});
-	dispatch({ type: DELETE_SHOPPINGCART, payload: newCart });
-};
-export const emptyCart = (dispatch) => {
-	dispatch({ type: EMPTY_SHOPPINGCART, payload: [] });
-};
-export const sumPriceChange = (dispatch, sumPrice) => {
-	dispatch({ type: SUMPRICE_CHANGE, payload: sumPrice });
-};
-export const sizeChange = (dispatch, size) => {
-	switch (size) {
-		case Constants.PizzaBaseSize:
-			dispatch({ type: SIZE_CHANGE, payload: { size: Constants.PizzaBaseSize, priceMultiplier: Constants.PizzaBasePriceMultiplier } }); break;
-		case Constants.PizzaMediumSize:
-			dispatch({ type: SIZE_CHANGE, payload: { size: Constants.PizzaMediumSize, priceMultiplier: Constants.PizzaMediumPriceMultiplier } }); break;
-		case Constants.PizzaLargeSize:
-			dispatch({ type: SIZE_CHANGE, payload: { size: Constants.PizzaLargeSize, priceMultiplier: Constants.PizzaLargePriceMultiplier } }); break;
-		default: console.error("Érvénytelen méret.");
 	}
-};
-export const loadUser = (dispatch, data) => {
-	dispatch({
-		type: LOAD_USER, payload: {
-			id: data.id,
-			email: data.email,
-			firstname: data.firstname,
-			lastname: data.lastname,
-			phone: data.phone,
-			zip: data.zip,
-			city: data.city,
-			address: data.address,
-			comment: data.comment,
-			role: data.role,
-			joined: data.joined
+	static deleteFromCart = (item, shoppingCart) => {
+		const newCart = [...shoppingCart];
+		newCart.forEach(function (pizza, index) {
+			if (pizza.id === item.id) {
+				newCart.splice(index, 1);
+			}
+		});
+		return {
+			type: DELETE_SHOPPINGCART,
+			payload: newCart
 		}
-	});
-};
-export const updateUser = (dispatch, user) => {
-	dispatch({ type: UPDATE_USER, payload: user });
-};
-export const signIn = (dispatch) => {
-	dispatch({ type: SIGNIN });
+	}
+	static emptyCart = () => {
+		return {
+			type: EMPTY_SHOPPINGCART,
+			payload: []
+		}
+	}
+	static sumPriceChange = (sumPrice) => {
+		return {
+			type: SUMPRICE_CHANGE,
+			payload: sumPrice
+		}
+	}
+	static sizeChange = (size) => {
+		switch (size) {
+			case Constants.PizzaBaseSize:
+				return { type: SIZE_CHANGE, payload: { size: Constants.PizzaBaseSize, priceMultiplier: Constants.PizzaBasePriceMultiplier } };
+			case Constants.PizzaMediumSize:
+				return { type: SIZE_CHANGE, payload: { size: Constants.PizzaMediumSize, priceMultiplier: Constants.PizzaMediumPriceMultiplier } };
+			case Constants.PizzaLargeSize:
+				return { type: SIZE_CHANGE, payload: { size: Constants.PizzaLargeSize, priceMultiplier: Constants.PizzaLargePriceMultiplier } };
+			default: console.error("Érvénytelen méret.");
+		}
+	}
 }
-export const signOut = (dispatch) => {
-	dispatch({ type: SIGNOUT })
-}
-export const admin = (dispatch) => {
-	dispatch({ type: ADMIN });
+
+export class UserActions {
+	static loadUser = (data) => {
+		return {
+			type: LOAD_USER,
+			payload: {
+				id: data.id,
+				email: data.email,
+				firstname: data.firstname,
+				lastname: data.lastname,
+				phone: data.phone,
+				zip: data.zip,
+				city: data.city,
+				address: data.address,
+				comment: data.comment,
+				role: data.role,
+				joined: data.joined
+			}
+		}
+	}
+	static updateUser = (user) => {
+		return {
+			type: UPDATE_USER,
+			payload: user
+		}
+	}
+	static signIn = () => {
+		return { type: SIGNIN };
+	}
+	static signOut = () => {
+		return { type: SIGNOUT };
+	}
+	static admin = () => {
+		return { type: ADMIN };
+	}
 }
